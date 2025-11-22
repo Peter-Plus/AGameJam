@@ -1,0 +1,40 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/UIToolkit/HUD.uss?fileID=7433441132597879392&amp;guid=1a60f210f2cf51a42878d44531c79199&amp;type=3#HUD" />
+    <ui:VisualElement name="HUDRoot" class="hud-root">
+        <ui:VisualElement name="StatsContainer" class="stats-container">
+            <ui:VisualElement name="HpBarContainer" class="bar-container">
+                <ui:VisualElement name="HpBarBackground" class="bar-background">
+                    <ui:VisualElement name="HpBarFill" class="bar-fill hp-fill" />
+                    <ui:Label name="HpLabel" text="100/100" class="bar-label" style="top: -5px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="MpBarContainer" class="bar-container">
+                <ui:VisualElement name="MpBarBackground" class="bar-background">
+                    <ui:VisualElement name="MpBarFill" class="bar-fill mp-fill" />
+                    <ui:Label name="MpLabel" text="50/50" class="bar-label" style="top: -5px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="ExpRow" class="exp-row">
+                <ui:VisualElement name="ExpBarContainer" class="bar-container exp-container">
+                    <ui:VisualElement name="ExpBarBackground" class="bar-background" style="top: -5px;">
+                        <ui:VisualElement name="ExpBarFill" class="bar-fill exp-fill" />
+                        <ui:Label name="ExpLabel" text="0/100" class="bar-label" style="top: -5px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label name="LevelLabel" text="Lv.1" class="level-label" style="-unity-text-align: upper-left; white-space: nowrap; opacity: 1; color: rgb(218, 167, 26); font-size: 21px; height: 38px; -unity-text-outline-width: 0; top: -5px;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ItemsContainer" class="items-container">
+                <ui:VisualElement name="PotionSlot" class="item-slot" style="width: 60px; height: 60px; top: -20px;">
+                    <ui:VisualElement name="PotionIcon" class="item-icon" />
+                    <ui:Label name="PotionCount" text="3" class="item-count" />
+                    <ui:VisualElement name="PotionCooldown" class="cooldown-overlay" />
+                </ui:VisualElement>
+                <ui:VisualElement name="SkillSlot" class="item-slot" style="width: 60px; height: 60px; top: -20px;">
+                    <ui:VisualElement name="SkillIcon" class="item-icon skill-icon" />
+                    <ui:Label name="SkillCooldown" class="cooldown-text" />
+                    <ui:VisualElement name="SkillCooldownOverlay" class="cooldown-overlay" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
