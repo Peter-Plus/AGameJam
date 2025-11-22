@@ -18,7 +18,7 @@ public class DataManager : MonoBehaviour
         public int hp = 100;
         public int maxhp = 100;
         //蓝条
-        public int mp = 50;
+        public int mp = 40;
         public int maxmp = 50;
         public int level = 1;//当前等级
         public int exp = 50;//当前经验值
@@ -59,6 +59,8 @@ public class DataManager : MonoBehaviour
     {
         instance = this;
         DontDestroyOnLoad(gameObject);// 保持单例
+        //重置本机数据开关：
+        //SaveGameData();
         LoadAllData();// 加载所有数据
     }
 
@@ -251,6 +253,9 @@ public class DataManager : MonoBehaviour
 
 
     #region 内部数据存取（这里无需关心）
+
+    //Inspector右键可随时保存数据
+    [ContextMenu("Save Game Data")]
     private void SaveGameData()
     {
         PlayerPrefsMgr.Instance.SaveObject(saveData, "SaveData");
