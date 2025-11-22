@@ -28,6 +28,8 @@ public class PlayerCore : MonoBehaviour
 
     [Header("战斗设置")]
     [SerializeField] private float attackCooldown = 0.5f; // 普通攻击冷却
+    //是否启用攻击特效
+    [SerializeField] private bool enableAttackEffect = true;
     private float lastAttackTime = -999f; // 上次攻击时间
 
     [Header("无敌帧设置")]
@@ -59,6 +61,21 @@ public class PlayerCore : MonoBehaviour
             return 0;
         }
         lastAttackTime = Time.time;
+        
+        if (enableAttackEffect)
+        {
+            //获取面向方向
+            bool facingRight = true;
+            PlayerTrans playerTrans = GetComponent<PlayerTrans>();
+            if (playerTrans != null)
+            {
+                facingRight = playerTrans.IsFacingRight();
+            }
+            // 显示攻击特效
+            float angle = 0f;
+            angle = facingRight ? 0f : 180f;
+            CrescentSlashEffect.Instance.PlayCrescentSlash(transform.position, angle);
+        }
         // 返回当前攻击力
         return currentAttack;
     }

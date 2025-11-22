@@ -19,6 +19,17 @@ public class PlayerTrans : MonoBehaviour
     private float baseYPosition;  // 记录初始Y坐标作为基准
     private Vector3 baseScale;    // 记录初始缩放
 
+
+    //外部API-获取面朝向IsFacingRight
+    public bool IsFacingRight()
+    {
+        if (spriteRenderer != null)
+        {
+            return !spriteRenderer.flipX;
+        }
+        return true; // 默认朝右
+    }
+
     private void Awake()
     {
         if (spriteRenderer == null)
