@@ -48,9 +48,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 1106987624983401367}
   sfxSource: {fileID: 2043406097699811585}
-  mainMenuMusic: {fileID: 0}
-  battleMusic: {fileID: 0}
-  bossMusic: {fileID: 0}
+  mainMenuMusic: {fileID: 8300000, guid: 543ab135933cc494f84ef9b950b3a363, type: 3}
+  battleMusic: {fileID: 8300000, guid: 543ab135933cc494f84ef9b950b3a363, type: 3}
+  bossMusic: {fileID: 8300000, guid: 543ab135933cc494f84ef9b950b3a363, type: 3}
 --- !u!82 &1106987624983401367
 AudioSource:
   m_ObjectHideFlags: 0

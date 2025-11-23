@@ -94,7 +94,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -9.21, y: 0}
@@ -120,6 +120,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6495555431948831547}
   - component: {fileID: 3031458640088380918}
+  - component: {fileID: 3728318234925981320}
   m_Layer: 0
   m_Name: RWall
   m_TagString: Untagged
@@ -171,7 +172,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 17.45, y: 0}
@@ -187,3 +188,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.78, y: 16.14}
   m_EdgeRadius: 0
+--- !u!114 &3728318234925981320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3517552719147343082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 111c99edc9ef2e1418c836e2ab91e00f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelManager: {fileID: 0}

@@ -209,7 +209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7399079139385981753
 RectTransform:
   m_ObjectHideFlags: 0
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 3885682170475289563}
   - component: {fileID: 6568119667285168806}
   m_Layer: 5
-  m_Name: UIDocument
+  m_Name: HUDPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1787,7 +1787,7 @@ MonoBehaviour:
   tipPanel: {fileID: 5433577022510602929}
   textTipPanel: {fileID: 5951217368499798616}
   loadingPanel: {fileID: 4746345588981099714}
-  HUDPanel: {fileID: 0}
+  HUDPanel: {fileID: 6568119667285168806}
   beginPanel: {fileID: 5436946534664350013}
   settingsPanel: {fileID: 8415366973330899273}
   pausePanel: {fileID: 1293699960033687800}
