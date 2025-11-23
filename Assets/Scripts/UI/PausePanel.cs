@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PausePanel : BasePanel
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("UI References")]
+    public Button resumeBtn;
+
+    protected override void Awake()
     {
-        
+        base.Awake();
+        // 绑定按钮事件
+        resumeBtn.onClick.AddListener(OnResume);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnResume()
     {
-        
+        Hide();
     }
 }

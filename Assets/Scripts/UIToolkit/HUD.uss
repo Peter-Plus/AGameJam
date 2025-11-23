@@ -1,0 +1,151 @@
+/* 根容器 */
+.hud-root {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+/* 左上角属性容器 */
+.stats-container {
+    position: absolute;
+    left: 30px;
+    top: 20px;
+    width: 360px;
+}
+
+/* 进度条容器 */
+.bar-container {
+    margin-bottom: 6px;
+    height: 26px;
+    width: 100%;
+}
+
+/* 经验条行（经验条+等级） */
+.exp-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 经验条容器（更短） */
+.exp-container {
+    width: 280px;
+    margin-right: 10px;
+}
+
+/* 等级标签 */
+.level-label {
+    font-size: 28px;
+    color: rgb(255, 200, 50);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    text-shadow: 2px 2px 0px rgb(80, 40, 0);
+    min-width: 60px;
+}
+
+/* 进度条背景 */
+.bar-background {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(40, 40, 40);
+    border-width: 2px;
+    border-color: rgb(20, 20, 20);
+    position: relative;
+}
+
+/* 进度条填充 */
+.bar-fill {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition-duration: 0.3s;
+}
+
+/* 血条填充 - 红色 */
+.hp-fill {
+    background-color: rgb(180, 30, 30);
+}
+
+/* 蓝条填充 - 深蓝色 */
+.mp-fill {
+    background-color: rgb(40, 60, 120);
+}
+
+/* 经验条填充 - 黄色 */
+.exp-fill {
+    background-color: rgb(200, 160, 20);
+}
+
+/* 进度条文本 */
+.bar-label {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -unity-text-align: middle-center;
+    font-size: 15px;
+    color: white;
+    -unity-font-style: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
+}
+
+/* 物品容器（现在在经验条下方） */
+.items-container {
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+/* 物品槽 */
+.item-slot {
+    width: 70px;
+    height: 70px;
+    background-color: rgb(30, 30, 30);
+    border-width: 3px;
+    border-color: rgb(60, 60, 60);
+    margin-right: 12px;
+    position: relative;
+}
+
+/* 物品图标 */
+.item-icon {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+}
+
+/* 技能图标 - 使用Skill1.png */
+.skill-icon {
+    background-image: resource('Texture/UI/Skill1');
+}
+
+/* 物品数量 */
+.item-count {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    font-size: 20px;
+    color: white;
+    -unity-font-style: bold;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+}
+
+/* 冷却遮罩 */
+.cooldown-overlay {
+    position: absolute;
+    width: 100%;
+    height: 0%;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    transition-duration: 0.1s;
+}
+
+/* 冷却文本 */
+.cooldown-text {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -unity-text-align: middle-center;
+    font-size: 24px;
+    color: white;
+    -unity-font-style: bold;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+}

@@ -152,37 +152,120 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
+
     #region 游戏HUD面板
     /// <summary>
     /// 显示/隐藏游戏内HUD
     /// </summary>
     public void ShowGameUI(bool show)
     {
-        //待开发
+        if (HUDPanel == null)
+        {
+            Debug.LogError("UIManager: HUDPanel未配置!");
+            return;
+        }
+
+        if (show)
+        {
+            HUDPanel.Show();
+        }
+        else
+        {
+            HUDPanel.Hide();
+        }
     }
 
     /// <summary>
     /// 更新血量显示
     /// </summary>
-    public void UpdateHP()
+    public void UpdateHpUI()
     {
-        //待开发
+        if (HUDPanel == null) return;
+        HUDPanel.UpdateHpUI();
+    }
+
+    /// <summary>
+    /// 更新蓝量显示
+    /// </summary>
+    public void UpdateMpUI()
+    {
+        if (HUDPanel == null) return;
+        HUDPanel.UpdateMpUI();
+    }
+
+    /// <summary>
+    /// 更新经验显示
+    /// </summary>
+    public void UpdateExpUI()
+    {
+        if (HUDPanel == null) return;
+        HUDPanel.UpdateExpUI();
     }
 
     /// <summary>
     /// 更新等级显示
     /// </summary>
-    public void UpdateLevel(int level)
+    public void UpdateLevelUI()
     {
-        //待开发
+        if (HUDPanel == null) return;
+        HUDPanel.UpdateLevelUI();
     }
 
     /// <summary>
     /// 更新血瓶数量显示
     /// </summary>
-    public void UpdatePotion(int count)
+    public void UpdatePotionUI()
     {
-        //待开发
+        if (HUDPanel == null) return;
+        HUDPanel.UpdatePotionUI();
+    }
+
+    /// <summary>
+    /// 使用血瓶时调用
+    /// </summary>
+    public void OnUsedPotion()
+    {
+        if (HUDPanel == null) return;
+        HUDPanel.OnUsedPotion();
+    }
+    #endregion
+
+
+    #region 游戏菜单面板
+    //显示设置面板
+    public void ShowSettingsPanel()
+    {
+        settingsPanel.Show();
+    }
+    //显示暂停面板
+    public void ShowPausePanel()
+    {
+        pausePanel.Show();
+    }
+    //显示开始面板
+    public void ShowBeginPanel()
+    {
+        beginPanel.Show();
+    }
+    //隐藏所有菜单面板
+    public void HideAllMenuPanels()
+    {
+        settingsPanel.Hide();
+        pausePanel.Hide();
+        beginPanel.Hide();
+    }
+    //隐藏设置面板
+    public void HideSettingsPanel()
+    {
+        settingsPanel.Hide();
+    }
+    public void HidePausePanel()
+    {
+        pausePanel.Hide();
+    }
+    public void HideBeginPanel()
+    {
+        beginPanel.Hide();
     }
     #endregion
 }

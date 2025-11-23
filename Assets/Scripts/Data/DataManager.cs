@@ -17,8 +17,11 @@ public class DataManager : MonoBehaviour
     {
         public int hp = 100;
         public int maxhp = 100;
+        //蓝条
+        public int mp = 40;
+        public int maxmp = 50;
         public int level = 1;//当前等级
-        public int exp = 0;//当前经验值
+        public int exp = 50;//当前经验值
         public int attack = 10;
         public int currentScene = 0;//玩家当前所在的关卡，0为第一个交互关卡，1为第一个战斗关卡，以此类推
         public int defense = 5;//防御力
@@ -30,8 +33,8 @@ public class DataManager : MonoBehaviour
     [System.Serializable]
     public class SettingData
     {
-        public int musicVolume = 100;//音乐音量
-        public int soundVolume = 100;//音效音量
+        public float musicVolume = 1;//音乐音量
+        public float soundVolume = 1;//音效音量
     }
     //成就数据
     [System.Serializable]
@@ -56,6 +59,8 @@ public class DataManager : MonoBehaviour
     {
         instance = this;
         DontDestroyOnLoad(gameObject);// 保持单例
+        //重置本机数据开关：
+        //SaveGameData();
         LoadAllData();// 加载所有数据
     }
 
@@ -67,18 +72,34 @@ public class DataManager : MonoBehaviour
     {
         saveData.hp = value;
         SaveGameData();
+        UIManager.Instance.HUDPanel.UpdateHpUI();
     }
     public void SetMaxHp(int value)
     {
         saveData.maxhp = value;
         SaveGameData();
+        UIManager.Instance.HUDPanel.UpdateHpUI();
     }
-
+    public int GetMp() => saveData.mp;
+    public int GetMaxMp() => saveData.maxmp;
+    public void SetMp(int value)
+    {
+        saveData.mp = value;
+        SaveGameData();
+        UIManager.Instance.HUDPanel.UpdateMpUI();
+    }
+    public void SetMaxMp(int value)
+    {
+        saveData.maxmp = value;
+        SaveGameData();
+        UIManager.Instance.HUDPanel.UpdateMpUI();
+    }
     public int GetLevel() => saveData.level;
     public void SetLevel(int value)
     {
         saveData.level = value;
         SaveGameData();
+        UIManager.Instance.HUDPanel.UpdateLevelUI();
     }
 
     public int GetExp() => saveData.exp;
@@ -86,6 +107,7 @@ public class DataManager : MonoBehaviour
     {
         saveData.exp = value;
         SaveGameData();
+        UIManager.Instance.HUDPanel.UpdateExpUI();
     }
 
     public int GetAttack() => saveData.attack;
@@ -107,6 +129,7 @@ public class DataManager : MonoBehaviour
     {
         saveData.healthPotionCount = value;
         SaveGameData();
+        UIManager.Instance.HUDPanel.UpdatePotionUI();
     }
 
     public int GetPassedLevelCount() => saveData.passedLevelCount;
@@ -129,15 +152,15 @@ public class DataManager : MonoBehaviour
     }
 
     //设置数据API
-    public int GetMusicVolume() => settingData.musicVolume;
-    public void SetMusicVolume(int value)
+    public float GetMusicVolume() => settingData.musicVolume;
+    public void SetMusicVolume(float value)
     {
         settingData.musicVolume = value;
         SaveSettingData();
     }
 
-    public int GetSfxVolume() => settingData.soundVolume;
-    public void SetSfxVolume(int value)
+    public float GetSfxVolume() => settingData.soundVolume;
+    public void SetSfxVolume(float value)
     {
         settingData.soundVolume = value;
         SaveSettingData();
@@ -230,6 +253,9 @@ public class DataManager : MonoBehaviour
 
 
     #region 内部数据存取（这里无需关心）
+
+    //Inspector右键可随时保存数据
+    [ContextMenu("Save Game Data")]
     private void SaveGameData()
     {
         PlayerPrefsMgr.Instance.SaveObject(saveData, "SaveData");

@@ -115,7 +115,6 @@ public abstract class BasePanel : MonoBehaviour
     /// </summary>
     public void HideMe()
     {
-        canvasGroup.alpha = 0;
         gameObject.SetActive(false);
     }
 
@@ -123,7 +122,6 @@ public abstract class BasePanel : MonoBehaviour
     /// 子类重写：面板显示时调用
     /// </summary>
     protected virtual void OnShow() { }
-
     /// <summary>
     /// 子类重写：面板隐藏时调用
     /// </summary>
