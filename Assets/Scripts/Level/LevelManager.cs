@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
     public List<Enemy> Enemys = new();
     public float levelTimer = 0f;
+    public Scene currentScene;
     
     private bool isLevelActive = true;
 
@@ -52,6 +54,12 @@ public class LevelManager : MonoBehaviour
         Debug.Log($"关卡完成！耗时: {levelTimer}秒");
         
         Invoke(nameof(CallNextLevel), 2.0f);
+    }
+
+    public void StartInteract()
+    {
+        if (DataManager.Instance.IsFirstTimeReachLevel(currentScene.buildIndex)) ;
+        
     }
     
     public void LevelFailed()

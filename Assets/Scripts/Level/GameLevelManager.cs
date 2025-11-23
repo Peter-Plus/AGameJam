@@ -10,7 +10,6 @@ public class GameLevelManager : MonoBehaviour
     public int currentLevelIndex = 0;
     public List<Scene> scenes = new List<Scene>();
     
-    private Dictionary<string, int> completedScenes = new Dictionary<string, int>();
     private int CompletedScenesCount = 0;
     
     private void Awake()
@@ -38,14 +37,13 @@ public class GameLevelManager : MonoBehaviour
     
     public void LoadFinalLevel()
     {
-        int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        if (completedScenes.Count == 5 && CompletedScenesCount >= 10)
+        if (DataManager.Instance.CanReachBossRoom())
         {
             LoadFinalLevel();
         }
         else
         {
-            LoadLevel(Random.Range(1,6));
+            LoadLevel(Random.Range(1,5));
         }
     }
 
@@ -63,12 +61,8 @@ public class GameLevelManager : MonoBehaviour
     {
         currentLevelIndex = scene.buildIndex;
         
-        // 统计进入次数
-        if (completedScenes.ContainsKey(scene.name))
-            completedScenes[scene.name]++;
-        else
-            completedScenes.Add(scene.name, 1);
+        DataManager.Instance.AddLevel(currentLevelIndex);
 
-        Debug.Log($"已进入场景 {scene.name} (第 {completedScenes[scene.name]} 次)");
+        Debug.Log($"已进入场景 {scene.name} (第 次)");
     }
 }

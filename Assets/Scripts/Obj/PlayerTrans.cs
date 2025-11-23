@@ -9,14 +9,14 @@ public class PlayerTrans : MonoBehaviour
     [SerializeField] private float scaleSpeed = 0.1f;  // 缩放速度
 
     [Header("移动范围限制")]
-    [SerializeField] private float minY = -2f;
-    [SerializeField] private float maxY = 2f;
+    [SerializeField] private float minZ = 0f;
+    [SerializeField] private float maxZ = 0f;
 
     [Header("组件引用")]
     public SpriteRenderer spriteRenderer;
 
     private Vector3 movement;
-    private float baseYPosition;  // 记录初始Y坐标作为基准
+    private float baseZPosition;  // 记录初始Y坐标作为基准
     private Vector3 baseScale;    // 记录初始缩放
 
 
@@ -38,7 +38,7 @@ public class PlayerTrans : MonoBehaviour
         }
 
         // 记录初始状态
-        baseYPosition = transform.position.y;
+        baseZPosition = transform.position.z;
         baseScale = transform.localScale;
     }
 
@@ -46,7 +46,7 @@ public class PlayerTrans : MonoBehaviour
     {
         HandleInput();
         UpdateScale();
-        UpdateSortingOrder();
+        //UpdateSortingOrder();
         FlipSprite();
     }
 
@@ -67,20 +67,20 @@ public class PlayerTrans : MonoBehaviour
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        movement = new Vector3(horizontal, vertical, 0f).normalized;
+        movement = new Vector3(horizontal, 0f , vertical).normalized;
     }
 
     private void MovePlayer()
     {
         Vector3 newPosition = transform.position + movement * moveSpeed * Time.fixedDeltaTime;
-        newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+        newPosition.z = Mathf.Clamp(newPosition.z, minZ, maxZ);
         transform.position = newPosition;
     }
 
     private void UpdateScale()
     {
         // 计算相对于初始位置的Y偏移
-        float yOffset = transform.position.y - baseYPosition;
+        float yOffset = transform.position.z - baseZPosition;
 
         // 往下走变大，往上走变小
         float scaleFactor = Mathf.Exp(-yOffset * scaleSpeed);
@@ -89,12 +89,12 @@ public class PlayerTrans : MonoBehaviour
         transform.localScale = baseScale * scaleFactor;
     }
 
-    private void UpdateSortingOrder()
-    {
-        if (spriteRenderer != null)
-        {
-            // Y值越小（越近）渲染层级越高
-            spriteRenderer.sortingOrder = Mathf.RoundToInt(-transform.position.y * 100);
-        }
-    }
+    // private void UpdateSortingOrder()
+    // {
+    //     if (spriteRenderer != null)
+    //     {
+    //         // Y值越小（越近）渲染层级越高
+    //         spriteRenderer.sortingOrder = Mathf.RoundToInt(-transform.position.y * 100);
+    //     }
+    // }
 }

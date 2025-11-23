@@ -12,13 +12,14 @@ public abstract class Enemy : MonoBehaviour
     [Header("Multipliers")]
     [SerializeField, Range(0.1f, 5f)] protected float healthMultiplier = 1.0f;
     [SerializeField, Range(0.1f, 5f)] protected float attackMultiplier = 1.0f;
+    [SerializeField, Range(0.1f, 5f)] protected float defenseMultiplier = 1.0f;
 
     protected float currentHealth;
     protected bool isDead = false;
     
     public float MaxHealth => baseMaxHealth * healthMultiplier;
     public float FinalAttack => baseAttack * attackMultiplier;
-    public float FinalDefense => baseDefense;
+    public float FinalDefense => baseDefense * defenseMultiplier;
     
     protected virtual void Start()
     {

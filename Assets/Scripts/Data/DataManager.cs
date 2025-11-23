@@ -53,7 +53,7 @@ public class DataManager : MonoBehaviour
 
     // 其他参数
     //关卡总数(不含boss房和初始交互关卡)
-    private const int totalLevelCount = 6;
+    private const int totalLevelCount = 5;
 
     private void Awake()
     {
