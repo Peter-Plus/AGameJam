@@ -40,6 +40,12 @@ public class LevelManager : MonoBehaviour
     
     public void LevelComplete()
     {
+        if (!CheckWinCondition())
+        {
+            // 未击杀全部怪物提示
+            return;
+        } 
+        
         if (!isLevelActive) return;
         isLevelActive = false; // 停止计时等
 

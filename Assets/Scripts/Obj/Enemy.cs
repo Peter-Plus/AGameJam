@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour
 {
     [Header("Base Stats")]
     [SerializeField] protected float baseMaxHealth = 100f;
@@ -19,13 +19,13 @@ public class Enemy : MonoBehaviour
     public float MaxHealth => baseMaxHealth * healthMultiplier;
     public float FinalAttack => baseAttack * attackMultiplier;
     public float FinalDefense => baseDefense;
-
+    
     protected virtual void Start()
     {
         currentHealth = MaxHealth;
     }
     
-    public virtual void Attack() {}
+    public abstract void Attack();
     
     public virtual void TakeDamage(float rawDamage)
     {
@@ -35,11 +35,12 @@ public class Enemy : MonoBehaviour
         currentHealth -= actualDamage;
 
         Debug.Log($"{gameObject.name} 受到 {actualDamage} 伤害");
+        
         OnHurtEffect();
 
         if (currentHealth <= 0) Die();
     }
-
+    
     protected virtual void OnHurtEffect() { }
 
     protected virtual void Die()
