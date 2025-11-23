@@ -122,8 +122,8 @@ MonoBehaviour:
   skillCooldown: 2
   healthPotionHealAmount: 30
   potionCooldown: 1
-  baseExpRequired: 100
-  expGrowthPerLevel: 50
+  baseExpRequired: 80
+  expGrowthPerLevel: 20
   hpGrowthPerLevel: 20
   mpGrowthPerLevel: 10
   attackGrowthPerLevel: 5

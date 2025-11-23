@@ -19,8 +19,8 @@ public class PlayerCore : MonoBehaviour
     private float lastPotionTime = -999f; // 上次使用血瓶的时间
 
     [Header("升级设置")]
-    [SerializeField] private int baseExpRequired = 100; // 基础升级所需经验
-    [SerializeField] private int expGrowthPerLevel = 50; // 每级经验成长（线性增长）
+    [SerializeField] private int baseExpRequired = 80; // 基础升级所需经验
+    [SerializeField] private int expGrowthPerLevel = 20; // 每级经验成长（线性增长）
     [SerializeField] private int hpGrowthPerLevel = 20; // 每级生命成长
     [SerializeField] private int mpGrowthPerLevel = 10; // 每级法力成长
     [SerializeField] private int attackGrowthPerLevel = 5; // 每级攻击成长
@@ -137,10 +137,7 @@ public class PlayerCore : MonoBehaviour
         // 显示伤害提示
         if (UIManager.Instance != null)
             UIManager.Instance.ShowTextTip($"-{actualDamage} HP");
-
-        // 进入无敌状态
-        StartInvincible();
-
+        
         // 检查是否死亡
         if (currentHp <= 0)
         {
@@ -347,16 +344,7 @@ public class PlayerCore : MonoBehaviour
         currentMp = Mathf.Max(0, currentMp - amount);
         DataManager.Instance.SetMp(currentMp);
     }
-
-    /// <summary>
-    /// 开始无敌状态
-    /// </summary>
-    private void StartInvincible()
-    {
-        isInvincible = true;
-        invincibleEndTime = Time.time + invincibleDuration;
-    }
-
+    
     /// <summary>
     /// 更新无敌状态
     /// </summary>
@@ -441,7 +429,7 @@ public class PlayerCore : MonoBehaviour
     /// </summary>
     private int CalculateMaxExpForLevel(int level)
     {
-        return baseExpRequired + (level - 1) * expGrowthPerLevel;
+        return baseExpRequired + (level) * expGrowthPerLevel;
     }
 
     /// <summary>
