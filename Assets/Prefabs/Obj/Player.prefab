@@ -215,8 +215,7 @@ MonoBehaviour:
   attackGrowthPerLevel: 5
   defenseGrowthPerLevel: 2
   attackCooldown: 0.5
-  enableAttackEffect: 1
-  invincibleDuration: 1
+  enableAttackEffect: 0
 --- !u!54 &1966507218209494304
 Rigidbody:
   m_ObjectHideFlags: 0

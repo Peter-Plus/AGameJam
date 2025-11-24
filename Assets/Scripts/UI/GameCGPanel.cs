@@ -18,7 +18,6 @@ public class GameCGPanel : BasePanel
     protected override void Awake()
     {
         base.Awake();
-        Debug.Log($"CGPanel Awake, canvasGroup = {canvasGroup}");
     }
 
     #region API

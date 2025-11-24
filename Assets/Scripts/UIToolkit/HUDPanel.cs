@@ -27,56 +27,11 @@ public class HUDPanel : MonoBehaviour
     private VisualElement skillCooldownOverlay;
 
     // 冷却相关
-    private float skillCooldownTime = 5f; // 技能冷却时间5秒
-    private float currentSkillCooldown = 0f;
-    private bool isVisible = false;
+    private bool isVisible = false; // HUD是否可见
+    private PlayerCore registeredPlayer = null;
 
-    private void Awake()
-    {
-        if (uiDocument == null)
-        {
-            uiDocument = GetComponent<UIDocument>();
-        }
 
-        // 获取根元素
-        root = uiDocument.rootVisualElement;
-
-        // 获取所有UI元素引用
-        levelLabel = root.Q<Label>("LevelLabel");
-        hpLabel = root.Q<Label>("HpLabel");
-        mpLabel = root.Q<Label>("MpLabel");
-        expLabel = root.Q<Label>("ExpLabel");
-        hpBarFill = root.Q<VisualElement>("HpBarFill");
-        mpBarFill = root.Q<VisualElement>("MpBarFill");
-        expBarFill = root.Q<VisualElement>("ExpBarFill");
-        potionIcon = root.Q<VisualElement>("PotionIcon");
-        potionCount = root.Q<Label>("PotionCount");
-        potionCooldown = root.Q<VisualElement>("PotionCooldown");
-        skillCooldownText = root.Q<Label>("SkillCooldown");
-        skillCooldownOverlay = root.Q<VisualElement>("SkillCooldownOverlay");
-
-        // 加载血瓶图标
-        LoadPotionIcon();
-
-        // 初始隐藏
-        Hide();
-    }
-
-    /// <summary>
-    /// 加载血瓶图标
-    /// </summary>
-    private void LoadPotionIcon()
-    {
-        Texture2D texture = Resources.Load<Texture2D>("Texture/UI/HealthPots");
-        if (texture != null)
-        {
-            potionIcon.style.backgroundImage = new StyleBackground(texture);
-        }
-        else
-        {
-            Debug.LogWarning("HUDPanel: 未找到血瓶图标 Resources/Texture/UI/HealthPots.png");
-        }
-    }
+    #region 更新UI方法
 
     /// <summary>
     /// 显示HUD
@@ -92,8 +47,6 @@ public class HUDPanel : MonoBehaviour
         // 从DataManager获取数据并更新UI
         RefreshAllUI();
 
-        // 开始技能冷却循环
-        StartCoroutine(SkillCooldownLoop());
     }
 
     /// <summary>
@@ -108,19 +61,6 @@ public class HUDPanel : MonoBehaviour
         StopAllCoroutines();
     }
 
-    /// <summary>
-    /// 刷新所有UI
-    /// </summary>
-    private void RefreshAllUI()
-    {
-        UpdateHpUI();
-        UpdateMpUI();
-        UpdateExpUI();
-        UpdateLevelUI();
-        UpdatePotionUI();
-    }
-
-    #region 更新UI方法
     /// <summary>
     /// 更新血条UI
     /// </summary>
@@ -194,64 +134,115 @@ public class HUDPanel : MonoBehaviour
     #endregion
 
     #region 技能冷却相关
-    /// <summary>
-    /// 技能冷却循环（5秒循环）
-    /// </summary>
-    private IEnumerator SkillCooldownLoop()
+    //注册玩家信息
+    public void RegisterPlayer(PlayerCore player)
     {
-        while (isVisible)
-        {
-            // 开始冷却
-            currentSkillCooldown = skillCooldownTime;
-
-            while (currentSkillCooldown > 0)
-            {
-                currentSkillCooldown -= Time.deltaTime;
-                UpdateSkillCooldownUI();
-                yield return null;
-            }
-
-            // 冷却完成
-            currentSkillCooldown = 0;
-            UpdateSkillCooldownUI();
-
-            // 等待下一次循环开始
-            yield return new WaitForSeconds(0.1f);
-        }
+        if (player == null) return;
+        registeredPlayer = player;
     }
 
-    /// <summary>
-    /// 更新技能冷却UI
-    /// </summary>
-    private void UpdateSkillCooldownUI()
+    private void Update()
     {
-        if (currentSkillCooldown > 0)
-        {
-            // 显示冷却时间
-            int cooldownSeconds = Mathf.CeilToInt(currentSkillCooldown);
-            skillCooldownText.text = cooldownSeconds.ToString();
+        if (!isVisible || registeredPlayer == null) return;
+        // 更新技能冷却
+        UpdateSkillCDUI();
+        UpdatePotionCDUI();
+    }
 
-            // 更新冷却遮罩高度（从下往上）
-            float cooldownPercent = currentSkillCooldown / skillCooldownTime;
-            skillCooldownOverlay.style.height = Length.Percent(cooldownPercent * 100);
+    private void UpdateSkillCDUI()
+    {
+        float remaining = registeredPlayer.GetSkillCooldownRemaining();//获取剩余冷却时间
+        float duration = registeredPlayer.GetSkillCooldownDuration();// 获取冷却总时间
+
+        if (remaining > 0)
+        {
+            skillCooldownText.text = Mathf.CeilToInt(remaining).ToString();// 显示剩余时间（向上取整）
+            //Mathf.CeilToInt()这个API的作用是将一个浮点数向上取整为最接近的整数。
+            skillCooldownOverlay.style.height = Length.Percent((remaining / duration) * 100);// 更新遮罩高度
+            //Length.Percent()这个API的作用是创建一个表示百分比长度的Length对象，通常用于UI布局中指定元素的尺寸或位置。
         }
         else
         {
-            // 冷却完成
             skillCooldownText.text = "";
             skillCooldownOverlay.style.height = Length.Percent(0);
         }
     }
-    #endregion
 
-    #region 血瓶冷却相关（可选，暂未实现）
-    /// <summary>
-    /// 使用血瓶时调用，显示冷却动画
-    /// </summary>
-    public void OnUsedPotion()
+    private void UpdatePotionCDUI()
     {
-        UpdatePotionUI();
-        //可以在这里添加血瓶使用后的冷却逻辑
+        float remaining = registeredPlayer.GetPotionCooldownRemaining();
+        float duration = registeredPlayer.GetPotionCooldownDuration();
+        if (remaining > 0)
+        {
+            potionCooldown.style.height = Length.Percent((remaining / duration) * 100);
+        }
+        else
+        {
+            potionCooldown.style.height = Length.Percent(0);
+        }
     }
     #endregion
+
+    #region 内部
+    private void Awake()
+    {
+        if (uiDocument == null)
+        {
+            uiDocument = GetComponent<UIDocument>();
+        }
+
+        // 获取根元素
+        root = uiDocument.rootVisualElement;
+
+        // 获取所有UI元素引用
+        levelLabel = root.Q<Label>("LevelLabel");
+        hpLabel = root.Q<Label>("HpLabel");
+        mpLabel = root.Q<Label>("MpLabel");
+        expLabel = root.Q<Label>("ExpLabel");
+        hpBarFill = root.Q<VisualElement>("HpBarFill");
+        mpBarFill = root.Q<VisualElement>("MpBarFill");
+        expBarFill = root.Q<VisualElement>("ExpBarFill");
+        potionIcon = root.Q<VisualElement>("PotionIcon");
+        potionCount = root.Q<Label>("PotionCount");
+        potionCooldown = root.Q<VisualElement>("PotionCooldown");
+        skillCooldownText = root.Q<Label>("SkillCooldown");
+        skillCooldownOverlay = root.Q<VisualElement>("SkillCooldownOverlay");
+
+        // 加载血瓶图标
+        LoadPotionIcon();
+
+        // 初始隐藏
+        Hide();
+    }
+
+    /// <summary>
+    /// 加载血瓶图标
+    /// </summary>
+    private void LoadPotionIcon()
+    {
+        Texture2D texture = Resources.Load<Texture2D>("Texture/UI/HealthPots");
+        if (texture != null)
+        {
+            potionIcon.style.backgroundImage = new StyleBackground(texture);
+        }
+        else
+        {
+            Debug.LogWarning("HUDPanel: 未找到血瓶图标 Resources/Texture/UI/HealthPots.png");
+        }
+    }
+
+    /// <summary>
+    /// 刷新所有UI
+    /// </summary>
+    private void RefreshAllUI()
+    {
+        UpdateHpUI();
+        UpdateMpUI();
+        UpdateExpUI();
+        UpdateLevelUI();
+        UpdatePotionUI();
+    }
+
+
+    #endregion 
 }

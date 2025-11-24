@@ -33,11 +33,14 @@ public class BeginPanel : BasePanel
     {
         //开始游戏逻辑
         //根据存档判断玩家是新的游戏还是继续游戏
-        int passedLevelCount = DataManager.Instance.GetPassedLevelCount();
-        if( passedLevelCount == 0 ) GameLevelManager.Instance.LoadInitialLevel(); //加载初始交互关卡
-        else GameLevelManager.Instance.LoadNextLevel(); //加载下一个关卡 
-        //隐藏开始面板
-        Hide();
+        //显示加载面板
+        UIManager.Instance.ShowLoadingPanel(true);
+        Hide(()=>
+        {
+            int passedLevelCount = DataManager.Instance.GetPassedLevelCount();
+            if (passedLevelCount == 0) GameLevelManager.Instance.LoadInitialLevel(); //加载初始交互关卡
+            else GameLevelManager.Instance.LoadNextLevel(); //加载下一个关卡 
+        });
     }
     private void OnSettingsClick()
     {

@@ -18,8 +18,9 @@ public class PlayerTrans : MonoBehaviour
     private Vector3 movement;
     private float baseZPosition;  // 记录初始Y坐标作为基准
     private Vector3 baseScale;    // 记录初始缩放
+    private Rigidbody rb;
 
-
+    #region API
     //外部API-获取面朝向IsFacingRight
     public bool IsFacingRight()
     {
@@ -30,13 +31,16 @@ public class PlayerTrans : MonoBehaviour
         return true; // 默认朝右
     }
 
+    #endregion
+
+    #region 生命周期
     private void Awake()
     {
         if (spriteRenderer == null)
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
-
+        rb = GetComponent<Rigidbody>();
         // 记录初始状态
         baseZPosition = transform.position.z;
         baseScale = transform.localScale;
@@ -44,23 +48,32 @@ public class PlayerTrans : MonoBehaviour
 
     private void Update()
     {
+        //通过PlayerCore获取存活状态isLive
+        PlayerCore playerCore = GetComponent<PlayerCore>();
+        if(!playerCore.IsLive()||!playerCore.CanMove())
+        {
+            //直接静止玩家刚体，防止有残留移动
+            movement = Vector3.zero;
+            return;
+        }
         HandleInput();
         UpdateScale();
-        //UpdateSortingOrder();
         FlipSprite();
     }
 
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
+    #endregion
+
+    #region 内部
     private void FlipSprite()
     {
         if (movement.x != 0 && spriteRenderer != null)
         {
             spriteRenderer.flipX = movement.x < 0;
         }
-    }
-
-    private void FixedUpdate()
-    {
-        MovePlayer();
     }
 
     private void HandleInput()
@@ -72,29 +85,28 @@ public class PlayerTrans : MonoBehaviour
 
     private void MovePlayer()
     {
-        Vector3 newPosition = transform.position + movement * moveSpeed * Time.fixedDeltaTime;
-        newPosition.z = Mathf.Clamp(newPosition.z, minZ, maxZ);
-        transform.position = newPosition;
+        if(movement==Vector3.zero)
+        {
+            //静止刚体
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            return;
+        }
+
+        //目标位置
+        Vector3 targetPos = rb.position+ movement * moveSpeed * Time.fixedDeltaTime;
+        targetPos.z = Mathf.Clamp(targetPos.z, minZ, maxZ);
+        rb.MovePosition(targetPos);
+
     }
 
+    // 根据Z位置调整缩放
     private void UpdateScale()
     {
         // 计算相对于初始位置的Y偏移
         float yOffset = transform.position.z - baseZPosition;
-
-        // 往下走变大，往上走变小
         float scaleFactor = Mathf.Exp(-yOffset * scaleSpeed);
-
-        // 基于初始缩放进行调整
         transform.localScale = baseScale * scaleFactor;
     }
-
-    // private void UpdateSortingOrder()
-    // {
-    //     if (spriteRenderer != null)
-    //     {
-    //         // Y值越小（越近）渲染层级越高
-    //         spriteRenderer.sortingOrder = Mathf.RoundToInt(-transform.position.y * 100);
-    //     }
-    // }
+    #endregion
 }

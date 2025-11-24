@@ -63,9 +63,14 @@ public abstract class BasePanel : MonoBehaviour
     /// </summary>
     public virtual void Hide()
     {
+        if (canvasGroup == null)
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+            if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
         isShowing = false;
         //先检查对象是否active，以避免重复隐藏时的问题
-        if(gameObject.activeSelf == false)
+        if (gameObject.activeSelf == false)
         {
             return;
         }

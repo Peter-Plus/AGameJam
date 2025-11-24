@@ -7,8 +7,8 @@ public class Snowfall : MonoBehaviour
 
     [Header("基础参数")]
     public int maxSnowflakes = 800;
-    public float spawnWidth = 25f;
-    public float fallSpeed = 1.5f;
+    public float spawnWidth = 25f;// 生成范围宽度
+    public float fallSpeed = 1.5f;// 下落速度
     public Vector2 snowflakeSize = new Vector2(0.1f, 0.2f); // 尺寸
 
     [Header("风力效果")]

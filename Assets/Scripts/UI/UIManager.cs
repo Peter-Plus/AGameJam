@@ -163,6 +163,11 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region 游戏HUD面板
+    // 注册玩家API
+    public void RegisterPlayer(PlayerCore player)
+    {
+        HUDPanel.RegisterPlayer(player);
+    }
     /// <summary>
     /// 显示/隐藏游戏内HUD
     /// </summary>
@@ -235,7 +240,7 @@ public class UIManager : MonoBehaviour
     public void OnUsedPotion()
     {
         if (HUDPanel == null) return;
-        HUDPanel.OnUsedPotion();
+        HUDPanel.UpdatePotionUI();
     }
     #endregion
 
@@ -318,7 +323,7 @@ public class UIManager : MonoBehaviour
     {
         gameCGPanel.ShowCGInstant(cgSprite, displayTime, onComplete);
     }
-    public void ShowGameCGPanelInstant(Sprite cgSprite,  Action onComplete = null)
+    public void ShowGameCGPanelInstant(Sprite cgSprite, Action onComplete = null)
     {
         gameCGPanel.ShowCGInstant(cgSprite, onComplete);
     }

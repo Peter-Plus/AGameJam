@@ -306,7 +306,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 789223616}
-  - component: {fileID: 789223615}
+  - component: {fileID: 789223617}
   m_Layer: 0
   m_Name: LevelBossManager
   m_TagString: Untagged
@@ -314,28 +314,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &789223615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 789223614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b08bc189b408d2b428cfd0a957237b0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CanPause: 1
-  Enemys: []
-  levelName: "\u5BB6"
-  dialogue1: "\u96EA\u591C\u4FBF\u5229\u5E97\u7684\u81EA\u52A8\u95E8\u5F00\u5408\u95F4\u5E26\u8FDB\u7EC6\u788E\u7684\u96EA\u82B1,\u4E24\u4E2A\u7A7F\u7740\u6821\u670D\u7684\u5973\u751F\u6324\u5728\u6696\u67DC\u65C1\u3002"
-  dialogue2: "\u6240\u4EE5\u8FD9\u5C31\u662F\u4F60\u7FD8\u6389\u8865\u4E60\u73ED\u7684\u7406\u7531?\u4E3A\u4E86\u5403\u5173\u4E1C\u716E?"
-  dialogue3: "\u4E3A\u4E86\u548C\u4F60\u4E00\u8D77\u5403\u8FD9\u4E2A\u3002"
-  dialogue4: "\u73BB\u7483\u7A97\u4E0A\u7684\u96FE\u6C14\u6E10\u6E10\u6655\u5F00\u4E86\u8FDC\u5904\u9713\u8679\u706F\u7684\u5149\u6591"
-  finalSpeak: "\"\u540E\u6765\u88AB\u8001\u5E08\u9A82\u4E86\u4E2A\u72D7\u8840\u6DCB\u5934,\u4E0D\u77E5\u9053\u5979\u6709\u6CA1\u6709\u540E\u6094\u2026\u2026\""
-  girl1Name: "\u83CA \u6E1A\u6708"
-  girl2Name: "\u6D45\u4ED3 \u51DB\u51DB\u5B50"
 --- !u!4 &789223616
 Transform:
   m_ObjectHideFlags: 0
@@ -352,6 +330,27 @@ Transform:
   - {fileID: 631336463}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &789223617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789223614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f02fb77ab6d14f449900bfcba6e2b92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CanPause: 1
+  Enemys: []
+  levelName: "\u4E0B\u6C34\u9053"
+  dialogue1: "\u96EA\u591C\u4FBF\u5229\u5E97\u7684\u81EA\u52A8\u95E8\u5F00\u5408\u95F4\u5E26\u8FDB\u7EC6\u788E\u7684\u96EA\u82B1,\u4E24\u4E2A\u7A7F\u7740\u6821\u670D\u7684\u5973\u751F\u6324\u5728\u6696\u67DC\u65C1\u3002"
+  dialogue2: "\u6240\u4EE5\u8FD9\u5C31\u662F\u4F60\u7FD8\u6389\u8865\u4E60\u73ED\u7684\u7406\u7531?\u4E3A\u4E86\u5403\u5173\u4E1C\u716E?"
+  dialogue3: "\u4E3A\u4E86\u548C\u4F60\u4E00\u8D77\u5403\u8FD9\u4E2A\u3002"
+  finalSpeak: "\"\u540E\u6765\u88AB\u8001\u5E08\u9A82\u4E86\u4E2A\u72D7\u8840\u6DCB\u5934,\u4E0D\u77E5\u9053\u5979\u6709\u6CA1\u6709\u540E\u6094\u2026\u2026\""
+  girl1Name: "\u83CA \u6E1A\u6708"
+  girl2Name: "\u6D45\u4ED3 \u51DB\u51DB\u5B50"
 --- !u!1001 &1275261562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -415,7 +414,7 @@ PrefabInstance:
     - target: {fileID: 7003762897568513803, guid: 64a155809718426438b50094aa3393d0, type: 3}
       propertyPath: levelManager
       value: 
-      objectReference: {fileID: 789223615}
+      objectReference: {fileID: 789223617}
     - target: {fileID: 7848471329492535152, guid: 64a155809718426438b50094aa3393d0, type: 3}
       propertyPath: m_Size.y
       value: 18.4

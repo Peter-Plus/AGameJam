@@ -31,8 +31,8 @@ public class EndPoint : MonoBehaviour
                 if (currentLevelIndex == -1)
                 {
                     UIManager.Instance.ShowLoadingPanel(true);
-                    //清空存档数据，回到主菜单
-                    GameLevelManager.Instance.FailAndReturnToMainMenu();
+                    //开始协程，等待2s后返回主菜单
+                    StartCoroutine(ReturnToMainMenuAfterDelay(2f));
                     return;
                 }
                 //触发关卡完成
@@ -40,5 +40,11 @@ public class EndPoint : MonoBehaviour
                 UIManager.Instance.ShowLoadingPanel(true);
             }
         }
+    }
+
+    private IEnumerator ReturnToMainMenuAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        GameLevelManager.Instance.FailAndReturnToMainMenu();
     }
 }

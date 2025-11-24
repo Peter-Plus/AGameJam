@@ -18,5 +18,7 @@ public class PausePanel : BasePanel
     private void OnResume()
     {
         Hide();
+
+        Time.timeScale = 1f; // ª÷∏¥”Œœ∑ ±º‰
     }
 }

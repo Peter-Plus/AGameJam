@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -30,14 +31,12 @@ public class PlayerCore : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.5f; // 普通攻击冷却
     //是否启用攻击特效
     [SerializeField] private bool enableAttackEffect = true;
+    [SerializeField] private bool canMove = true; // 玩家是否可以移动，另一种暂停方式
     private float lastAttackTime = -999f; // 上次攻击时间
+    private bool isLive = true; // 玩家是否存活
 
-    [Header("无敌帧设置")]
-    [SerializeField] private float invincibleDuration = 1.0f; // 受伤后无敌时间
-    private float invincibleEndTime = -999f; // 无敌结束时间
-    private bool isInvincible = false; // 是否处于无敌状态
 
-    // 当前属性缓存(避免频繁访问DataManager)
+    // 当前属性缓存
     private int currentHp;
     private int currentMaxHp;
     private int currentMp;
@@ -49,10 +48,30 @@ public class PlayerCore : MonoBehaviour
     #endregion
 
     #region 公开API
-    /// <summary>
-    /// 普通攻击
-    /// </summary>
-    /// <returns>攻击伤害值,如果攻击失败返回0</returns>
+    // 设置玩家能否移动
+    public void SetCanMove(bool value)
+    {
+        canMove = value;
+    }
+    // 玩家是否可以移动
+    public bool CanMove() => canMove;
+    // 玩家是否存活
+    public bool IsLive() => isLive;
+    // 获取技能冷却剩余时间
+    public float GetSkillCooldownRemaining()
+    {
+        return Mathf.Max(0, skillCooldown - (Time.time - lastSkillTime));
+    }
+    // 获取血瓶冷却剩余时间
+    public float GetPotionCooldownRemaining()
+    {
+        return Mathf.Max(0, potionCooldown - (Time.time - lastPotionTime));
+    }
+    // 获取技能冷却总时长
+    public float GetSkillCooldownDuration() => skillCooldown;
+    // 获取血瓶冷却总时长
+    public float GetPotionCooldownDuration() => potionCooldown;
+    // 普通攻击
     public int Attack()
     {
         // 检查攻击冷却
@@ -80,10 +99,7 @@ public class PlayerCore : MonoBehaviour
         return currentAttack;
     }
 
-    /// <summary>
-    /// 使用技能攻击
-    /// </summary>
-    /// <returns>技能伤害值,如果技能使用失败返回0</returns>
+    // 使用技能攻击
     public int UseSkill()
     {
         // 检查技能冷却
@@ -115,17 +131,9 @@ public class PlayerCore : MonoBehaviour
         return skillDamage;
     }
 
-    /// <summary>
-    /// 玩家受到伤害
-    /// </summary>
-    /// <param name="damage">原始伤害值</param>
+    // 玩家受到伤害 - 初始伤害
     public void TakeDamage(int damage)
     {
-        // 检查无敌状态
-        if (isInvincible)
-        {
-            return;
-        }
 
         // 计算实际伤害(伤害 - 防御)
         int actualDamage = Mathf.Max(1, damage - currentDefense);
@@ -145,9 +153,7 @@ public class PlayerCore : MonoBehaviour
         }
     }
 
-    /// <summary>
     /// 使用血瓶回复生命
-    /// </summary>
     public void UseHealthPotion()
     {
         // 检查冷却时间
@@ -184,7 +190,7 @@ public class PlayerCore : MonoBehaviour
         currentHp += healAmount;
         DataManager.Instance.SetHp(currentHp);
 
-        // 显示回复提示
+        // 显示相关UI
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowTextTip($"+{healAmount} HP");
@@ -192,9 +198,7 @@ public class PlayerCore : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 拾取血瓶*1
-    /// </summary>
+    // 拾取血瓶*1
     public void PickupHealthPotion()
     {
         int potionCount = DataManager.Instance.GetHealthPotionCount();
@@ -204,10 +208,7 @@ public class PlayerCore : MonoBehaviour
             UIManager.Instance.ShowTextTip("拾取了一个血瓶!");
     }
 
-    /// <summary>
-    /// 获得经验值
-    /// </summary>
-    /// <param name="exp">获得的经验值</param>
+    // 获得经验值
     public void GainExperience(int exp)
     {
         currentExp += exp;
@@ -222,10 +223,7 @@ public class PlayerCore : MonoBehaviour
         DataManager.Instance.SetExp(currentExp);
     }
 
-    /// <summary>
-    /// 恢复生命值(非血瓶,备用)
-    /// </summary>
-    /// <param name="amount">恢复量</param>
+    // 恢复生命值(非血瓶,备用)
     public void RestoreHealth(int amount)
     {
         if (currentHp >= currentMaxHp)
@@ -241,10 +239,7 @@ public class PlayerCore : MonoBehaviour
             UIManager.Instance.ShowTextTip($"+{healAmount} HP");
     }
 
-    /// <summary>
-    /// 恢复法力值
-    /// </summary>
-    /// <param name="amount">恢复量</param>
+    // 恢复法力值
     public void RestoreMana(int amount)
     {
         if (currentMp >= currentMaxMp)
@@ -260,38 +255,24 @@ public class PlayerCore : MonoBehaviour
             UIManager.Instance.ShowTextTip($"+{restoreAmount} MP");
     }
 
-    /// <summary>
-    /// 获取当前生命值
-    /// </summary>
+    // 获取当前生命值
     public int GetCurrentHp() => currentHp;
 
-    /// <summary>
-    /// 获取当前法力值
-    /// </summary>
+    // 获取当前法力值
     public int GetCurrentMp() => currentMp;
 
-    /// <summary>
-    /// 获取当前等级
-    /// </summary>
+    // 获取当前等级
     public int GetCurrentLevel() => currentLevel;
 
-    /// <summary>
-    /// 获取当前经验值
-    /// </summary>
+    // 获取当前经验值
     public int GetCurrentExp() => currentExp;
 
-    /// <summary>
-    /// 获取当前等级升级所需的最大经验值
-    /// </summary>
+    // 获取当前等级升级所需的最大经验值
     public int GetMaxExpForCurrentLevel()
     {
         return CalculateMaxExpForLevel(currentLevel);
     }
 
-    /// <summary>
-    /// 是否处于无敌状态
-    /// </summary>
-    public bool IsInvincible() => isInvincible;
     #endregion
 
     #region 生命周期
@@ -299,22 +280,20 @@ public class PlayerCore : MonoBehaviour
     {
         // 在Start中加载属性，确保DataManager和UIManager已初始化
         RefreshPlayerStats();
+        // 注册到HUD
+        UIManager.Instance.RegisterPlayer(this);
     }
 
     private void Update()
     {
-        // 更新无敌状态
-        UpdateInvincibleState();
-
-        // 处理输入(开发测试用)
+        if(!isLive || !canMove) return;
+        // 处理调试输入(开发测试用)
         HandleDebugInput();
     }
     #endregion
 
     #region 私有方法
-    /// <summary>
-    /// 刷新玩家属性(从DataManager同步)
-    /// </summary>
+    // 刷新玩家属性
     private void RefreshPlayerStats()
     {
         // 检查DataManager是否存在
@@ -336,29 +315,14 @@ public class PlayerCore : MonoBehaviour
         Debug.Log($"[PlayerCore] 玩家属性加载 - Lv.{currentLevel} HP:{currentHp}/{currentMaxHp} EXP:{currentExp}/{GetMaxExpForCurrentLevel()}");
     }
 
-    /// <summary>
-    /// 消耗法力值
-    /// </summary>
+    // 消耗法力值
     private void ConsumeMana(int amount)
     {
         currentMp = Mathf.Max(0, currentMp - amount);
         DataManager.Instance.SetMp(currentMp);
     }
-    
-    /// <summary>
-    /// 更新无敌状态
-    /// </summary>
-    private void UpdateInvincibleState()
-    {
-        if (isInvincible && Time.time >= invincibleEndTime)
-        {
-            isInvincible = false;
-        }
-    }
 
-    /// <summary>
-    /// 检查是否升级
-    /// </summary>
+    //检查是否升级
     private void CheckLevelUp()
     {
         // 循环检查，因为可能一次获得足够多的经验连续升级
@@ -369,12 +333,10 @@ public class PlayerCore : MonoBehaviour
             // 如果当前经验达到升级要求
             if (currentExp >= maxExp)
             {
-                // 计算溢出的经验（超过升级线的部分）
+                // 计算溢出的经验
                 int overflowExp = currentExp - maxExp;
-
                 // 执行升级
                 LevelUp();
-
                 // 升级后经验设为溢出的经验
                 currentExp = overflowExp;
             }
@@ -386,24 +348,19 @@ public class PlayerCore : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 升级
-    /// </summary>
+    // 升级
     private void LevelUp()
     {
         // 等级提升
         currentLevel++;
-
         // 提升属性
         currentMaxHp += hpGrowthPerLevel;
         currentMaxMp += mpGrowthPerLevel;
         currentAttack += attackGrowthPerLevel;
         currentDefense += defenseGrowthPerLevel;
-
         // 升级时回满血蓝
         currentHp = currentMaxHp;
         currentMp = currentMaxMp;
-
         // 保存所有属性到DataManager
         DataManager.Instance.SetLevel(currentLevel);
         DataManager.Instance.SetMaxHp(currentMaxHp);
@@ -416,39 +373,40 @@ public class PlayerCore : MonoBehaviour
         // 显示升级提示
         if (UIManager.Instance != null)
             UIManager.Instance.ShowTextTip($"升级! 达到 Lv.{currentLevel}");
-
-        Debug.Log($"[PlayerCore] 升级! Lv.{currentLevel} - HP:{currentMaxHp} MP:{currentMaxMp} ATK:{currentAttack} DEF:{currentDefense} 下一级需要:{GetMaxExpForCurrentLevel()}EXP");
     }
 
     /// <summary>
     /// 计算指定等级升级所需的最大经验值
-    /// 公式: baseExpRequired + (level - 1) * expGrowthPerLevel
-    /// 例如: 100 + (1-1)*50 = 100 (1级满经验)
-    ///       100 + (2-1)*50 = 150 (2级满经验)
-    ///       100 + (3-1)*50 = 200 (3级满经验)
+    /// 公式: baseExpRequired + level* expGrowthPerLevel
     /// </summary>
     private int CalculateMaxExpForLevel(int level)
     {
         return baseExpRequired + (level) * expGrowthPerLevel;
     }
 
-    /// <summary>
-    /// 玩家死亡处理
-    /// </summary>
+    // 玩家死亡处理
     private void OnPlayerDeath()
     {
-        Debug.Log("玩家死亡!");
+        //玩家死亡时取消所有输入控制
+        isLive = false;
 
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip("你死了...");
-
-        // TODO: 游戏结束逻辑
-        // 可以显示游戏结束面板,重新开始等
+            UIManager.Instance.ShowTip("你已死亡!", () =>
+            {
+                // 重置玩家数据
+                DataManager.Instance.ResetSaveData();
+                // 显示加载界面，等待2s返回主界面
+                UIManager.Instance.ShowLoadingPanel(true);
+                StartCoroutine(ReturnToMainMenuAfterDelay(2f));
+            });
+    }
+    private IEnumerator ReturnToMainMenuAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        GameLevelManager.Instance.FailAndReturnToMainMenu();
     }
 
-    /// <summary>
-    /// 处理调试输入(开发测试用)
-    /// </summary>
+    // 处理调试输入(开发测试用)
     private void HandleDebugInput()
     {
         // 按J键普通攻击(测试)
@@ -486,21 +444,9 @@ public class PlayerCore : MonoBehaviour
         // 按O键受到伤害(测试)
         if (Input.GetKeyDown(KeyCode.O))
         {
-            TakeDamage(15);
+            TakeDamage(35);
         }
 
-        // 按P键查看当前状态(测试)
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Debug.Log($"===== 玩家状态 =====");
-            Debug.Log($"等级: Lv.{currentLevel}");
-            Debug.Log($"生命: {currentHp}/{currentMaxHp}");
-            Debug.Log($"法力: {currentMp}/{currentMaxMp}");
-            Debug.Log($"经验: {currentExp}/{GetMaxExpForCurrentLevel()}");
-            Debug.Log($"攻击: {currentAttack}");
-            Debug.Log($"防御: {currentDefense}");
-            Debug.Log($"==================");
-        }
     }
     #endregion
 }

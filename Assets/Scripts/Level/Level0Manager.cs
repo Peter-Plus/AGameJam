@@ -42,8 +42,8 @@ public class Level0Manager : LevelManager
             UIManager.Instance.ShowTextTip(levelName);
             UIManager.Instance.ShowGameUI(true);
         }
-        
     }
+
 
     protected override void Update()
     {
@@ -61,7 +61,13 @@ public class Level0Manager : LevelManager
     private IEnumerator InteractSequence()
     {
         //暂停游戏
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
+        //level 1 需要下雨且没有敌人，故不暂停，通过PlayerCore禁用玩家操作实现暂停效果
+        PlayerCore playerCore = player.GetComponent<PlayerCore>();
+        if (playerCore != null)
+        {
+            playerCore.SetCanMove(false);// 禁用玩家操作
+        }
         // 加载资源
         Sprite blackScreen = Resources.Load<Sprite>("CG/BlackScreen");
         Sprite illustration1 = Resources.Load<Sprite>("CG/Illustration1");
@@ -120,9 +126,8 @@ public class Level0Manager : LevelManager
             UIManager.Instance.ShowSpeakPanel(finalSpeak, playerHead, () => done = true);
         }
         yield return new WaitUntil(() => done);
-        //恢复
-        Time.timeScale = 1f;
-
+        // 恢复游戏
+        playerCore.SetCanMove(true);
         UIManager.Instance.ShowTextTip(levelName);
         UIManager.Instance.ShowGameUI(true);
     }

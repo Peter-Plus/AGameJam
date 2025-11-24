@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 
 /// <summary>
-/// 对话框面板，支持打字机效果、角色名、角色立绘
+/// 对话面板，支持打字机效果、角色姓名框、角色立绘
 /// </summary>
 public class ChatPanel : BasePanel
 {
@@ -12,14 +12,14 @@ public class ChatPanel : BasePanel
     [Tooltip("对话文本")]
     public Text dialogueText;
 
-    [Tooltip("角色名背景框")]
+    [Tooltip("角色名字的底框图")]
     public RectTransform nameBox;
     public float nameBoxPadding = 40f;
     public float widthK = 1.2f;
     public float transK = 1.1f;
-    public float transOffsetX = -705f;//初始位置X坐标
+    public float transOffsetX = -705f; // 姓名框初始 X 位置
 
-    [Tooltip("角色名文本（可选）")]
+    [Tooltip("角色名字文本（可选）")]
     public Text nameText;
 
     [Tooltip("角色立绘（可选）")]
@@ -28,7 +28,7 @@ public class ChatPanel : BasePanel
     [Tooltip("继续按钮")]
     public Button continueButton;
 
-    [Tooltip("遮罩（可选，防止误触）")]
+    [Tooltip("遮罩，用于禁止点击下层UI（可选）")]
     public Image maskImage;
 
     [Header("Typing Settings")]
@@ -43,7 +43,7 @@ public class ChatPanel : BasePanel
     {
         base.Awake();
 
-        // 绑定按钮事件
+        // 绑定按钮点击事件
         if (continueButton != null)
         {
             continueButton.onClick.AddListener(OnContinueClick);
@@ -51,7 +51,7 @@ public class ChatPanel : BasePanel
     }
 
     /// <summary>
-    /// 显示对话（无角色名和立绘）
+    /// 显示无角色名与立绘的对话
     /// </summary>
     public void ShowDialogue(string dialogue, Action onComplete = null)
     {
@@ -59,7 +59,7 @@ public class ChatPanel : BasePanel
     }
 
     /// <summary>
-    /// 显示对话（带角色名）
+    /// 显示带角色名的对话
     /// </summary>
     public void ShowDialogue(string dialogue, string characterName, Action onComplete = null)
     {
@@ -67,48 +67,50 @@ public class ChatPanel : BasePanel
     }
 
     /// <summary>
-    /// 显示对话（完整版）
+    /// 显示完整对话（文本、姓名、立绘）
     /// </summary>
     public void ShowDialogue(string dialogue, string characterName, Sprite characterSprite, Action onComplete = null)
     {
         currentDialogue = dialogue;
         onCompleteCallback = onComplete;
 
-        // 设置角色名
+        // ----- 设置角色名字 -----
         if (nameText != null)
         {
-            //有角色名则显示角色名框
             nameText.text = characterName;
-            bool hasName = !string.IsNullOrEmpty(characterName);//还需要判断是否为空字符串
-            nameText.gameObject.SetActive(!string.IsNullOrEmpty(characterName));
+            bool hasName = !string.IsNullOrEmpty(characterName);
+            nameText.gameObject.SetActive(hasName);
 
-            if(nameBox != null)
+            if (nameBox != null)
             {
                 nameBox.gameObject.SetActive(hasName);
+
                 if (hasName)
                 {
                     Canvas.ForceUpdateCanvases(); // 强制更新布局
-                    float nameWidth = nameText.preferredWidth + nameBoxPadding; // 额外留点空间
-                    nameBox.sizeDelta = new Vector2(nameWidth*widthK, nameBox.sizeDelta.y);
-                    //文字左对齐故还需要NameBox右移一定距离
-                    //nameBox.anchoredPosition = new Vector2(nameWidth / 2f*transK, nameBox.anchoredPosition.y);
-                    //直接改变X坐标
+
+                    float nameWidth = nameText.preferredWidth + nameBoxPadding;
+                    nameBox.sizeDelta = new Vector2(nameWidth * widthK, nameBox.sizeDelta.y);
+
+                    // 修改姓名框X坐标
                     Vector2 pos = nameBox.anchoredPosition;
                     pos.x = transOffsetX + (nameWidth / 2f) * transK;
                     nameBox.anchoredPosition = pos;
                 }
-
             }
         }
 
-        // 设置角色立绘
+        // ----- 设置立绘 -----
         if (charaImage != null)
         {
             charaImage.sprite = characterSprite;
             charaImage.gameObject.SetActive(characterSprite != null);
         }
+
+        // 显示面板
         Show();
-        // 开始打字机效果
+
+        // ----- 开始打字机 -----
         if (dialogueText != null)
         {
             dialogueText.text = "";
@@ -119,17 +121,15 @@ public class ChatPanel : BasePanel
             typingCoroutine = StartCoroutine(TypeText());
         }
 
-        // 禁用继续按钮（打字机结束后启用）
+        // 在打字期间不允许点击继续
         if (continueButton != null)
         {
             continueButton.interactable = false;
         }
-
-        
     }
 
     /// <summary>
-    /// 打字机效果协程
+    /// 打字机效果
     /// </summary>
     private IEnumerator TypeText()
     {
@@ -139,7 +139,7 @@ public class ChatPanel : BasePanel
             yield return new WaitForSecondsRealtime(typingSpeed);
         }
 
-        // 打字完成，启用继续按钮
+        // 打字完成，允许点击继续
         if (continueButton != null)
         {
             continueButton.interactable = true;
@@ -147,11 +147,11 @@ public class ChatPanel : BasePanel
     }
 
     /// <summary>
-    /// 点击继续按钮
+    /// 继续按钮逻辑
     /// </summary>
     private void OnContinueClick()
     {
-        // 如果还在打字，直接显示全部文本
+        // 如果打字未完成，则立即显示完整文本
         if (typingCoroutine != null && dialogueText.text.Length < currentDialogue.Length)
         {
             StopCoroutine(typingCoroutine);
@@ -160,17 +160,17 @@ public class ChatPanel : BasePanel
             return;
         }
 
-        // 关闭对话框
+        // 关闭面板
         Hide();
 
-        // 触发回调
+        // 回调
         onCompleteCallback?.Invoke();
         onCompleteCallback = null;
     }
 
     protected override void OnShow()
     {
-        // 启用遮罩（如果有）
+        // 显示遮罩
         if (maskImage != null)
         {
             maskImage.gameObject.SetActive(true);
@@ -179,7 +179,7 @@ public class ChatPanel : BasePanel
 
     protected override void OnHide()
     {
-        // 禁用遮罩
+        // 隐藏遮罩
         if (maskImage != null)
         {
             maskImage.gameObject.SetActive(false);
