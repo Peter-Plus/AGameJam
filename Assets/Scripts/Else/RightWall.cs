@@ -10,6 +10,6 @@ public class RightWall : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         levelManager.LevelComplete();
-        Debug.Log("Ω”¥•”“≤‡");
+        UIManager.Instance.ShowLoadingPanel(true);
     }
 }

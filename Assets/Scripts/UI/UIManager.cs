@@ -19,12 +19,15 @@ public class UIManager : MonoBehaviour
     public ChatPanel chatPanel; //对话面板
     public TipPanel tipPanel; //提示面板
     public TextTipPanel textTipPanel; //飘字提示面板
+    public SpeakPanel speakPanel; //对话气泡面板
 
     [Header("Loading UI")]
     public LoadingPanel loadingPanel; //加载面板
+    public CGPanel cgPanel; //CG插画面板
 
     [Header("Game UI")]
     public HUDPanel HUDPanel; //游戏内HUD面板
+    public GameCGPanel gameCGPanel; //游戏CG面板 层级更低
 
     [Header("Menu UI")]
     public BeginPanel beginPanel; //开始菜单面板
@@ -145,13 +148,19 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// 显示/隐藏加载界面
     /// </summary>
-    public void ShowLoading(bool show)
+    public void ShowLoadingPanel(bool show)
     {
-        //待开发
+        if (show)
+        {
+            loadingPanel.ShowLoading();
+        }
+        else
+        {
+            loadingPanel.HideLoading();
+        }
     }
 
     #endregion
-
 
     #region 游戏HUD面板
     /// <summary>
@@ -230,7 +239,6 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-
     #region 游戏菜单面板
     //显示设置面板
     public void ShowSettingsPanel()
@@ -266,6 +274,70 @@ public class UIManager : MonoBehaviour
     public void HideBeginPanel()
     {
         beginPanel.Hide();
+    }
+    #endregion
+
+    #region CG面板相关
+    public void ShowCGPanel(Sprite cgSprite, Action onComplete = null)
+    {
+        cgPanel.ShowCG(cgSprite, onComplete);
+    }
+
+    public void ShowCGPanel(Sprite cgSprite, float displayTime, Action onComplete = null)
+    {
+        cgPanel.ShowCG(cgSprite, displayTime, onComplete);
+    }
+
+    public void HideCGPanel(Action onComplete = null)
+    {
+        cgPanel.HideCG(onComplete);
+    }
+
+    public void ShowCGPanelInstant(Sprite cgSprite, float displayTime, Action onComplete = null)
+    {
+        cgPanel.ShowCGInstant(cgSprite, displayTime, onComplete);
+    }
+    #endregion
+
+    #region 游戏CG面板相关
+
+    public void ShowGameCGPanel(Sprite cgSprite, Action onComplete = null)
+    {
+        Debug.Log("UIManager: ShowGameCGPanel called");
+        gameCGPanel.ShowCG(cgSprite, onComplete);
+    }
+    public void ShowGameCGPanel(Sprite cgSprite, float displayTime, Action onComplete = null)
+    {
+        gameCGPanel.ShowCG(cgSprite, displayTime, onComplete);
+    }
+    public void HideGameCGPanel(Action onComplete = null)
+    {
+        gameCGPanel.HideCG(onComplete);
+    }
+    public void ShowGameCGPanelInstant(Sprite cgSprite, float displayTime, Action onComplete = null)
+    {
+        gameCGPanel.ShowCGInstant(cgSprite, displayTime, onComplete);
+    }
+    public void ShowGameCGPanelInstant(Sprite cgSprite,  Action onComplete = null)
+    {
+        gameCGPanel.ShowCGInstant(cgSprite, onComplete);
+    }
+    #endregion
+
+    #region 对话泡泡相关
+    public void ShowSpeakPanel(string text, Vector3 worldPosition, Action onComplete = null)
+    {
+        speakPanel.ShowSpeak(text, worldPosition, onComplete);
+    }
+
+    public void ShowSpeakPanelAtScreen(string text, Vector2 screenPosition, Action onComplete = null)
+    {
+        speakPanel.ShowSpeakAtScreenPosition(text, screenPosition, onComplete);
+    }
+
+    public void HideSpeakPanel(Action onComplete = null)
+    {
+        speakPanel.HideSpeak(onComplete);
     }
     #endregion
 }

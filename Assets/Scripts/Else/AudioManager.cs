@@ -16,44 +16,47 @@ public class AudioManager : MonoBehaviour
     public AudioClip battleMusic;
     public AudioClip bossMusic;
 
-    private void Awake()
+    #region 场景音乐切换API
+    /// <summary>
+    /// 切换到主菜单音乐
+    /// </summary>
+    public void PlayMainMenuMusic()
     {
-        // 单例模式
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start()
-    {
-
-        // 从DataManager加载音量设置
-        LoadVolumeSettings();
-        // 自动播放主菜单音乐
         PlayMusic(mainMenuMusic);
     }
 
     /// <summary>
-    /// 从DataManager加载音量设置
+    /// 切换到战斗音乐
     /// </summary>
-    private void LoadVolumeSettings()
+    public void PlayBattleMusic()
     {
-        musicSource.volume = DataManager.Instance.GetMusicVolume();
-        sfxSource.volume = DataManager.Instance.GetSfxVolume();
+        PlayMusic(battleMusic);
     }
 
-    #region 音乐控制API
     /// <summary>
-    /// 播放背景音乐API
+    /// 切换到Boss音乐
     /// </summary>
+    public void PlayBossMusic()
+    {
+        PlayMusic(bossMusic);
+    }
+    #endregion
+
+    #region 外部音乐API
+    public void PlayerMainMusic()
+    {
+        musicSource = GetComponent<AudioSource>();
+        PlayMusic(mainMenuMusic);
+    }
+
+    //播放背景音乐API
     public void PlayMusic(AudioClip clip)
     {
         if (clip == null) return;
-
         //Q下面这句是什么意思？
         //A 如果当前播放的音乐就是要播放的音乐，并且正在播放中，则不做任何操作，避免重复播放同一音乐。
         if (musicSource.clip == clip && musicSource.isPlaying)
             return;
-
         musicSource.clip = clip;
         musicSource.Play();
     }
@@ -91,7 +94,7 @@ public class AudioManager : MonoBehaviour
     }
     #endregion
 
-    #region 音效控制
+    #region 音效控制API
     /// <summary>
     /// 播放单次音效
     /// </summary>
@@ -119,29 +122,30 @@ public class AudioManager : MonoBehaviour
     }
     #endregion
 
-    #region 场景音乐切换
-    /// <summary>
-    /// 切换到主菜单音乐
-    /// </summary>
-    public void PlayMainMenuMusic()
+    #region else
+
+    private void Awake()
     {
-        PlayMusic(mainMenuMusic);
+        // 单例模式
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        // 从DataManager加载音量设置
+        LoadVolumeSettings();
     }
 
     /// <summary>
-    /// 切换到战斗音乐
+    /// 从DataManager加载音量设置
     /// </summary>
-    public void PlayBattleMusic()
+    private void LoadVolumeSettings()
     {
-        PlayMusic(battleMusic);
-    }
-
-    /// <summary>
-    /// 切换到Boss音乐
-    /// </summary>
-    public void PlayBossMusic()
-    {
-        PlayMusic(bossMusic);
+        musicSource.volume = DataManager.Instance.GetMusicVolume();
+        sfxSource.volume = DataManager.Instance.GetSfxVolume();
     }
     #endregion
+
+
 }

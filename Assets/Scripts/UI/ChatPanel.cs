@@ -12,6 +12,13 @@ public class ChatPanel : BasePanel
     [Tooltip("对话文本")]
     public Text dialogueText;
 
+    [Tooltip("角色名背景框")]
+    public RectTransform nameBox;
+    public float nameBoxPadding = 40f;
+    public float widthK = 1.2f;
+    public float transK = 1.1f;
+    public float transOffsetX = -705f;//初始位置X坐标
+
     [Tooltip("角色名文本（可选）")]
     public Text nameText;
 
@@ -70,8 +77,28 @@ public class ChatPanel : BasePanel
         // 设置角色名
         if (nameText != null)
         {
+            //有角色名则显示角色名框
             nameText.text = characterName;
+            bool hasName = !string.IsNullOrEmpty(characterName);//还需要判断是否为空字符串
             nameText.gameObject.SetActive(!string.IsNullOrEmpty(characterName));
+
+            if(nameBox != null)
+            {
+                nameBox.gameObject.SetActive(hasName);
+                if (hasName)
+                {
+                    Canvas.ForceUpdateCanvases(); // 强制更新布局
+                    float nameWidth = nameText.preferredWidth + nameBoxPadding; // 额外留点空间
+                    nameBox.sizeDelta = new Vector2(nameWidth*widthK, nameBox.sizeDelta.y);
+                    //文字左对齐故还需要NameBox右移一定距离
+                    //nameBox.anchoredPosition = new Vector2(nameWidth / 2f*transK, nameBox.anchoredPosition.y);
+                    //直接改变X坐标
+                    Vector2 pos = nameBox.anchoredPosition;
+                    pos.x = transOffsetX + (nameWidth / 2f) * transK;
+                    nameBox.anchoredPosition = pos;
+                }
+
+            }
         }
 
         // 设置角色立绘
@@ -80,7 +107,7 @@ public class ChatPanel : BasePanel
             charaImage.sprite = characterSprite;
             charaImage.gameObject.SetActive(characterSprite != null);
         }
-
+        Show();
         // 开始打字机效果
         if (dialogueText != null)
         {
@@ -98,7 +125,7 @@ public class ChatPanel : BasePanel
             continueButton.interactable = false;
         }
 
-        Show();
+        
     }
 
     /// <summary>

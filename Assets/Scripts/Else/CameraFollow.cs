@@ -6,8 +6,8 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Transform target;  // Player的Transform
 
     [Header("边界限制")]
-    public int BoundaryL = -10;  // 左边界
-    public int BoundaryR = 10;   // 右边界
+    public float BoundaryL = -10;  // 左边界
+    public float BoundaryR = 10;   // 右边界
 
     private Camera cam;
     private float cameraHalfWidth;

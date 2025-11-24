@@ -32,10 +32,12 @@ public class BeginPanel : BasePanel
     private void OnBeginClick()
     {
         //开始游戏逻辑
-        Debug.Log("开始游戏--功能待开发--关联场景");
+        //根据存档判断玩家是新的游戏还是继续游戏
+        int passedLevelCount = DataManager.Instance.GetPassedLevelCount();
+        if( passedLevelCount == 0 ) GameLevelManager.Instance.LoadInitialLevel(); //加载初始交互关卡
+        else GameLevelManager.Instance.LoadNextLevel(); //加载下一个关卡 
         //隐藏开始面板
         Hide();
-        //进入游戏-SceneMgr-待开发
     }
     private void OnSettingsClick()
     {

@@ -26,7 +26,7 @@ public class DataManager : MonoBehaviour
         public int currentScene = 0;//玩家当前所在的关卡，0为第一个交互关卡，1为第一个战斗关卡，以此类推
         public int defense = 5;//防御力
         public List<int> levelList = new List<int>(); //（1,3,5）代表通过了1,3,5关卡
-        public int passedLevelCount = 0;//通过的战斗关卡总数
+        public int passedLevelCount = 0;//经过的战斗关卡数（包括正在进行的战斗关卡）
         public int healthPotionCount = 3;//血瓶数量
     }
     //设置数据
@@ -53,7 +53,7 @@ public class DataManager : MonoBehaviour
 
     // 其他参数
     //关卡总数(不含boss房和初始交互关卡)
-    private const int totalLevelCount = 5;
+    public const int totalLevelCount = 5;
 
     private void Awake()
     {
@@ -65,6 +65,8 @@ public class DataManager : MonoBehaviour
     }
 
     #region Set&Get
+    //非存档数据API
+    public int GetTotalLevelCount() => totalLevelCount;
     //存档数据API
     public int GetHp() => saveData.hp;
     public int GetMaxHp() => saveData.maxhp;
@@ -216,7 +218,7 @@ public class DataManager : MonoBehaviour
     /// </summary>
     public void AddLevel(int levelIndex)
     {
-        saveData.passedLevelCount++;//通过的战斗关卡总数加一
+        saveData.passedLevelCount++;//经过的关卡数加一
 
         // 添加到已通过关卡列表
         if (!saveData.levelList.Contains(levelIndex))
