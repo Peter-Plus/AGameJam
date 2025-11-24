@@ -18,10 +18,10 @@ public class DataManager : MonoBehaviour
         public int hp = 100;
         public int maxhp = 100;
         //蓝条
-        public int mp = 40;
+        public int mp = 50;
         public int maxmp = 50;
         public int level = 1;//当前等级
-        public int exp = 50;//当前经验值
+        public int exp = 0;//当前经验值
         public int attack = 10;
         public int currentScene = 0;//玩家当前所在的关卡，0为第一个交互关卡，1为第一个战斗关卡，以此类推
         public int defense = 5;//防御力
@@ -311,5 +311,41 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
-    
+    #region 调试功能
+    //在Inspector面板显示当前存档数据（仅调试用）
+    [ContextMenu("Print Save Data")]
+    private void PrintSaveData()
+    {
+        string levelListStr = string.Join(", ", saveData.levelList);
+        Debug.Log($"HP: {saveData.hp}/{saveData.maxhp}, MP: {saveData.mp}/{saveData.maxmp}, Level: {saveData.level}, Exp: {saveData.exp}, Attack: {saveData.attack}, Defense: {saveData.defense}, CurrentScene: {saveData.currentScene}, PassedLevelCount: {saveData.passedLevelCount}, LevelList: [{levelListStr}], HealthPotions: {saveData.healthPotionCount}");
+    }
+    [ContextMenu("Print Setting Data")]
+    private void PrintSettingData()
+    {
+        Debug.Log($"Music Volume: {settingData.musicVolume}, Sound Volume: {settingData.soundVolume}");
+    }
+    [ContextMenu("Print Achievement Data")]
+    private void PrintAchievementData()
+    {
+        Debug.Log($"IsFirstClear: {achievementData.isFirstClear}, IsFirstBossKill: {achievementData.isFirstBossKill}, TotalKillCount: {achievementData.totalKillCount}");
+    }
+    //重置所有数据
+    [ContextMenu("Reset All Data")]
+    private void ResetAllDataContextMenu()
+    {
+        ResetAllData();
+        Debug.Log("所有数据已重置");
+    }
+
+    //重置存档数据
+    [ContextMenu("Reset Save Data")]
+    private void ResetSaveDataContextMenu()
+    {
+        ResetSaveData();
+        Debug.Log("存档数据已重置");
+    }
+
+
+
+    #endregion
 }

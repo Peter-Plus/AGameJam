@@ -12,7 +12,7 @@ public class GameLevelManager : MonoBehaviour
     //按场景名称加载场景
     //===================
 
-    private int currentLevelIndex = 0; //当前战斗关卡索引（注意这里不是场景索引，是关卡编号）
+    private int currentLevelIndex = 0; //当前战斗关卡索引（注意这里不是场景索引，是关卡编号）,-1是Boss房间，0是初始交互关卡和主界面
     private int totalLevels = 0; //总关卡数，不包括Boss房间、主界面和初始交互界面
     //public List<Scene> scenes = new List<Scene>(); //已加载的场景列表
 
@@ -47,9 +47,17 @@ public class GameLevelManager : MonoBehaviour
             //记录已完成的关卡
             DataManager.Instance.AddLevel(currentLevelIndex);
         }
-        else
+        else if(scene.name == "Level0" || scene.name == "MainScene")
         {
             currentLevelIndex = 0; //非战斗关卡，重置索引
+        }
+        else if(scene.name == "LevelBoss")
+        {
+            currentLevelIndex = -1; //Boss关卡，特殊标记
+        }
+        else
+        {
+            currentLevelIndex = -2; //其他测试场景，特殊标记
         }
     }
     #endregion
@@ -79,7 +87,7 @@ public class GameLevelManager : MonoBehaviour
         SceneManager.LoadScene("Level0");
     }
 
-    //战斗失败返回主界面
+    //战斗失败返回主界面--================别被名字误导了，胜利也可以调用这个API==================
     public void FailAndReturnToMainMenu()
     {
         //按场景名加载主界面
@@ -88,6 +96,12 @@ public class GameLevelManager : MonoBehaviour
         DataManager.Instance.ResetSaveData();
         //播放主界面音乐
         AudioManager.Instance.PlayerMainMusic();
+    }
+
+    //获取当前关卡索引API
+    public int GetCurrentLevelIndex()
+    {
+        return currentLevelIndex;
     }
     #endregion
 

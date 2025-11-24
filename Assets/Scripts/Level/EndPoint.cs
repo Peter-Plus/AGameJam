@@ -20,7 +20,25 @@ public class EndPoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        levelManager.LevelComplete();
-        UIManager.Instance.ShowLoadingPanel(true);
+        //先检查当前关卡是不是boss关卡
+        //Q 怎么检查？用名字，LevelBoss
+        if (hasKilledAll)
+        {
+            if (other.CompareTag("Player"))
+            {
+                //检查当前关卡是不是boss关卡
+                int currentLevelIndex = GameLevelManager.Instance.GetCurrentLevelIndex();
+                if (currentLevelIndex == -1)
+                {
+                    UIManager.Instance.ShowLoadingPanel(true);
+                    //清空存档数据，回到主菜单
+                    GameLevelManager.Instance.FailAndReturnToMainMenu();
+                    return;
+                }
+                //触发关卡完成
+                levelManager.LevelComplete();
+                UIManager.Instance.ShowLoadingPanel(true);
+            }
+        }
     }
 }
