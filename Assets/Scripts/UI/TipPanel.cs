@@ -3,18 +3,18 @@ using UnityEngine.UI;
 using System;
 
 /// <summary>
-/// ÌáÊ¾Ãæ°å£¬ÓÃÓÚÏÔÊ¾È·ÈÏÌáÊ¾ĞÅÏ¢
+/// æç¤ºé¢æ¿ï¼Œç”¨äºæ˜¾ç¤ºç¡®è®¤æç¤ºä¿¡æ¯
 /// </summary>
 public class TipPanel : BasePanel
 {
     [Header("UI References")]
-    [Tooltip("ÌáÊ¾ÎÄ±¾")]
+    [Tooltip("æç¤ºæ–‡æœ¬")]
     public Text tipText;
 
-    [Tooltip("È·ÈÏ°´Å¥")]
+    [Tooltip("ç¡®è®¤æŒ‰é’®")]
     public Button confirmButton;
 
-    [Tooltip("ÕÚÕÖ£¨¿ÉÑ¡£¬ÓÃÓÚ×èµ²ÏÂ²ã UI£©")]
+    [Tooltip("é®ç½©ï¼ˆå¯é€‰ï¼Œç”¨äºé˜»æŒ¡ä¸‹å±‚ UIï¼‰")]
     public Image maskImage;
 
     private Action onConfirmCallback;
@@ -23,7 +23,7 @@ public class TipPanel : BasePanel
     {
         base.Awake();
 
-        // °ó¶¨°´Å¥ÊÂ¼ş
+        // ç»‘å®šæŒ‰é’®äº‹ä»¶
         if (confirmButton != null)
         {
             confirmButton.onClick.AddListener(OnConfirmClick);
@@ -31,7 +31,7 @@ public class TipPanel : BasePanel
     }
 
     /// <summary>
-    /// ÏÔÊ¾ÌáÊ¾ÄÚÈİ
+    /// æ˜¾ç¤ºæç¤ºå†…å®¹
     /// </summary>
     public void ShowTip(string tip, Action onConfirm = null)
     {
@@ -46,20 +46,20 @@ public class TipPanel : BasePanel
     }
 
     /// <summary>
-    /// µã»÷È·ÈÏ°´Å¥
+    /// ç‚¹å‡»ç¡®è®¤æŒ‰é’®
     /// </summary>
     private void OnConfirmClick()
     {
         Hide();
 
-        // Ö´ĞĞ»Øµ÷
+        // æ‰§è¡Œå›è°ƒ
         onConfirmCallback?.Invoke();
         onConfirmCallback = null;
     }
 
     protected override void OnShow()
     {
-        // ÏÔÊ¾ÕÚÕÖ
+        // æ˜¾ç¤ºé®ç½©
         if (maskImage != null)
         {
             maskImage.gameObject.SetActive(true);
@@ -68,7 +68,7 @@ public class TipPanel : BasePanel
 
     protected override void OnHide()
     {
-        // Òş²ØÕÚÕÖ
+        // éšè—é®ç½©
         if (maskImage != null)
         {
             maskImage.gameObject.SetActive(false);

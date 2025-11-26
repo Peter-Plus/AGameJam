@@ -7,9 +7,9 @@ public class MainManager : LevelManager
     // Start is called before the first frame update
     void Start()
     {
-        //ÏÔÊ¾²Ëµ¥Ãæ°å
+        //æ˜¾ç¤ºèœå•é¢æ¿
         UIManager.Instance.beginPanel.Show();
-        //²¥·ÅÖ÷½çÃæÒôÀÖ
+        //æ’­æ”¾ä¸»ç•Œé¢éŸ³ä¹
         AudioManager.Instance.PlayerMainMusic();
     }
 

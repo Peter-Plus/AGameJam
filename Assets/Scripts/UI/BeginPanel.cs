@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class BeginPanel : BasePanel
 {
-    //»ñÈ¡×é¼ş ¿ªÊ¼¡¢ÉèÖÃ¡¢ÍË³ö°´Å¥
+    //è·å–ç»„ä»¶ å¼€å§‹ã€è®¾ç½®ã€é€€å‡ºæŒ‰é’®
     [Header("UI References")]
     public Button BeginButton;
     public Button SettingsButton;
@@ -14,7 +14,7 @@ public class BeginPanel : BasePanel
     protected override void Awake()
     {
         base.Awake();
-        //°ó¶¨°´Å¥ÊÂ¼ş
+        //ç»‘å®šæŒ‰é’®äº‹ä»¶
         if (BeginButton != null)
         {
             BeginButton.onClick.AddListener(OnBeginClick);
@@ -31,15 +31,15 @@ public class BeginPanel : BasePanel
 
     private void OnBeginClick()
     {
-        //¿ªÊ¼ÓÎÏ·Âß¼­
-        //¸ù¾İ´æµµÅĞ¶ÏÍæ¼ÒÊÇĞÂµÄÓÎÏ·»¹ÊÇ¼ÌĞøÓÎÏ·
-        //ÏÔÊ¾¼ÓÔØÃæ°å
+        //å¼€å§‹æ¸¸æˆé€»è¾‘
+        //æ ¹æ®å­˜æ¡£åˆ¤æ–­ç©å®¶æ˜¯æ–°çš„æ¸¸æˆè¿˜æ˜¯ç»§ç»­æ¸¸æˆ
+        //æ˜¾ç¤ºåŠ è½½é¢æ¿
         UIManager.Instance.ShowLoadingPanel(true);
         Hide(()=>
         {
             int passedLevelCount = DataManager.Instance.GetPassedLevelCount();
-            if (passedLevelCount == 0) GameLevelManager.Instance.LoadInitialLevel(); //¼ÓÔØ³õÊ¼½»»¥¹Ø¿¨
-            else GameLevelManager.Instance.LoadNextLevel(); //¼ÓÔØÏÂÒ»¸ö¹Ø¿¨ 
+            if (passedLevelCount == 0) GameLevelManager.Instance.LoadInitialLevel(); //åŠ è½½åˆå§‹äº¤äº’å…³å¡
+            else GameLevelManager.Instance.LoadNextLevel(); //åŠ è½½ä¸‹ä¸€ä¸ªå…³å¡ 
         });
     }
     private void OnSettingsClick()
@@ -49,7 +49,7 @@ public class BeginPanel : BasePanel
 
     private void OnExitClick()
     {
-        Debug.Log("ÍË³öÓÎÏ·");
+        Debug.Log("é€€å‡ºæ¸¸æˆ");
         Application.Quit();
     }
 }

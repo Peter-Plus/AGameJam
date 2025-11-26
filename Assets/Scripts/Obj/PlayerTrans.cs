@@ -2,38 +2,38 @@ using UnityEngine;
 
 public class PlayerTrans : MonoBehaviour
 {
-    [Header("ÒÆ¶¯ÉèÖÃ")]
+    [Header("ç§»åŠ¨è®¾ç½®")]
     [SerializeField] private float moveSpeed = 5f;
 
-    [Header("Ô¶½üËõ·ÅÉèÖÃ")]
-    [SerializeField] private float scaleSpeed = 0.1f;  // Ëõ·ÅËÙ¶È
+    [Header("è¿œè¿‘ç¼©æ”¾è®¾ç½®")]
+    [SerializeField] private float scaleSpeed = 0.1f;  // ç¼©æ”¾é€Ÿåº¦
 
-    [Header("ÒÆ¶¯·¶Î§ÏŞÖÆ")]
+    [Header("ç§»åŠ¨èŒƒå›´é™åˆ¶")]
     [SerializeField] private float minZ = 0f;
     [SerializeField] private float maxZ = 0f;
 
-    [Header("×é¼şÒıÓÃ")]
+    [Header("ç»„ä»¶å¼•ç”¨")]
     public SpriteRenderer spriteRenderer;
 
     private Vector3 movement;
-    private float baseZPosition;  // ¼ÇÂ¼³õÊ¼Y×ø±ê×÷Îª»ù×¼
-    private Vector3 baseScale;    // ¼ÇÂ¼³õÊ¼Ëõ·Å
+    private float baseZPosition;  // è®°å½•åˆå§‹Yåæ ‡ä½œä¸ºåŸºå‡†
+    private Vector3 baseScale;    // è®°å½•åˆå§‹ç¼©æ”¾
     private Rigidbody rb;
 
     #region API
-    //Íâ²¿API-»ñÈ¡Ãæ³¯ÏòIsFacingRight
+    //å¤–éƒ¨API-è·å–é¢æœå‘IsFacingRight
     public bool IsFacingRight()
     {
         if (spriteRenderer != null)
         {
             return !spriteRenderer.flipX;
         }
-        return true; // Ä¬ÈÏ³¯ÓÒ
+        return true; // é»˜è®¤æœå³
     }
 
     #endregion
 
-    #region ÉúÃüÖÜÆÚ
+    #region ç”Ÿå‘½å‘¨æœŸ
     private void Awake()
     {
         if (spriteRenderer == null)
@@ -41,18 +41,18 @@ public class PlayerTrans : MonoBehaviour
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
         rb = GetComponent<Rigidbody>();
-        // ¼ÇÂ¼³õÊ¼×´Ì¬
+        // è®°å½•åˆå§‹çŠ¶æ€
         baseZPosition = transform.position.z;
         baseScale = transform.localScale;
     }
 
     private void Update()
     {
-        //Í¨¹ıPlayerCore»ñÈ¡´æ»î×´Ì¬isLive
+        //é€šè¿‡PlayerCoreè·å–å­˜æ´»çŠ¶æ€isLive
         PlayerCore playerCore = GetComponent<PlayerCore>();
         if(!playerCore.IsLive()||!playerCore.CanMove())
         {
-            //Ö±½Ó¾²Ö¹Íæ¼Ò¸ÕÌå£¬·ÀÖ¹ÓĞ²ĞÁôÒÆ¶¯
+            //ç›´æ¥é™æ­¢ç©å®¶åˆšä½“ï¼Œé˜²æ­¢æœ‰æ®‹ç•™ç§»åŠ¨
             movement = Vector3.zero;
             return;
         }
@@ -67,7 +67,7 @@ public class PlayerTrans : MonoBehaviour
     }
     #endregion
 
-    #region ÄÚ²¿
+    #region å†…éƒ¨
     private void FlipSprite()
     {
         if (movement.x != 0 && spriteRenderer != null)
@@ -87,23 +87,23 @@ public class PlayerTrans : MonoBehaviour
     {
         if(movement==Vector3.zero)
         {
-            //¾²Ö¹¸ÕÌå
+            //é™æ­¢åˆšä½“
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
             return;
         }
 
-        //Ä¿±êÎ»ÖÃ
+        //ç›®æ ‡ä½ç½®
         Vector3 targetPos = rb.position+ movement * moveSpeed * Time.fixedDeltaTime;
         targetPos.z = Mathf.Clamp(targetPos.z, minZ, maxZ);
         rb.MovePosition(targetPos);
 
     }
 
-    // ¸ù¾İZÎ»ÖÃµ÷ÕûËõ·Å
+    // æ ¹æ®Zä½ç½®è°ƒæ•´ç¼©æ”¾
     private void UpdateScale()
     {
-        // ¼ÆËãÏà¶ÔÓÚ³õÊ¼Î»ÖÃµÄYÆ«ÒÆ
+        // è®¡ç®—ç›¸å¯¹äºåˆå§‹ä½ç½®çš„Yåç§»
         float yOffset = transform.position.z - baseZPosition;
         float scaleFactor = Mathf.Exp(-yOffset * scaleSpeed);
         transform.localScale = baseScale * scaleFactor;

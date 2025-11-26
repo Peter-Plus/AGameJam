@@ -5,9 +5,9 @@ using UnityEngine;
 public class EndPoint : MonoBehaviour
 {
     public LevelManager levelManager;
-    //¹Ø¿¨½áÊøµã-É±ËÀËùÓĞµĞÈËºóÅö×²µ½3DÇ½Ìå´¥·¢¹Ø¿¨½áÊø
+    //å…³å¡ç»“æŸç‚¹-æ€æ­»æ‰€æœ‰æ•Œäººåç¢°æ’åˆ°3Då¢™ä½“è§¦å‘å…³å¡ç»“æŸ
     private bool hasKilledAll = false;
-    //É±ËÀËùÓĞµĞÈËºó½«Ç½ÌåÉèÎª´¥·¢Æ÷
+    //æ€æ­»æ‰€æœ‰æ•Œäººåå°†å¢™ä½“è®¾ä¸ºè§¦å‘å™¨
     private void Update()
     {
         if (hasKilledAll) return;
@@ -20,22 +20,22 @@ public class EndPoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //ÏÈ¼ì²éµ±Ç°¹Ø¿¨ÊÇ²»ÊÇboss¹Ø¿¨
-        //Q ÔõÃ´¼ì²é£¿ÓÃÃû×Ö£¬LevelBoss
+        //å…ˆæ£€æŸ¥å½“å‰å…³å¡æ˜¯ä¸æ˜¯bosså…³å¡
+        //Q æ€ä¹ˆæ£€æŸ¥ï¼Ÿç”¨åå­—ï¼ŒLevelBoss
         if (hasKilledAll)
         {
             if (other.CompareTag("Player"))
             {
-                //¼ì²éµ±Ç°¹Ø¿¨ÊÇ²»ÊÇboss¹Ø¿¨
+                //æ£€æŸ¥å½“å‰å…³å¡æ˜¯ä¸æ˜¯bosså…³å¡
                 int currentLevelIndex = GameLevelManager.Instance.GetCurrentLevelIndex();
                 if (currentLevelIndex == -1)
                 {
                     UIManager.Instance.ShowLoadingPanel(true);
-                    //¿ªÊ¼Ğ­³Ì£¬µÈ´ı2sºó·µ»ØÖ÷²Ëµ¥
+                    //å¼€å§‹åç¨‹ï¼Œç­‰å¾…2såè¿”å›ä¸»èœå•
                     StartCoroutine(ReturnToMainMenuAfterDelay(2f));
                     return;
                 }
-                //´¥·¢¹Ø¿¨Íê³É
+                //è§¦å‘å…³å¡å®Œæˆ
                 levelManager.LevelComplete();
                 UIManager.Instance.ShowLoadingPanel(true);
             }

@@ -4,10 +4,10 @@ public class CrescentSlashEffect : MonoBehaviour
 {
     public static CrescentSlashEffect Instance;
 
-    [Header("ÌØĞ§²ÄÖÊ")]
+    [Header("ç‰¹æ•ˆæè´¨")]
     public Material slashMaterial;
 
-    [Header("ÔÂÑÀ²ÎÊı")]
+    [Header("æœˆç‰™å‚æ•°")]
     public Color slashColor = new Color(0.8f, 0.9f, 1f);
     public float crescentRadius = 1.5f;
     public float crescentThickness = 0.3f;
@@ -34,12 +34,12 @@ public class CrescentSlashEffect : MonoBehaviour
         MeshRenderer mr = slashObj.AddComponent<MeshRenderer>();
 
         mr.material = slashMaterial;
-        mr.sortingLayerName = "Effects"; // È·±£ÔÚÕıÈ·µÄ²ã¼¶
+        mr.sortingLayerName = "Effects"; // ç¡®ä¿åœ¨æ­£ç¡®çš„å±‚çº§
         mr.sortingOrder = 100;
 
         mf.mesh = CreateCrescentMesh();
 
-        // ¶¯»­£º·Å´ó+µ­³ö
+        // åŠ¨ç”»ï¼šæ”¾å¤§+æ·¡å‡º
         float elapsed = 0f;
         Vector3 startScale = Vector3.zero;
         Vector3 endScale = Vector3.one;
@@ -53,11 +53,11 @@ public class CrescentSlashEffect : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = elapsed / duration;
 
-            // »º¶¯ÇúÏß
+            // ç¼“åŠ¨æ›²çº¿
             float scaleCurve = Mathf.Sin(t * Mathf.PI * 0.5f);
             slashObj.transform.localScale = Vector3.Lerp(startScale, endScale, scaleCurve);
 
-            // ÑÕÉ«µ­³ö
+            // é¢œè‰²æ·¡å‡º
             Color currentColor = Color.Lerp(startColor, endColor, t);
             props.SetColor("_Color", currentColor);
             mr.SetPropertyBlock(props);
@@ -72,11 +72,11 @@ public class CrescentSlashEffect : MonoBehaviour
     {
         Mesh mesh = new Mesh();
 
-        // ÔÂÑÀÊÇÁ½¸ö»¡ĞÎÖ®¼äµÄ²î
+        // æœˆç‰™æ˜¯ä¸¤ä¸ªå¼§å½¢ä¹‹é—´çš„å·®
         float innerRadius = crescentRadius - crescentThickness;
         float outerRadius = crescentRadius;
 
-        // ÔÂÑÀ»¡¶È·¶Î§£¨-60¶Èµ½60¶È£¬¹²120¶È£©
+        // æœˆç‰™å¼§åº¦èŒƒå›´ï¼ˆ-60åº¦åˆ°60åº¦ï¼Œå…±120åº¦ï¼‰
         float startAngle = -60f * Mathf.Deg2Rad;
         float endAngle = 60f * Mathf.Deg2Rad;
 
@@ -85,7 +85,7 @@ public class CrescentSlashEffect : MonoBehaviour
         Vector2[] uv = new Vector2[vertCount];
         int[] triangles = new int[segments * 6];
 
-        // Éú³É¶¥µã
+        // ç”Ÿæˆé¡¶ç‚¹
         for (int i = 0; i <= segments; i++)
         {
             float t = (float)i / segments;
@@ -94,27 +94,27 @@ public class CrescentSlashEffect : MonoBehaviour
             float cos = Mathf.Cos(angle);
             float sin = Mathf.Sin(angle);
 
-            // ÍâÈ¦¶¥µã
+            // å¤–åœˆé¡¶ç‚¹
             vertices[i * 2] = new Vector3(cos * outerRadius, sin * outerRadius, 0);
             uv[i * 2] = new Vector2(t, 1);
 
-            // ÄÚÈ¦¶¥µã
+            // å†…åœˆé¡¶ç‚¹
             vertices[i * 2 + 1] = new Vector3(cos * innerRadius, sin * innerRadius, 0);
             uv[i * 2 + 1] = new Vector2(t, 0);
         }
 
-        // Éú³ÉÈı½ÇĞÎ
+        // ç”Ÿæˆä¸‰è§’å½¢
         for (int i = 0; i < segments; i++)
         {
             int idx = i * 6;
             int v = i * 2;
 
-            // µÚÒ»¸öÈı½ÇĞÎ
+            // ç¬¬ä¸€ä¸ªä¸‰è§’å½¢
             triangles[idx] = v;
             triangles[idx + 1] = v + 2;
             triangles[idx + 2] = v + 1;
 
-            // µÚ¶ş¸öÈı½ÇĞÎ
+            // ç¬¬äºŒä¸ªä¸‰è§’å½¢
             triangles[idx + 3] = v + 1;
             triangles[idx + 4] = v + 2;
             triangles[idx + 5] = v + 3;

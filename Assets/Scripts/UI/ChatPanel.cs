@@ -4,35 +4,35 @@ using System;
 using System.Collections;
 
 /// <summary>
-/// ¶Ô»°Ãæ°å£¬Ö§³Ö´ò×Ö»úĞ§¹û¡¢½ÇÉ«ĞÕÃû¿ò¡¢½ÇÉ«Á¢»æ
+/// å¯¹è¯é¢æ¿ï¼Œæ”¯æŒæ‰“å­—æœºæ•ˆæœã€è§’è‰²å§“åæ¡†ã€è§’è‰²ç«‹ç»˜
 /// </summary>
 public class ChatPanel : BasePanel
 {
     [Header("UI References")]
-    [Tooltip("¶Ô»°ÎÄ±¾")]
+    [Tooltip("å¯¹è¯æ–‡æœ¬")]
     public Text dialogueText;
 
-    [Tooltip("½ÇÉ«Ãû×ÖµÄµ×¿òÍ¼")]
+    [Tooltip("è§’è‰²åå­—çš„åº•æ¡†å›¾")]
     public RectTransform nameBox;
     public float nameBoxPadding = 40f;
     public float widthK = 1.2f;
     public float transK = 1.1f;
-    public float transOffsetX = -705f; // ĞÕÃû¿ò³õÊ¼ X Î»ÖÃ
+    public float transOffsetX = -705f; // å§“åæ¡†åˆå§‹ X ä½ç½®
 
-    [Tooltip("½ÇÉ«Ãû×ÖÎÄ±¾£¨¿ÉÑ¡£©")]
+    [Tooltip("è§’è‰²åå­—æ–‡æœ¬ï¼ˆå¯é€‰ï¼‰")]
     public Text nameText;
 
-    [Tooltip("½ÇÉ«Á¢»æ£¨¿ÉÑ¡£©")]
+    [Tooltip("è§’è‰²ç«‹ç»˜ï¼ˆå¯é€‰ï¼‰")]
     public Image charaImage;
 
-    [Tooltip("¼ÌĞø°´Å¥")]
+    [Tooltip("ç»§ç»­æŒ‰é’®")]
     public Button continueButton;
 
-    [Tooltip("ÕÚÕÖ£¬ÓÃÓÚ½ûÖ¹µã»÷ÏÂ²ãUI£¨¿ÉÑ¡£©")]
+    [Tooltip("é®ç½©ï¼Œç”¨äºç¦æ­¢ç‚¹å‡»ä¸‹å±‚UIï¼ˆå¯é€‰ï¼‰")]
     public Image maskImage;
 
     [Header("Typing Settings")]
-    [Tooltip("´ò×Ö»úËÙ¶È")]
+    [Tooltip("æ‰“å­—æœºé€Ÿåº¦")]
     public float typingSpeed = 0.05f;
 
     private string currentDialogue;
@@ -43,7 +43,7 @@ public class ChatPanel : BasePanel
     {
         base.Awake();
 
-        // °ó¶¨°´Å¥µã»÷ÊÂ¼ş
+        // ç»‘å®šæŒ‰é’®ç‚¹å‡»äº‹ä»¶
         if (continueButton != null)
         {
             continueButton.onClick.AddListener(OnContinueClick);
@@ -51,7 +51,7 @@ public class ChatPanel : BasePanel
     }
 
     /// <summary>
-    /// ÏÔÊ¾ÎŞ½ÇÉ«ÃûÓëÁ¢»æµÄ¶Ô»°
+    /// æ˜¾ç¤ºæ— è§’è‰²åä¸ç«‹ç»˜çš„å¯¹è¯
     /// </summary>
     public void ShowDialogue(string dialogue, Action onComplete = null)
     {
@@ -59,7 +59,7 @@ public class ChatPanel : BasePanel
     }
 
     /// <summary>
-    /// ÏÔÊ¾´ø½ÇÉ«ÃûµÄ¶Ô»°
+    /// æ˜¾ç¤ºå¸¦è§’è‰²åçš„å¯¹è¯
     /// </summary>
     public void ShowDialogue(string dialogue, string characterName, Action onComplete = null)
     {
@@ -67,14 +67,14 @@ public class ChatPanel : BasePanel
     }
 
     /// <summary>
-    /// ÏÔÊ¾ÍêÕû¶Ô»°£¨ÎÄ±¾¡¢ĞÕÃû¡¢Á¢»æ£©
+    /// æ˜¾ç¤ºå®Œæ•´å¯¹è¯ï¼ˆæ–‡æœ¬ã€å§“åã€ç«‹ç»˜ï¼‰
     /// </summary>
     public void ShowDialogue(string dialogue, string characterName, Sprite characterSprite, Action onComplete = null)
     {
         currentDialogue = dialogue;
         onCompleteCallback = onComplete;
 
-        // ----- ÉèÖÃ½ÇÉ«Ãû×Ö -----
+        // ----- è®¾ç½®è§’è‰²åå­— -----
         if (nameText != null)
         {
             nameText.text = characterName;
@@ -87,12 +87,12 @@ public class ChatPanel : BasePanel
 
                 if (hasName)
                 {
-                    Canvas.ForceUpdateCanvases(); // Ç¿ÖÆ¸üĞÂ²¼¾Ö
+                    Canvas.ForceUpdateCanvases(); // å¼ºåˆ¶æ›´æ–°å¸ƒå±€
 
                     float nameWidth = nameText.preferredWidth + nameBoxPadding;
                     nameBox.sizeDelta = new Vector2(nameWidth * widthK, nameBox.sizeDelta.y);
 
-                    // ĞŞ¸ÄĞÕÃû¿òX×ø±ê
+                    // ä¿®æ”¹å§“åæ¡†Xåæ ‡
                     Vector2 pos = nameBox.anchoredPosition;
                     pos.x = transOffsetX + (nameWidth / 2f) * transK;
                     nameBox.anchoredPosition = pos;
@@ -100,17 +100,17 @@ public class ChatPanel : BasePanel
             }
         }
 
-        // ----- ÉèÖÃÁ¢»æ -----
+        // ----- è®¾ç½®ç«‹ç»˜ -----
         if (charaImage != null)
         {
             charaImage.sprite = characterSprite;
             charaImage.gameObject.SetActive(characterSprite != null);
         }
 
-        // ÏÔÊ¾Ãæ°å
+        // æ˜¾ç¤ºé¢æ¿
         Show();
 
-        // ----- ¿ªÊ¼´ò×Ö»ú -----
+        // ----- å¼€å§‹æ‰“å­—æœº -----
         if (dialogueText != null)
         {
             dialogueText.text = "";
@@ -121,7 +121,7 @@ public class ChatPanel : BasePanel
             typingCoroutine = StartCoroutine(TypeText());
         }
 
-        // ÔÚ´ò×ÖÆÚ¼ä²»ÔÊĞíµã»÷¼ÌĞø
+        // åœ¨æ‰“å­—æœŸé—´ä¸å…è®¸ç‚¹å‡»ç»§ç»­
         if (continueButton != null)
         {
             continueButton.interactable = false;
@@ -129,7 +129,7 @@ public class ChatPanel : BasePanel
     }
 
     /// <summary>
-    /// ´ò×Ö»úĞ§¹û
+    /// æ‰“å­—æœºæ•ˆæœ
     /// </summary>
     private IEnumerator TypeText()
     {
@@ -139,7 +139,7 @@ public class ChatPanel : BasePanel
             yield return new WaitForSecondsRealtime(typingSpeed);
         }
 
-        // ´ò×ÖÍê³É£¬ÔÊĞíµã»÷¼ÌĞø
+        // æ‰“å­—å®Œæˆï¼Œå…è®¸ç‚¹å‡»ç»§ç»­
         if (continueButton != null)
         {
             continueButton.interactable = true;
@@ -147,11 +147,11 @@ public class ChatPanel : BasePanel
     }
 
     /// <summary>
-    /// ¼ÌĞø°´Å¥Âß¼­
+    /// ç»§ç»­æŒ‰é’®é€»è¾‘
     /// </summary>
     private void OnContinueClick()
     {
-        // Èç¹û´ò×ÖÎ´Íê³É£¬ÔòÁ¢¼´ÏÔÊ¾ÍêÕûÎÄ±¾
+        // å¦‚æœæ‰“å­—æœªå®Œæˆï¼Œåˆ™ç«‹å³æ˜¾ç¤ºå®Œæ•´æ–‡æœ¬
         if (typingCoroutine != null && dialogueText.text.Length < currentDialogue.Length)
         {
             StopCoroutine(typingCoroutine);
@@ -160,17 +160,17 @@ public class ChatPanel : BasePanel
             return;
         }
 
-        // ¹Ø±ÕÃæ°å
+        // å…³é—­é¢æ¿
         Hide();
 
-        // »Øµ÷
+        // å›è°ƒ
         onCompleteCallback?.Invoke();
         onCompleteCallback = null;
     }
 
     protected override void OnShow()
     {
-        // ÏÔÊ¾ÕÚÕÖ
+        // æ˜¾ç¤ºé®ç½©
         if (maskImage != null)
         {
             maskImage.gameObject.SetActive(true);
@@ -179,13 +179,13 @@ public class ChatPanel : BasePanel
 
     protected override void OnHide()
     {
-        // Òş²ØÕÚÕÖ
+        // éšè—é®ç½©
         if (maskImage != null)
         {
             maskImage.gameObject.SetActive(false);
         }
 
-        // Í£Ö¹´ò×Ö»ú
+        // åœæ­¢æ‰“å­—æœº
         if (typingCoroutine != null)
         {
             StopCoroutine(typingCoroutine);

@@ -8,7 +8,7 @@ public class ButtonAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private Button button;
     private RectTransform rectTransform;
 
-    [Header("¶¯»­ÉèÖÃ")]
+    [Header("åŠ¨ç”»è®¾ç½®")]
     public float hoverScale = 1.05f;
     public float clickScale = 0.95f;
     public float animDuration = 0.2f;

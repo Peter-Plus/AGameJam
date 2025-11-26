@@ -35,7 +35,7 @@ public abstract class Enemy : MonoBehaviour
         float actualDamage = Mathf.Max(rawDamage - FinalDefense, 1f);
         currentHealth -= actualDamage;
 
-        Debug.Log($"{gameObject.name} 受到 {actualDamage} 伤害");
+        Debug.Log($"{gameObject.name} 鍙楀埌 {actualDamage} 浼ゅ");
         
         OnHurtEffect();
 

@@ -2,72 +2,72 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ÓÎÏ·Êı¾İµ¥Àı¹ÜÀíÆ÷
-/// ¸ºÔğËùÓĞÓÎÏ·Êı¾İµÄ´æÈ¡
+/// æ¸¸æˆæ•°æ®å•ä¾‹ç®¡ç†å™¨
+/// è´Ÿè´£æ‰€æœ‰æ¸¸æˆæ•°æ®çš„å­˜å–
 /// </summary>
 public class DataManager : MonoBehaviour
 {
     private static DataManager instance;
     public static DataManager Instance => instance;
 
-    #region Êı¾İ½á¹¹Àà
-    //´æµµÊı¾İ
+    #region æ•°æ®ç»“æ„ç±»
+    //å­˜æ¡£æ•°æ®
     [System.Serializable]
     public class SaveData
     {
         public int hp = 100;
         public int maxhp = 100;
-        //À¶Ìõ
+        //è“æ¡
         public int mp = 50;
         public int maxmp = 50;
-        public int level = 1;//µ±Ç°µÈ¼¶
-        public int exp = 0;//µ±Ç°¾­ÑéÖµ
+        public int level = 1;//å½“å‰ç­‰çº§
+        public int exp = 0;//å½“å‰ç»éªŒå€¼
         public int attack = 10;
-        public int currentScene = 0;//Íæ¼Òµ±Ç°ËùÔÚµÄ¹Ø¿¨£¬0ÎªµÚÒ»¸ö½»»¥¹Ø¿¨£¬1ÎªµÚÒ»¸öÕ½¶·¹Ø¿¨£¬ÒÔ´ËÀàÍÆ
-        public int defense = 5;//·ÀÓùÁ¦
-        public List<int> levelList = new List<int>(); //£¨1,3,5£©´ú±íÍ¨¹ıÁË1,3,5¹Ø¿¨
-        public int passedLevelCount = 0;//¾­¹ıµÄÕ½¶·¹Ø¿¨Êı£¨°üÀ¨ÕıÔÚ½øĞĞµÄÕ½¶·¹Ø¿¨£©
-        public int healthPotionCount = 3;//ÑªÆ¿ÊıÁ¿
+        public int currentScene = 0;//ç©å®¶å½“å‰æ‰€åœ¨çš„å…³å¡ï¼Œ0ä¸ºç¬¬ä¸€ä¸ªäº¤äº’å…³å¡ï¼Œ1ä¸ºç¬¬ä¸€ä¸ªæˆ˜æ–—å…³å¡ï¼Œä»¥æ­¤ç±»æ¨
+        public int defense = 5;//é˜²å¾¡åŠ›
+        public List<int> levelList = new List<int>(); //ï¼ˆ1,3,5ï¼‰ä»£è¡¨é€šè¿‡äº†1,3,5å…³å¡
+        public int passedLevelCount = 0;//ç»è¿‡çš„æˆ˜æ–—å…³å¡æ•°ï¼ˆåŒ…æ‹¬æ­£åœ¨è¿›è¡Œçš„æˆ˜æ–—å…³å¡ï¼‰
+        public int healthPotionCount = 3;//è¡€ç“¶æ•°é‡
     }
-    //ÉèÖÃÊı¾İ
+    //è®¾ç½®æ•°æ®
     [System.Serializable]
     public class SettingData
     {
-        public float musicVolume = 1;//ÒôÀÖÒôÁ¿
-        public float soundVolume = 1;//ÒôĞ§ÒôÁ¿
+        public float musicVolume = 1;//éŸ³ä¹éŸ³é‡
+        public float soundVolume = 1;//éŸ³æ•ˆéŸ³é‡
     }
-    //³É¾ÍÊı¾İ
+    //æˆå°±æ•°æ®
     [System.Serializable]
     public class AchievementData
     {
-        public bool isFirstClear = false;//ÊÇ·ñµÚÒ»´ÎÍ¨¹Ø
-        public bool isFirstBossKill = false;//ÊÇ·ñµÚÒ»´Î»÷É±Boss
-        public int totalKillCount = 0;//×Ü»÷É±Êı
+        public bool isFirstClear = false;//æ˜¯å¦ç¬¬ä¸€æ¬¡é€šå…³
+        public bool isFirstBossKill = false;//æ˜¯å¦ç¬¬ä¸€æ¬¡å‡»æ€Boss
+        public int totalKillCount = 0;//æ€»å‡»æ€æ•°
     }
     #endregion
 
-    // Êı¾İÊµÀı
+    // æ•°æ®å®ä¾‹
     private SaveData saveData = new SaveData();
     private SettingData settingData = new SettingData();
     private AchievementData achievementData = new AchievementData();
 
-    // ÆäËû²ÎÊı
-    //¹Ø¿¨×ÜÊı(²»º¬boss·¿ºÍ³õÊ¼½»»¥¹Ø¿¨)
+    // å…¶ä»–å‚æ•°
+    //å…³å¡æ€»æ•°(ä¸å«bossæˆ¿å’Œåˆå§‹äº¤äº’å…³å¡)
     public const int totalLevelCount = 5;
 
     private void Awake()
     {
         instance = this;
-        DontDestroyOnLoad(gameObject);// ±£³Öµ¥Àı
-        //ÖØÖÃ±¾»úÊı¾İ¿ª¹Ø£º
+        DontDestroyOnLoad(gameObject);// ä¿æŒå•ä¾‹
+        //é‡ç½®æœ¬æœºæ•°æ®å¼€å…³ï¼š
         //SaveGameData();
-        LoadAllData();// ¼ÓÔØËùÓĞÊı¾İ
+        LoadAllData();// åŠ è½½æ‰€æœ‰æ•°æ®
     }
 
     #region Set&Get
-    //·Ç´æµµÊı¾İAPI
+    //éå­˜æ¡£æ•°æ®API
     public int GetTotalLevelCount() => totalLevelCount;
-    //´æµµÊı¾İAPI
+    //å­˜æ¡£æ•°æ®API
     public int GetHp() => saveData.hp;
     public int GetMaxHp() => saveData.maxhp;
     public void SetHp(int value)
@@ -153,7 +153,7 @@ public class DataManager : MonoBehaviour
         SaveGameData();
     }
 
-    //ÉèÖÃÊı¾İAPI
+    //è®¾ç½®æ•°æ®API
     public float GetMusicVolume() => settingData.musicVolume;
     public void SetMusicVolume(float value)
     {
@@ -167,7 +167,7 @@ public class DataManager : MonoBehaviour
         settingData.soundVolume = value;
         SaveSettingData();
     }
-    //³É¾ÍÊı¾İAPI
+    //æˆå°±æ•°æ®API
     public bool GetIsFirstClear() => achievementData.isFirstClear;
     public void SetIsFirstClear(bool value)
     {
@@ -196,9 +196,9 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
-    #region ºËĞÄAPI
+    #region æ ¸å¿ƒAPI
     /// <summary>
-    /// ÅĞ¶ÏÊÇ·ñµÚÒ»´Îµ½´ïÄ³¹Ø¿¨
+    /// åˆ¤æ–­æ˜¯å¦ç¬¬ä¸€æ¬¡åˆ°è¾¾æŸå…³å¡
     /// </summary>
     public bool IsFirstTimeReachLevel(int levelIndex)
     {
@@ -206,7 +206,7 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÅĞ¶ÏÊÇ·ñ¿ÉÒÔµ½´ïBoss·¿
+    /// åˆ¤æ–­æ˜¯å¦å¯ä»¥åˆ°è¾¾Bossæˆ¿
     /// </summary>
     public bool CanReachBossRoom()
     {
@@ -214,18 +214,18 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Ìí¼Ó¹Ø¿¨
+    /// æ·»åŠ å…³å¡
     /// </summary>
     public void AddLevel(int levelIndex)
     {
-        saveData.passedLevelCount++;//¾­¹ıµÄ¹Ø¿¨Êı¼ÓÒ»
+        saveData.passedLevelCount++;//ç»è¿‡çš„å…³å¡æ•°åŠ ä¸€
 
-        // Ìí¼Óµ½ÒÑÍ¨¹ı¹Ø¿¨ÁĞ±í
+        // æ·»åŠ åˆ°å·²é€šè¿‡å…³å¡åˆ—è¡¨
         if (!saveData.levelList.Contains(levelIndex))
-        {// ½öµ±¹Ø¿¨Î´´æÔÚÊ±Ìí¼Ó
+        {// ä»…å½“å…³å¡æœªå­˜åœ¨æ—¶æ·»åŠ 
             if (saveData.levelList.Count < totalLevelCount)
             {
-                saveData.levelList.Add(levelIndex);// Ìí¼Ó¹Ø¿¨
+                saveData.levelList.Add(levelIndex);// æ·»åŠ å…³å¡
             }
         }
 
@@ -233,7 +233,7 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÖØÖÃ´æµµÊı¾İ
+    /// é‡ç½®å­˜æ¡£æ•°æ®
     /// </summary>
     public void ResetSaveData()
     {
@@ -242,7 +242,7 @@ public class DataManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÖØÖÃËùÓĞÊı¾İ
+    /// é‡ç½®æ‰€æœ‰æ•°æ®
     /// </summary>
     public void ResetAllData()
     {
@@ -254,9 +254,9 @@ public class DataManager : MonoBehaviour
     #endregion
 
 
-    #region ÄÚ²¿Êı¾İ´æÈ¡£¨ÕâÀïÎŞĞè¹ØĞÄ£©
+    #region å†…éƒ¨æ•°æ®å­˜å–ï¼ˆè¿™é‡Œæ— éœ€å…³å¿ƒï¼‰
 
-    //InspectorÓÒ¼ü¿ÉËæÊ±±£´æÊı¾İ
+    //Inspectorå³é”®å¯éšæ—¶ä¿å­˜æ•°æ®
     [ContextMenu("Save Game Data")]
     private void SaveGameData()
     {
@@ -273,7 +273,7 @@ public class DataManager : MonoBehaviour
         PlayerPrefsMgr.Instance.SaveObject(achievementData, "AchievementData");
     }
 
-    //µÚÒ»´Îµ÷ÓÃÊ±¼ÓÔØËùÓĞÊı¾İ
+    //ç¬¬ä¸€æ¬¡è°ƒç”¨æ—¶åŠ è½½æ‰€æœ‰æ•°æ®
     private void LoadAllData()
     {
         if (PlayerPrefsMgr.Instance.HasObject("SaveData", typeof(SaveData)))
@@ -311,8 +311,8 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
-    #region µ÷ÊÔ¹¦ÄÜ
-    //ÔÚInspectorÃæ°åÏÔÊ¾µ±Ç°´æµµÊı¾İ£¨½öµ÷ÊÔÓÃ£©
+    #region è°ƒè¯•åŠŸèƒ½
+    //åœ¨Inspectoré¢æ¿æ˜¾ç¤ºå½“å‰å­˜æ¡£æ•°æ®ï¼ˆä»…è°ƒè¯•ç”¨ï¼‰
     [ContextMenu("Print Save Data")]
     private void PrintSaveData()
     {
@@ -329,20 +329,20 @@ public class DataManager : MonoBehaviour
     {
         Debug.Log($"IsFirstClear: {achievementData.isFirstClear}, IsFirstBossKill: {achievementData.isFirstBossKill}, TotalKillCount: {achievementData.totalKillCount}");
     }
-    //ÖØÖÃËùÓĞÊı¾İ
+    //é‡ç½®æ‰€æœ‰æ•°æ®
     [ContextMenu("Reset All Data")]
     private void ResetAllDataContextMenu()
     {
         ResetAllData();
-        Debug.Log("ËùÓĞÊı¾İÒÑÖØÖÃ");
+        Debug.Log("æ‰€æœ‰æ•°æ®å·²é‡ç½®");
     }
 
-    //ÖØÖÃ´æµµÊı¾İ
+    //é‡ç½®å­˜æ¡£æ•°æ®
     [ContextMenu("Reset Save Data")]
     private void ResetSaveDataContextMenu()
     {
         ResetSaveData();
-        Debug.Log("´æµµÊı¾İÒÑÖØÖÃ");
+        Debug.Log("å­˜æ¡£æ•°æ®å·²é‡ç½®");
     }
 
 

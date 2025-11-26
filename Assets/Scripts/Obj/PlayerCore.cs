@@ -2,41 +2,41 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Íæ¼ÒºËĞÄÕ½¶·ÏµÍ³
-/// ¸ºÔğÍæ¼ÒÊôĞÔ¡¢¹¥»÷¡¢¼¼ÄÜ¡¢ÊÜÉË¡¢Éı¼¶µÈºËĞÄÂß¼­
+/// ç©å®¶æ ¸å¿ƒæˆ˜æ–—ç³»ç»Ÿ
+/// è´Ÿè´£ç©å®¶å±æ€§ã€æ”»å‡»ã€æŠ€èƒ½ã€å—ä¼¤ã€å‡çº§ç­‰æ ¸å¿ƒé€»è¾‘
 /// </summary>
 public class PlayerCore : MonoBehaviour
 {
-    #region ³ÉÔ±ÊôĞÔ
-    [Header("¼¼ÄÜÉèÖÃ")]
-    [SerializeField] private int skillManaCost = 20; // ¼¼ÄÜÏûºÄÀ¶Á¿
-    [SerializeField] private float skillDamageMultiplier = 2.0f; // ¼¼ÄÜÉËº¦±¶ÂÊ
-    [SerializeField] private float skillCooldown = 2.0f; // ¼¼ÄÜÀäÈ´Ê±¼ä
-    private float lastSkillTime = -999f; // ÉÏ´ÎÊ¹ÓÃ¼¼ÄÜµÄÊ±¼ä
+    #region æˆå‘˜å±æ€§
+    [Header("æŠ€èƒ½è®¾ç½®")]
+    [SerializeField] private int skillManaCost = 20; // æŠ€èƒ½æ¶ˆè€—è“é‡
+    [SerializeField] private float skillDamageMultiplier = 2.0f; // æŠ€èƒ½ä¼¤å®³å€ç‡
+    [SerializeField] private float skillCooldown = 2.0f; // æŠ€èƒ½å†·å´æ—¶é—´
+    private float lastSkillTime = -999f; // ä¸Šæ¬¡ä½¿ç”¨æŠ€èƒ½çš„æ—¶é—´
 
-    [Header("ÑªÆ¿ÉèÖÃ")]
-    [SerializeField] private int healthPotionHealAmount = 30; // ÑªÆ¿»Ø¸´Á¿
-    [SerializeField] private float potionCooldown = 1.0f; // ÑªÆ¿ÀäÈ´Ê±¼ä
-    private float lastPotionTime = -999f; // ÉÏ´ÎÊ¹ÓÃÑªÆ¿µÄÊ±¼ä
+    [Header("è¡€ç“¶è®¾ç½®")]
+    [SerializeField] private int healthPotionHealAmount = 30; // è¡€ç“¶å›å¤é‡
+    [SerializeField] private float potionCooldown = 1.0f; // è¡€ç“¶å†·å´æ—¶é—´
+    private float lastPotionTime = -999f; // ä¸Šæ¬¡ä½¿ç”¨è¡€ç“¶çš„æ—¶é—´
 
-    [Header("Éı¼¶ÉèÖÃ")]
-    [SerializeField] private int baseExpRequired = 80; // »ù´¡Éı¼¶ËùĞè¾­Ñé
-    [SerializeField] private int expGrowthPerLevel = 20; // Ã¿¼¶¾­Ñé³É³¤£¨ÏßĞÔÔö³¤£©
-    [SerializeField] private int hpGrowthPerLevel = 20; // Ã¿¼¶ÉúÃü³É³¤
-    [SerializeField] private int mpGrowthPerLevel = 10; // Ã¿¼¶·¨Á¦³É³¤
-    [SerializeField] private int attackGrowthPerLevel = 5; // Ã¿¼¶¹¥»÷³É³¤
-    [SerializeField] private int defenseGrowthPerLevel = 2; // Ã¿¼¶·ÀÓù³É³¤
+    [Header("å‡çº§è®¾ç½®")]
+    [SerializeField] private int baseExpRequired = 80; // åŸºç¡€å‡çº§æ‰€éœ€ç»éªŒ
+    [SerializeField] private int expGrowthPerLevel = 20; // æ¯çº§ç»éªŒæˆé•¿ï¼ˆçº¿æ€§å¢é•¿ï¼‰
+    [SerializeField] private int hpGrowthPerLevel = 20; // æ¯çº§ç”Ÿå‘½æˆé•¿
+    [SerializeField] private int mpGrowthPerLevel = 10; // æ¯çº§æ³•åŠ›æˆé•¿
+    [SerializeField] private int attackGrowthPerLevel = 5; // æ¯çº§æ”»å‡»æˆé•¿
+    [SerializeField] private int defenseGrowthPerLevel = 2; // æ¯çº§é˜²å¾¡æˆé•¿
 
-    [Header("Õ½¶·ÉèÖÃ")]
-    [SerializeField] private float attackCooldown = 0.5f; // ÆÕÍ¨¹¥»÷ÀäÈ´
-    //ÊÇ·ñÆôÓÃ¹¥»÷ÌØĞ§
+    [Header("æˆ˜æ–—è®¾ç½®")]
+    [SerializeField] private float attackCooldown = 0.5f; // æ™®é€šæ”»å‡»å†·å´
+    //æ˜¯å¦å¯ç”¨æ”»å‡»ç‰¹æ•ˆ
     [SerializeField] private bool enableAttackEffect = true;
-    [SerializeField] private bool canMove = true; // Íæ¼ÒÊÇ·ñ¿ÉÒÔÒÆ¶¯£¬ÁíÒ»ÖÖÔİÍ£·½Ê½
-    private float lastAttackTime = -999f; // ÉÏ´Î¹¥»÷Ê±¼ä
-    private bool isLive = true; // Íæ¼ÒÊÇ·ñ´æ»î
+    [SerializeField] private bool canMove = true; // ç©å®¶æ˜¯å¦å¯ä»¥ç§»åŠ¨ï¼Œå¦ä¸€ç§æš‚åœæ–¹å¼
+    private float lastAttackTime = -999f; // ä¸Šæ¬¡æ”»å‡»æ—¶é—´
+    private bool isLive = true; // ç©å®¶æ˜¯å¦å­˜æ´»
 
 
-    // µ±Ç°ÊôĞÔ»º´æ
+    // å½“å‰å±æ€§ç¼“å­˜
     private int currentHp;
     private int currentMaxHp;
     private int currentMp;
@@ -47,34 +47,34 @@ public class PlayerCore : MonoBehaviour
     private int currentDefense;
     #endregion
 
-    #region ¹«¿ªAPI
-    // ÉèÖÃÍæ¼ÒÄÜ·ñÒÆ¶¯
+    #region å…¬å¼€API
+    // è®¾ç½®ç©å®¶èƒ½å¦ç§»åŠ¨
     public void SetCanMove(bool value)
     {
         canMove = value;
     }
-    // Íæ¼ÒÊÇ·ñ¿ÉÒÔÒÆ¶¯
+    // ç©å®¶æ˜¯å¦å¯ä»¥ç§»åŠ¨
     public bool CanMove() => canMove;
-    // Íæ¼ÒÊÇ·ñ´æ»î
+    // ç©å®¶æ˜¯å¦å­˜æ´»
     public bool IsLive() => isLive;
-    // »ñÈ¡¼¼ÄÜÀäÈ´Ê£ÓàÊ±¼ä
+    // è·å–æŠ€èƒ½å†·å´å‰©ä½™æ—¶é—´
     public float GetSkillCooldownRemaining()
     {
         return Mathf.Max(0, skillCooldown - (Time.time - lastSkillTime));
     }
-    // »ñÈ¡ÑªÆ¿ÀäÈ´Ê£ÓàÊ±¼ä
+    // è·å–è¡€ç“¶å†·å´å‰©ä½™æ—¶é—´
     public float GetPotionCooldownRemaining()
     {
         return Mathf.Max(0, potionCooldown - (Time.time - lastPotionTime));
     }
-    // »ñÈ¡¼¼ÄÜÀäÈ´×ÜÊ±³¤
+    // è·å–æŠ€èƒ½å†·å´æ€»æ—¶é•¿
     public float GetSkillCooldownDuration() => skillCooldown;
-    // »ñÈ¡ÑªÆ¿ÀäÈ´×ÜÊ±³¤
+    // è·å–è¡€ç“¶å†·å´æ€»æ—¶é•¿
     public float GetPotionCooldownDuration() => potionCooldown;
-    // ÆÕÍ¨¹¥»÷
+    // æ™®é€šæ”»å‡»
     public int Attack()
     {
-        // ¼ì²é¹¥»÷ÀäÈ´
+        // æ£€æŸ¥æ”»å‡»å†·å´
         if (Time.time < lastAttackTime + attackCooldown)
         {
             return 0;
@@ -83,114 +83,114 @@ public class PlayerCore : MonoBehaviour
         
         if (enableAttackEffect)
         {
-            //»ñÈ¡ÃæÏò·½Ïò
+            //è·å–é¢å‘æ–¹å‘
             bool facingRight = true;
             PlayerTrans playerTrans = GetComponent<PlayerTrans>();
             if (playerTrans != null)
             {
                 facingRight = playerTrans.IsFacingRight();
             }
-            // ÏÔÊ¾¹¥»÷ÌØĞ§
+            // æ˜¾ç¤ºæ”»å‡»ç‰¹æ•ˆ
             float angle = 0f;
             angle = facingRight ? 0f : 180f;
             CrescentSlashEffect.Instance.PlayCrescentSlash(transform.position, angle);
         }
-        // ·µ»Øµ±Ç°¹¥»÷Á¦
+        // è¿”å›å½“å‰æ”»å‡»åŠ›
         return currentAttack;
     }
 
-    // Ê¹ÓÃ¼¼ÄÜ¹¥»÷
+    // ä½¿ç”¨æŠ€èƒ½æ”»å‡»
     public int UseSkill()
     {
-        // ¼ì²é¼¼ÄÜÀäÈ´
+        // æ£€æŸ¥æŠ€èƒ½å†·å´
         if (Time.time < lastSkillTime + skillCooldown)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("¼¼ÄÜÀäÈ´ÖĞ!");
+                UIManager.Instance.ShowTextTip("æŠ€èƒ½å†·å´ä¸­!");
             return 0;
         }
 
-        // ¼ì²éÀ¶Á¿ÊÇ·ñ×ã¹»
+        // æ£€æŸ¥è“é‡æ˜¯å¦è¶³å¤Ÿ
         if (currentMp < skillManaCost)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("·¨Á¦²»×ã!");
+                UIManager.Instance.ShowTextTip("æ³•åŠ›ä¸è¶³!");
             return 0;
         }
 
-        // ÏûºÄÀ¶Á¿
+        // æ¶ˆè€—è“é‡
         lastSkillTime = Time.time;
         ConsumeMana(skillManaCost);
 
-        // ¼ÆËã¼¼ÄÜÉËº¦
+        // è®¡ç®—æŠ€èƒ½ä¼¤å®³
         int skillDamage = Mathf.RoundToInt(currentAttack * skillDamageMultiplier);
 
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip($"Ê¹ÓÃ¼¼ÄÜ! Ôì³É {skillDamage} µãÉËº¦!");
+            UIManager.Instance.ShowTextTip($"ä½¿ç”¨æŠ€èƒ½! é€ æˆ {skillDamage} ç‚¹ä¼¤å®³!");
 
         return skillDamage;
     }
 
-    // Íæ¼ÒÊÜµ½ÉËº¦ - ³õÊ¼ÉËº¦
+    // ç©å®¶å—åˆ°ä¼¤å®³ - åˆå§‹ä¼¤å®³
     public void TakeDamage(int damage)
     {
 
-        // ¼ÆËãÊµ¼ÊÉËº¦(ÉËº¦ - ·ÀÓù)
+        // è®¡ç®—å®é™…ä¼¤å®³(ä¼¤å®³ - é˜²å¾¡)
         int actualDamage = Mathf.Max(1, damage - currentDefense);
 
-        // ¿Û³ıÉúÃüÖµ
+        // æ‰£é™¤ç”Ÿå‘½å€¼
         currentHp = Mathf.Max(0, currentHp - actualDamage);
         DataManager.Instance.SetHp(currentHp);
 
-        // ÏÔÊ¾ÉËº¦ÌáÊ¾
+        // æ˜¾ç¤ºä¼¤å®³æç¤º
         if (UIManager.Instance != null)
             UIManager.Instance.ShowTextTip($"-{actualDamage} HP");
         
-        // ¼ì²éÊÇ·ñËÀÍö
+        // æ£€æŸ¥æ˜¯å¦æ­»äº¡
         if (currentHp <= 0)
         {
             OnPlayerDeath();
         }
     }
 
-    /// Ê¹ÓÃÑªÆ¿»Ø¸´ÉúÃü
+    /// ä½¿ç”¨è¡€ç“¶å›å¤ç”Ÿå‘½
     public void UseHealthPotion()
     {
-        // ¼ì²éÀäÈ´Ê±¼ä
+        // æ£€æŸ¥å†·å´æ—¶é—´
         if (Time.time < lastPotionTime + potionCooldown)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("ÑªÆ¿ÀäÈ´ÖĞ!");
+                UIManager.Instance.ShowTextTip("è¡€ç“¶å†·å´ä¸­!");
             return;
         }
 
-        // ¼ì²éÊÇ·ñÓĞÑªÆ¿
+        // æ£€æŸ¥æ˜¯å¦æœ‰è¡€ç“¶
         int potionCount = DataManager.Instance.GetHealthPotionCount();
         if (potionCount <= 0)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("Ã»ÓĞÑªÆ¿ÁË!");
+                UIManager.Instance.ShowTextTip("æ²¡æœ‰è¡€ç“¶äº†!");
             return;
         }
 
-        // ¼ì²éÑªÁ¿ÊÇ·ñÒÑÂú
+        // æ£€æŸ¥è¡€é‡æ˜¯å¦å·²æ»¡
         if (currentHp >= currentMaxHp)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("ÉúÃüÖµÒÑÂú!");
+                UIManager.Instance.ShowTextTip("ç”Ÿå‘½å€¼å·²æ»¡!");
             return;
         }
 
-        // Ê¹ÓÃÑªÆ¿
+        // ä½¿ç”¨è¡€ç“¶
         lastPotionTime = Time.time;
         DataManager.Instance.SetHealthPotionCount(potionCount - 1);
 
-        // »Ø¸´ÉúÃüÖµ
+        // å›å¤ç”Ÿå‘½å€¼
         int healAmount = Mathf.Min(healthPotionHealAmount, currentMaxHp - currentHp);
         currentHp += healAmount;
         DataManager.Instance.SetHp(currentHp);
 
-        // ÏÔÊ¾Ïà¹ØUI
+        // æ˜¾ç¤ºç›¸å…³UI
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowTextTip($"+{healAmount} HP");
@@ -198,17 +198,17 @@ public class PlayerCore : MonoBehaviour
         }
     }
 
-    // Ê°È¡ÑªÆ¿*1
+    // æ‹¾å–è¡€ç“¶*1
     public void PickupHealthPotion()
     {
         int potionCount = DataManager.Instance.GetHealthPotionCount();
         DataManager.Instance.SetHealthPotionCount(potionCount + 1);
 
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip("Ê°È¡ÁËÒ»¸öÑªÆ¿!");
+            UIManager.Instance.ShowTextTip("æ‹¾å–äº†ä¸€ä¸ªè¡€ç“¶!");
     }
 
-    // »ñµÃ¾­ÑéÖµ
+    // è·å¾—ç»éªŒå€¼
     public void GainExperience(int exp)
     {
         currentExp += exp;
@@ -216,14 +216,14 @@ public class PlayerCore : MonoBehaviour
         if (UIManager.Instance != null)
             UIManager.Instance.ShowTextTip($"+{exp} EXP");
 
-        // ¼ì²éÊÇ·ñÉı¼¶£¨¿ÉÄÜÁ¬ĞøÉı¼¶£©
+        // æ£€æŸ¥æ˜¯å¦å‡çº§ï¼ˆå¯èƒ½è¿ç»­å‡çº§ï¼‰
         CheckLevelUp();
 
-        // ±£´æ¾­ÑéÖµ
+        // ä¿å­˜ç»éªŒå€¼
         DataManager.Instance.SetExp(currentExp);
     }
 
-    // »Ö¸´ÉúÃüÖµ(·ÇÑªÆ¿,±¸ÓÃ)
+    // æ¢å¤ç”Ÿå‘½å€¼(éè¡€ç“¶,å¤‡ç”¨)
     public void RestoreHealth(int amount)
     {
         if (currentHp >= currentMaxHp)
@@ -239,7 +239,7 @@ public class PlayerCore : MonoBehaviour
             UIManager.Instance.ShowTextTip($"+{healAmount} HP");
     }
 
-    // »Ö¸´·¨Á¦Öµ
+    // æ¢å¤æ³•åŠ›å€¼
     public void RestoreMana(int amount)
     {
         if (currentMp >= currentMaxMp)
@@ -255,19 +255,19 @@ public class PlayerCore : MonoBehaviour
             UIManager.Instance.ShowTextTip($"+{restoreAmount} MP");
     }
 
-    // »ñÈ¡µ±Ç°ÉúÃüÖµ
+    // è·å–å½“å‰ç”Ÿå‘½å€¼
     public int GetCurrentHp() => currentHp;
 
-    // »ñÈ¡µ±Ç°·¨Á¦Öµ
+    // è·å–å½“å‰æ³•åŠ›å€¼
     public int GetCurrentMp() => currentMp;
 
-    // »ñÈ¡µ±Ç°µÈ¼¶
+    // è·å–å½“å‰ç­‰çº§
     public int GetCurrentLevel() => currentLevel;
 
-    // »ñÈ¡µ±Ç°¾­ÑéÖµ
+    // è·å–å½“å‰ç»éªŒå€¼
     public int GetCurrentExp() => currentExp;
 
-    // »ñÈ¡µ±Ç°µÈ¼¶Éı¼¶ËùĞèµÄ×î´ó¾­ÑéÖµ
+    // è·å–å½“å‰ç­‰çº§å‡çº§æ‰€éœ€çš„æœ€å¤§ç»éªŒå€¼
     public int GetMaxExpForCurrentLevel()
     {
         return CalculateMaxExpForLevel(currentLevel);
@@ -275,31 +275,31 @@ public class PlayerCore : MonoBehaviour
 
     #endregion
 
-    #region ÉúÃüÖÜÆÚ
+    #region ç”Ÿå‘½å‘¨æœŸ
     private void Start()
     {
-        // ÔÚStartÖĞ¼ÓÔØÊôĞÔ£¬È·±£DataManagerºÍUIManagerÒÑ³õÊ¼»¯
+        // åœ¨Startä¸­åŠ è½½å±æ€§ï¼Œç¡®ä¿DataManagerå’ŒUIManagerå·²åˆå§‹åŒ–
         RefreshPlayerStats();
-        // ×¢²áµ½HUD
+        // æ³¨å†Œåˆ°HUD
         UIManager.Instance.RegisterPlayer(this);
     }
 
     private void Update()
     {
         if(!isLive || !canMove) return;
-        // ´¦Àíµ÷ÊÔÊäÈë(¿ª·¢²âÊÔÓÃ)
+        // å¤„ç†è°ƒè¯•è¾“å…¥(å¼€å‘æµ‹è¯•ç”¨)
         HandleDebugInput();
     }
     #endregion
 
-    #region Ë½ÓĞ·½·¨
-    // Ë¢ĞÂÍæ¼ÒÊôĞÔ
+    #region ç§æœ‰æ–¹æ³•
+    // åˆ·æ–°ç©å®¶å±æ€§
     private void RefreshPlayerStats()
     {
-        // ¼ì²éDataManagerÊÇ·ñ´æÔÚ
+        // æ£€æŸ¥DataManageræ˜¯å¦å­˜åœ¨
         if (DataManager.Instance == null)
         {
-            Debug.LogError("[PlayerCore] DataManager.InstanceÎª¿Õ! ÇëÈ·±£³¡¾°ÖĞÓĞDataManager");
+            Debug.LogError("[PlayerCore] DataManager.Instanceä¸ºç©º! è¯·ç¡®ä¿åœºæ™¯ä¸­æœ‰DataManager");
             return;
         }
 
@@ -312,56 +312,56 @@ public class PlayerCore : MonoBehaviour
         currentAttack = DataManager.Instance.GetAttack();
         currentDefense = DataManager.Instance.GetDefense();
 
-        Debug.Log($"[PlayerCore] Íæ¼ÒÊôĞÔ¼ÓÔØ - Lv.{currentLevel} HP:{currentHp}/{currentMaxHp} EXP:{currentExp}/{GetMaxExpForCurrentLevel()}");
+        Debug.Log($"[PlayerCore] ç©å®¶å±æ€§åŠ è½½ - Lv.{currentLevel} HP:{currentHp}/{currentMaxHp} EXP:{currentExp}/{GetMaxExpForCurrentLevel()}");
     }
 
-    // ÏûºÄ·¨Á¦Öµ
+    // æ¶ˆè€—æ³•åŠ›å€¼
     private void ConsumeMana(int amount)
     {
         currentMp = Mathf.Max(0, currentMp - amount);
         DataManager.Instance.SetMp(currentMp);
     }
 
-    //¼ì²éÊÇ·ñÉı¼¶
+    //æ£€æŸ¥æ˜¯å¦å‡çº§
     private void CheckLevelUp()
     {
-        // Ñ­»·¼ì²é£¬ÒòÎª¿ÉÄÜÒ»´Î»ñµÃ×ã¹»¶àµÄ¾­ÑéÁ¬ĞøÉı¼¶
+        // å¾ªç¯æ£€æŸ¥ï¼Œå› ä¸ºå¯èƒ½ä¸€æ¬¡è·å¾—è¶³å¤Ÿå¤šçš„ç»éªŒè¿ç»­å‡çº§
         while (true)
         {
             int maxExp = GetMaxExpForCurrentLevel();
 
-            // Èç¹ûµ±Ç°¾­Ñé´ïµ½Éı¼¶ÒªÇó
+            // å¦‚æœå½“å‰ç»éªŒè¾¾åˆ°å‡çº§è¦æ±‚
             if (currentExp >= maxExp)
             {
-                // ¼ÆËãÒç³öµÄ¾­Ñé
+                // è®¡ç®—æº¢å‡ºçš„ç»éªŒ
                 int overflowExp = currentExp - maxExp;
-                // Ö´ĞĞÉı¼¶
+                // æ‰§è¡Œå‡çº§
                 LevelUp();
-                // Éı¼¶ºó¾­ÑéÉèÎªÒç³öµÄ¾­Ñé
+                // å‡çº§åç»éªŒè®¾ä¸ºæº¢å‡ºçš„ç»éªŒ
                 currentExp = overflowExp;
             }
             else
             {
-                // ¾­Ñé²»×ã£¬ÍË³öÑ­»·
+                // ç»éªŒä¸è¶³ï¼Œé€€å‡ºå¾ªç¯
                 break;
             }
         }
     }
 
-    // Éı¼¶
+    // å‡çº§
     private void LevelUp()
     {
-        // µÈ¼¶ÌáÉı
+        // ç­‰çº§æå‡
         currentLevel++;
-        // ÌáÉıÊôĞÔ
+        // æå‡å±æ€§
         currentMaxHp += hpGrowthPerLevel;
         currentMaxMp += mpGrowthPerLevel;
         currentAttack += attackGrowthPerLevel;
         currentDefense += defenseGrowthPerLevel;
-        // Éı¼¶Ê±»ØÂúÑªÀ¶
+        // å‡çº§æ—¶å›æ»¡è¡€è“
         currentHp = currentMaxHp;
         currentMp = currentMaxMp;
-        // ±£´æËùÓĞÊôĞÔµ½DataManager
+        // ä¿å­˜æ‰€æœ‰å±æ€§åˆ°DataManager
         DataManager.Instance.SetLevel(currentLevel);
         DataManager.Instance.SetMaxHp(currentMaxHp);
         DataManager.Instance.SetMaxMp(currentMaxMp);
@@ -370,32 +370,32 @@ public class PlayerCore : MonoBehaviour
         DataManager.Instance.SetHp(currentHp);
         DataManager.Instance.SetMp(currentMp);
 
-        // ÏÔÊ¾Éı¼¶ÌáÊ¾
+        // æ˜¾ç¤ºå‡çº§æç¤º
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip($"Éı¼¶! ´ïµ½ Lv.{currentLevel}");
+            UIManager.Instance.ShowTextTip($"å‡çº§! è¾¾åˆ° Lv.{currentLevel}");
     }
 
     /// <summary>
-    /// ¼ÆËãÖ¸¶¨µÈ¼¶Éı¼¶ËùĞèµÄ×î´ó¾­ÑéÖµ
-    /// ¹«Ê½: baseExpRequired + level* expGrowthPerLevel
+    /// è®¡ç®—æŒ‡å®šç­‰çº§å‡çº§æ‰€éœ€çš„æœ€å¤§ç»éªŒå€¼
+    /// å…¬å¼: baseExpRequired + level* expGrowthPerLevel
     /// </summary>
     private int CalculateMaxExpForLevel(int level)
     {
         return baseExpRequired + (level) * expGrowthPerLevel;
     }
 
-    // Íæ¼ÒËÀÍö´¦Àí
+    // ç©å®¶æ­»äº¡å¤„ç†
     private void OnPlayerDeath()
     {
-        //Íæ¼ÒËÀÍöÊ±È¡ÏûËùÓĞÊäÈë¿ØÖÆ
+        //ç©å®¶æ­»äº¡æ—¶å–æ¶ˆæ‰€æœ‰è¾“å…¥æ§åˆ¶
         isLive = false;
 
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTip("ÄãÒÑËÀÍö!", () =>
+            UIManager.Instance.ShowTip("ä½ å·²æ­»äº¡!", () =>
             {
-                // ÖØÖÃÍæ¼ÒÊı¾İ
+                // é‡ç½®ç©å®¶æ•°æ®
                 DataManager.Instance.ResetSaveData();
-                // ÏÔÊ¾¼ÓÔØ½çÃæ£¬µÈ´ı2s·µ»ØÖ÷½çÃæ
+                // æ˜¾ç¤ºåŠ è½½ç•Œé¢ï¼Œç­‰å¾…2sè¿”å›ä¸»ç•Œé¢
                 UIManager.Instance.ShowLoadingPanel(true);
                 StartCoroutine(ReturnToMainMenuAfterDelay(2f));
             });
@@ -406,42 +406,42 @@ public class PlayerCore : MonoBehaviour
         GameLevelManager.Instance.FailAndReturnToMainMenu();
     }
 
-    // ´¦Àíµ÷ÊÔÊäÈë(¿ª·¢²âÊÔÓÃ)
+    // å¤„ç†è°ƒè¯•è¾“å…¥(å¼€å‘æµ‹è¯•ç”¨)
     private void HandleDebugInput()
     {
-        // °´J¼üÆÕÍ¨¹¥»÷(²âÊÔ)
+        // æŒ‰Jé”®æ™®é€šæ”»å‡»(æµ‹è¯•)
         if (Input.GetKeyDown(KeyCode.J))
         {
             int damage = Attack();
             if (damage > 0)
             {
-                Debug.Log($"ÆÕÍ¨¹¥»÷Ôì³É {damage} µãÉËº¦");
+                Debug.Log($"æ™®é€šæ”»å‡»é€ æˆ {damage} ç‚¹ä¼¤å®³");
             }
         }
 
-        // °´K¼üÊ¹ÓÃ¼¼ÄÜ(²âÊÔ)
+        // æŒ‰Ké”®ä½¿ç”¨æŠ€èƒ½(æµ‹è¯•)
         if (Input.GetKeyDown(KeyCode.K))
         {
             int damage = UseSkill();
             if (damage > 0)
             {
-                Debug.Log($"¼¼ÄÜ¹¥»÷Ôì³É {damage} µãÉËº¦");
+                Debug.Log($"æŠ€èƒ½æ”»å‡»é€ æˆ {damage} ç‚¹ä¼¤å®³");
             }
         }
 
-        // °´H¼üÊ¹ÓÃÑªÆ¿(²âÊÔ)
+        // æŒ‰Hé”®ä½¿ç”¨è¡€ç“¶(æµ‹è¯•)
         if (Input.GetKeyDown(KeyCode.H))
         {
             UseHealthPotion();
         }
 
-        // °´L¼ü»ñµÃ¾­Ñé(²âÊÔ)
+        // æŒ‰Lé”®è·å¾—ç»éªŒ(æµ‹è¯•)
         if (Input.GetKeyDown(KeyCode.L))
         {
             GainExperience(50);
         }
 
-        // °´O¼üÊÜµ½ÉËº¦(²âÊÔ)
+        // æŒ‰Oé”®å—åˆ°ä¼¤å®³(æµ‹è¯•)
         if (Input.GetKeyDown(KeyCode.O))
         {
             TakeDamage(35);

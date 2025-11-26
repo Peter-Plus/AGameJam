@@ -4,16 +4,16 @@ using System;
 using System.Collections;
 
 /// <summary>
-/// CG²å»­Ãæ°å,ÓÃÓÚÏÔÊ¾²åÍ¼ºÍºÚÄ»,Ê¹ÓÃBasePanelµÄµ­Èëµ­³öĞ§¹û
+/// CGæ’ç”»é¢æ¿,ç”¨äºæ˜¾ç¤ºæ’å›¾å’Œé»‘å¹•,ä½¿ç”¨BasePanelçš„æ·¡å…¥æ·¡å‡ºæ•ˆæœ
 /// </summary>
 public class GameCGPanel : BasePanel
 {
     [Header("UI References")]
-    [Tooltip("ÓÃÓÚÏÔÊ¾CGÍ¼Æ¬µÄImage×é¼ş")]
+    [Tooltip("ç”¨äºæ˜¾ç¤ºCGå›¾ç‰‡çš„Imageç»„ä»¶")]
     public Image cgImage;
 
-    private Coroutine autoHideCoroutine;// ×Ô¶¯Òş²ØĞ­³ÌÒıÓÃ
-    private Action pendingCallback;// ´ıµ÷ÓÃµÄ»Øµ÷º¯Êı
+    private Coroutine autoHideCoroutine;// è‡ªåŠ¨éšè—åç¨‹å¼•ç”¨
+    private Action pendingCallback;// å¾…è°ƒç”¨çš„å›è°ƒå‡½æ•°
 
     protected override void Awake()
     {
@@ -21,51 +21,51 @@ public class GameCGPanel : BasePanel
     }
 
     #region API
-    //Ìá¹©Ò»¸ö×Ô¶¯Òş²Ø²»µ­Èëµ«µ­³öµÄÏÔÊ¾CGµÄ·½·¨
+    //æä¾›ä¸€ä¸ªè‡ªåŠ¨éšè—ä¸æ·¡å…¥ä½†æ·¡å‡ºçš„æ˜¾ç¤ºCGçš„æ–¹æ³•
     public void ShowCGInstant(Sprite sprite, float displayTime, Action onComplete = null)
     {
-        // Í£Ö¹Ö®Ç°µÄ×Ô¶¯Òş²ØĞ­³Ì
+        // åœæ­¢ä¹‹å‰çš„è‡ªåŠ¨éšè—åç¨‹
         if (autoHideCoroutine != null)
         {
             StopCoroutine(autoHideCoroutine);
             autoHideCoroutine = null;
         }
-        // ÉèÖÃÍ¼Æ¬
+        // è®¾ç½®å›¾ç‰‡
         cgImage.sprite = sprite;
-        // Ö±½ÓÉèÖÃÍ¸Ã÷¶ÈÎª1
+        // ç›´æ¥è®¾ç½®é€æ˜åº¦ä¸º1
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
-        //¼¤»î¶ÔÏó
+        //æ¿€æ´»å¯¹è±¡
         this.gameObject.SetActive(true);
-        // Æô¶¯×Ô¶¯Òş²ØĞ­³Ì
+        // å¯åŠ¨è‡ªåŠ¨éšè—åç¨‹
         autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(displayTime, onComplete));
     }
-    //Ìá¹©Ò»¸ö²»µ­Èëµ«µ­³öµÄÏÔÊ¾CGµÄ·½·¨
+    //æä¾›ä¸€ä¸ªä¸æ·¡å…¥ä½†æ·¡å‡ºçš„æ˜¾ç¤ºCGçš„æ–¹æ³•
     public void ShowCGInstant(Sprite sprite, Action onComplete = null)
     {
         StopAllCoroutines();
-        // ÉèÖÃÍ¼Æ¬
+        // è®¾ç½®å›¾ç‰‡
         cgImage.sprite = sprite;
-        // Ö±½ÓÉèÖÃÍ¸Ã÷¶ÈÎª1
+        // ç›´æ¥è®¾ç½®é€æ˜åº¦ä¸º1
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
-        //¼¤»î¶ÔÏó
+        //æ¿€æ´»å¯¹è±¡
         this.gameObject.SetActive(true);
-        // µ÷ÓÃ»Øµ÷
+        // è°ƒç”¨å›è°ƒ
         onComplete?.Invoke();
     }
-    // ÏÔÊ¾CGÍ¼Æ¬,µ­ÈëÍê³Éºóµ÷ÓÃ»Øµ÷
+    // æ˜¾ç¤ºCGå›¾ç‰‡,æ·¡å…¥å®Œæˆåè°ƒç”¨å›è°ƒ
     public void ShowCG(Sprite sprite, Action onComplete = null)
     {
-        // ÍòÒ»ÓĞ£¬Í£Ö¹Ö®Ç°µÄ×Ô¶¯Òş²ØĞ­³Ì
+        // ä¸‡ä¸€æœ‰ï¼Œåœæ­¢ä¹‹å‰çš„è‡ªåŠ¨éšè—åç¨‹
         if (autoHideCoroutine != null)
         {
             StopCoroutine(autoHideCoroutine);
             autoHideCoroutine = null;
         }
-        // ÉèÖÃÍ¼Æ¬
+        // è®¾ç½®å›¾ç‰‡
         cgImage.sprite = sprite;
         pendingCallback = onComplete;
         Show();
@@ -78,40 +78,40 @@ public class GameCGPanel : BasePanel
         }
     }
 
-    // ÏÔÊ¾CGÍ¼Æ¬,²¢ÔÚÖ¸¶¨Ê±¼äºó×Ô¶¯Òş²Ø
+    // æ˜¾ç¤ºCGå›¾ç‰‡,å¹¶åœ¨æŒ‡å®šæ—¶é—´åè‡ªåŠ¨éšè—
     public void ShowCG(Sprite sprite, float displayTime, Action onComplete = null)
     {
-        // Í£Ö¹Ö®Ç°µÄ×Ô¶¯Òş²ØĞ­³Ì
+        // åœæ­¢ä¹‹å‰çš„è‡ªåŠ¨éšè—åç¨‹
         if (autoHideCoroutine != null)
         {
             StopCoroutine(autoHideCoroutine);
             autoHideCoroutine = null;
         }
-        // ÉèÖÃÍ¼Æ¬
+        // è®¾ç½®å›¾ç‰‡
         cgImage.sprite = sprite;
-        // ÏÔÊ¾Ãæ°å(Ê¹ÓÃBasePanelµÄµ­Èë)
+        // æ˜¾ç¤ºé¢æ¿(ä½¿ç”¨BasePanelçš„æ·¡å…¥)
         Show();
-        // Æô¶¯×Ô¶¯Òş²ØĞ­³Ì
+        // å¯åŠ¨è‡ªåŠ¨éšè—åç¨‹
         autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(displayTime, onComplete));
     }
 
-    // Òş²ØCG(µ­³ö),µ­³öÍê³Éºóµ÷ÓÃ»Øµ÷
+    // éšè—CG(æ·¡å‡º),æ·¡å‡ºå®Œæˆåè°ƒç”¨å›è°ƒ
     public void HideCG(Action onComplete = null)
     {
-        // Í£Ö¹×Ô¶¯Òş²ØĞ­³Ì
+        // åœæ­¢è‡ªåŠ¨éšè—åç¨‹
         if (autoHideCoroutine != null)
         {
             StopCoroutine(autoHideCoroutine);
             autoHideCoroutine = null;
         }
 
-        // Òş²ØÃæ°å
+        // éšè—é¢æ¿
         Hide(onComplete);
     }
     #endregion
 
-    #region ÄÚ²¿
-    // µÈ´ıµ­ÈëÍê³É
+    #region å†…éƒ¨
+    // ç­‰å¾…æ·¡å…¥å®Œæˆ
     private IEnumerator WaitForFadeInComplete()
     {
         yield return new WaitForSecondsRealtime(fadeTime);
@@ -119,15 +119,15 @@ public class GameCGPanel : BasePanel
         pendingCallback = null;
     }
 
-    // ÑÓ³Ùºó×Ô¶¯Òş²Ø
+    // å»¶è¿Ÿåè‡ªåŠ¨éšè—
     private IEnumerator AutoHideAfterDelay(float displayTime, Action onComplete = null)
     {
-        Debug.Log($"¿ªÊ¼×Ô¶¯Òş²ØĞ­³Ì, ÏÔÊ¾Ê±¼ä: {displayTime}s");
-        // µÈ´ıµ­ÈëÍê³É
+        Debug.Log($"å¼€å§‹è‡ªåŠ¨éšè—åç¨‹, æ˜¾ç¤ºæ—¶é—´: {displayTime}s");
+        // ç­‰å¾…æ·¡å…¥å®Œæˆ
         yield return new WaitForSecondsRealtime(fadeTime);
-        // µÈ´ıÏÔÊ¾Ê±¼ä
+        // ç­‰å¾…æ˜¾ç¤ºæ—¶é—´
         yield return new WaitForSecondsRealtime(displayTime);
-        // µ­³ö²¢µ÷ÓÃ»Øµ÷
+        // æ·¡å‡ºå¹¶è°ƒç”¨å›è°ƒ
         Hide(onComplete);
     }
     #endregion

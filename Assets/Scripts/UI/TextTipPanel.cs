@@ -3,23 +3,23 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ÎÄ×ÖÌáÊ¾Ãæ°å ¡ª¡ª ÏÔÊ¾ºó×Ô¶¯ÏûÊ§
+/// æ–‡å­—æç¤ºé¢æ¿ â€”â€” æ˜¾ç¤ºåè‡ªåŠ¨æ¶ˆå¤±
 /// </summary>
 public class TextTipPanel : BasePanel
 {
-    [Tooltip("ÌáÊ¾ÎÄ×Ö£¨ÏÔÊ¾ÔÚÄÚÈİÇøÓò£©")]
+    [Tooltip("æç¤ºæ–‡å­—ï¼ˆæ˜¾ç¤ºåœ¨å†…å®¹åŒºåŸŸï¼‰")]
     public Text tipText;
 
-    [Tooltip("ÌáÊ¾Íâ¿òÉÏµÄÎÄ×Ö£¨Èç¹ûÓĞµ×¿ò£©")]
+    [Tooltip("æç¤ºå¤–æ¡†ä¸Šçš„æ–‡å­—ï¼ˆå¦‚æœæœ‰åº•æ¡†ï¼‰")]
     public Text tipTextBox;
 
-    [Tooltip("ÏÔÊ¾³ÖĞøÊ±¼ä")]
+    [Tooltip("æ˜¾ç¤ºæŒç»­æ—¶é—´")]
     public float displayDuration = 2f;
 
     private Coroutine hideCoroutine;
 
     /// <summary>
-    /// ÏÔÊ¾ÌáÊ¾ÎÄ×Ö
+    /// æ˜¾ç¤ºæç¤ºæ–‡å­—
     /// </summary>
     public void ShowTip(string text)
     {
@@ -31,18 +31,18 @@ public class TextTipPanel : BasePanel
 
         Show();
 
-        // ÈôÒÑÓĞ¼ÆÊ±Ğ­³Ì£¬ÏÈÍ£Ö¹
+        // è‹¥å·²æœ‰è®¡æ—¶åç¨‹ï¼Œå…ˆåœæ­¢
         if (hideCoroutine != null)
         {
             StopCoroutine(hideCoroutine);
         }
 
-        // ¿ªÊ¼×Ô¶¯Òş²Ø
+        // å¼€å§‹è‡ªåŠ¨éšè—
         hideCoroutine = StartCoroutine(AutoHide());
     }
 
     /// <summary>
-    /// ×Ô¶¯Òş²ØĞ­³Ì
+    /// è‡ªåŠ¨éšè—åç¨‹
     /// </summary>
     private IEnumerator AutoHide()
     {

@@ -1,24 +1,24 @@
 using UnityEngine;
 
 /// <summary>
-/// ¸Ä½ø°æÈ«ÆÁÏÂÓêÌØĞ§
-/// Ê¹ÓÃ×Ô¶¨ÒåĞÎ×´´´½¨¸üÃ÷ÏÔµÄ³¤·½ĞÎÓêµÎ
+/// æ”¹è¿›ç‰ˆå…¨å±ä¸‹é›¨ç‰¹æ•ˆ
+/// ä½¿ç”¨è‡ªå®šä¹‰å½¢çŠ¶åˆ›å»ºæ›´æ˜æ˜¾çš„é•¿æ–¹å½¢é›¨æ»´
 /// </summary>
 public class RainEffect : MonoBehaviour
 {
-    [Header("ÓêµÎÉèÖÃ")]
+    [Header("é›¨æ»´è®¾ç½®")]
     [SerializeField] private int maxParticles = 2000;
     [SerializeField] private float emissionRate = 200f;
     [SerializeField] private float rainSpeed = 15f;
-    [SerializeField] private float windForce = 0f; // ·çÁ¦£¬¿ÉÒÔ×öĞ±Óê
+    [SerializeField] private float windForce = 0f; // é£åŠ›ï¼Œå¯ä»¥åšæ–œé›¨
 
-    [Header("ÓêµÎÍâ¹Û")]
-    [SerializeField] private float rainWidth = 0.02f; // ÓêµÎ¿í¶È
-    [SerializeField] private float rainLength = 0.3f; // ÓêµÎ³¤¶È
+    [Header("é›¨æ»´å¤–è§‚")]
+    [SerializeField] private float rainWidth = 0.02f; // é›¨æ»´å®½åº¦
+    [SerializeField] private float rainLength = 0.3f; // é›¨æ»´é•¿åº¦
     [SerializeField] private Color rainColor = new Color(0.9f, 0.9f, 1f, 0.7f);
-    [SerializeField] private float brightnessVariation = 0.3f; // ÁÁ¶È±ä»¯
+    [SerializeField] private float brightnessVariation = 0.3f; // äº®åº¦å˜åŒ–
 
-    [Header("·¶Î§ÉèÖÃ")]
+    [Header("èŒƒå›´è®¾ç½®")]
     [SerializeField] private float spawnWidth = 40f;
     //[SerializeField] private float spawnHeight = 25f;
 
@@ -32,12 +32,12 @@ public class RainEffect : MonoBehaviour
     }
 
     /// <summary>
-    /// ´´½¨Ò»¸ö³¤·½ĞÎÎÆÀíÓÃÓÚÓêµÎ
+    /// åˆ›å»ºä¸€ä¸ªé•¿æ–¹å½¢çº¹ç†ç”¨äºé›¨æ»´
     /// </summary>
     void CreateRainTexture()
     {
         int width = 4;
-        int height = 32; // ¸ß¿í±È 8:1£¬´´ÔìÏ¸³¤Ğ§¹û
+        int height = 32; // é«˜å®½æ¯” 8:1ï¼Œåˆ›é€ ç»†é•¿æ•ˆæœ
 
         rainTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
         rainTexture.filterMode = FilterMode.Bilinear;
@@ -45,12 +45,12 @@ public class RainEffect : MonoBehaviour
 
         Color[] pixels = new Color[width * height];
 
-        // ´´½¨½¥±äĞ§¹ûµÄ³¤·½ĞÎ
+        // åˆ›å»ºæ¸å˜æ•ˆæœçš„é•¿æ–¹å½¢
         for (int y = 0; y < height; y++)
         {
             float alpha = 1f;
 
-            // ¶¥²¿ºÍµ×²¿½¥±ä
+            // é¡¶éƒ¨å’Œåº•éƒ¨æ¸å˜
             if (y < 3)
                 alpha = y / 3f;
             else if (y > height - 4)
@@ -60,7 +60,7 @@ public class RainEffect : MonoBehaviour
             {
                 float edgeAlpha = 1f;
 
-                // ±ßÔµ½¥±ä
+                // è¾¹ç¼˜æ¸å˜
                 if (x == 0 || x == width - 1)
                     edgeAlpha = 0.5f;
 
@@ -74,15 +74,15 @@ public class RainEffect : MonoBehaviour
 
     void CreateRainSystem()
     {
-        // ´´½¨Á£×ÓÏµÍ³GameObject
+        // åˆ›å»ºç²’å­ç³»ç»ŸGameObject
         GameObject rainObject = new GameObject("RainParticles");
         rainObject.transform.SetParent(transform);
         rainObject.transform.localPosition = Vector3.zero;
 
-        // Ìí¼ÓÁ£×ÓÏµÍ³×é¼ş
+        // æ·»åŠ ç²’å­ç³»ç»Ÿç»„ä»¶
         rainParticleSystem = rainObject.AddComponent<ParticleSystem>();
 
-        // Ö÷Ä£¿é
+        // ä¸»æ¨¡å—
         var main = rainParticleSystem.main;
         main.startLifetime = new ParticleSystem.MinMaxCurve(2.5f, 4f);
         main.startSpeed = rainSpeed;
@@ -96,35 +96,35 @@ public class RainEffect : MonoBehaviour
         main.maxParticles = maxParticles;
         main.simulationSpace = ParticleSystemSimulationSpace.World;
         main.loop = true;
-        main.gravityModifier = 1f; // ÖØÁ¦Ğ§¹û
+        main.gravityModifier = 1f; // é‡åŠ›æ•ˆæœ
 
-        // ·¢ÉäÄ£¿é
+        // å‘å°„æ¨¡å—
         var emission = rainParticleSystem.emission;
         emission.rateOverTime = emissionRate;
 
-        // ĞÎ×´Ä£¿é - ´Ó¶¥²¿¾ØĞÎÇøÓò·¢Éä
+        // å½¢çŠ¶æ¨¡å— - ä»é¡¶éƒ¨çŸ©å½¢åŒºåŸŸå‘å°„
         var shape = rainParticleSystem.shape;
         shape.shapeType = ParticleSystemShapeType.Rectangle;
         shape.scale = new Vector3(spawnWidth, 0.1f, 1f);
 
-        // ËÙ¶ÈÄ£¿é - Ìí¼Ó·çÁ¦Ğ§¹û
+        // é€Ÿåº¦æ¨¡å— - æ·»åŠ é£åŠ›æ•ˆæœ
         var velocity = rainParticleSystem.velocityOverLifetime;
         velocity.enabled = true;
         velocity.space = ParticleSystemSimulationSpace.World;
         velocity.x = windForce;
 
-        // Ğı×ªÄ£¿é - ÈÃÓêµÎ±£³Ö´¹Ö±
+        // æ—‹è½¬æ¨¡å— - è®©é›¨æ»´ä¿æŒå‚ç›´
         var rotation = rainParticleSystem.rotationOverLifetime;
         rotation.enabled = true;
         rotation.z = 0;
 
-        // äÖÈ¾Ä£¿é
+        // æ¸²æŸ“æ¨¡å—
         var renderer = rainParticleSystem.GetComponent<ParticleSystemRenderer>();
         renderer.renderMode = ParticleSystemRenderMode.Billboard;
         renderer.alignment = ParticleSystemRenderSpace.World;
         renderer.sortingOrder = 100;
 
-        // ´´½¨²ÄÖÊ
+        // åˆ›å»ºæè´¨
         Material rainMat = new Material(Shader.Find("Particles/Standard Unlit"));
         rainMat.SetTexture("_MainTex", rainTexture);
         rainMat.SetColor("_Color", Color.white);
@@ -141,7 +141,7 @@ public class RainEffect : MonoBehaviour
     }
 
     /// <summary>
-    /// µ÷ÕûÏÂÓêÇ¿¶È
+    /// è°ƒæ•´ä¸‹é›¨å¼ºåº¦
     /// </summary>
     public void SetRainIntensity(float intensity)
     {
@@ -153,7 +153,7 @@ public class RainEffect : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉèÖÃ·çÁ¦£¨Ğ±ÓêĞ§¹û£©
+    /// è®¾ç½®é£åŠ›ï¼ˆæ–œé›¨æ•ˆæœï¼‰
     /// </summary>
     public void SetWindForce(float wind)
     {
@@ -166,7 +166,7 @@ public class RainEffect : MonoBehaviour
     }
 
     /// <summary>
-    /// ¿ªÊ¼ÏÂÓê
+    /// å¼€å§‹ä¸‹é›¨
     /// </summary>
     public void StartRain()
     {
@@ -177,7 +177,7 @@ public class RainEffect : MonoBehaviour
     }
 
     /// <summary>
-    /// Í£Ö¹ÏÂÓê
+    /// åœæ­¢ä¸‹é›¨
     /// </summary>
     public void StopRain()
     {
@@ -188,7 +188,7 @@ public class RainEffect : MonoBehaviour
     }
 
     /// <summary>
-    /// ½¥±äÍ£Ö¹
+    /// æ¸å˜åœæ­¢
     /// </summary>
     public void FadeOutRain(float duration = 2f)
     {

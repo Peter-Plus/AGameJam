@@ -5,22 +5,22 @@ using UnityEngine.XR;
 
 public class Leve15Manager : LevelManager
 {
-    [Header("¹Ø¿¨5ÅäÖÃ")]
-    public string levelName = "½ÌÊÒ";
+    [Header("å…³å¡5é…ç½®")]
+    public string levelName = "æ•™å®¤";
 
-    [Header("¶Ô»°ÄÚÈİ")]
+    [Header("å¯¹è¯å†…å®¹")]
     [TextArea(2, 4)]
-    public string dialogue1 = "Ñ©Ò¹±ãÀûµêµÄ×Ô¶¯ÃÅ¿ªºÏ¼ä´ø½øÏ¸ËéµÄÑ©»¨,Á½¸ö´©×ÅĞ£·şµÄÅ®Éú¼·ÔÚÅ¯¹ñÅÔ¡£";
+    public string dialogue1 = "é›ªå¤œä¾¿åˆ©åº—çš„è‡ªåŠ¨é—¨å¼€åˆé—´å¸¦è¿›ç»†ç¢çš„é›ªèŠ±,ä¸¤ä¸ªç©¿ç€æ ¡æœçš„å¥³ç”ŸæŒ¤åœ¨æš–æŸœæ—ã€‚";
     [TextArea(2, 4)]
-    public string dialogue2 = "ËùÒÔÕâ¾ÍÊÇÄãÇÌµô²¹Ï°°àµÄÀíÓÉ?ÎªÁË³Ô¹Ø¶«Öó?";
+    public string dialogue2 = "æ‰€ä»¥è¿™å°±æ˜¯ä½ ç¿˜æ‰è¡¥ä¹ ç­çš„ç†ç”±?ä¸ºäº†åƒå…³ä¸œç…®?";
     [TextArea(2, 4)]
-    public string dialogue3 = "ÎªÁËºÍÄãÒ»Æğ³ÔÕâ¸ö¡£";
+    public string dialogue3 = "ä¸ºäº†å’Œä½ ä¸€èµ·åƒè¿™ä¸ªã€‚";
     [TextArea(2, 4)]
-    public string finalSpeak = "\"ºóÀ´±»ÀÏÊ¦ÂîÁË¸ö¹·ÑªÁÜÍ·,²»ÖªµÀËıÓĞÃ»ÓĞºó»Ú¡­¡­\"";
+    public string finalSpeak = "\"åæ¥è¢«è€å¸ˆéª‚äº†ä¸ªç‹—è¡€æ·‹å¤´,ä¸çŸ¥é“å¥¹æœ‰æ²¡æœ‰åæ‚”â€¦â€¦\"";
 
-    [Header("½ÇÉ«Ãû³Æ")]
-    public string girl1Name = "¾Õ ä¾ÔÂ";
-    public string girl2Name = "Ç³²Ö ÁİÁİ×Ó";
+    [Header("è§’è‰²åç§°")]
+    public string girl1Name = "èŠ æ¸šæœˆ";
+    public string girl2Name = "æµ…ä»“ å‡›å‡›å­";
 
     private GameObject player;
     protected override void Awake()
@@ -30,7 +30,7 @@ public class Leve15Manager : LevelManager
     }
     private void Start()
     {
-        //ÅĞ¶ÏÊÇ²»ÊÇµÚÒ»´Î½øÈë¸Ã¹Ø¿¨
+        //åˆ¤æ–­æ˜¯ä¸æ˜¯ç¬¬ä¸€æ¬¡è¿›å…¥è¯¥å…³å¡
         if (DataManager.Instance.IsFirstTimeReachLevel(0))
         {
             StartInteract();
@@ -48,7 +48,7 @@ public class Leve15Manager : LevelManager
         base.Update();
     }
 
-    // ĞèÒªÖØĞ´µÄ½»»¥ÄÚÈİ
+    // éœ€è¦é‡å†™çš„äº¤äº’å†…å®¹
     public override void StartInteract()
     {
 
@@ -58,51 +58,51 @@ public class Leve15Manager : LevelManager
 
     private IEnumerator InteractSequence()
     {
-        //ÔİÍ£ÓÎÏ·
+        //æš‚åœæ¸¸æˆ
         Time.timeScale = 0f;
-        // ¼ÓÔØ×ÊÔ´
+        // åŠ è½½èµ„æº
         Sprite blackScreen = Resources.Load<Sprite>("CG/BlackScreen");
         Sprite illustration1 = Resources.Load<Sprite>("CG/Illustration1");
         Sprite illustration2 = Resources.Load<Sprite>("CG/Illustration2");
         Sprite girl1 = Resources.Load<Sprite>("Texture/UI/AIChara/girl1");
         Sprite girl2 = Resources.Load<Sprite>("Texture/UI/AIChara/girl2");
         bool done = false;
-        //ºÚÄ»1.5s
+        //é»‘å¹•1.5s
         UIManager.Instance.ShowCGPanelInstant(blackScreen, 1.5f, () => { done = true; });
-        // ²åÍ¼1
+        // æ’å›¾1
         UIManager.Instance.ShowGameCGPanel(illustration1);
         yield return new WaitUntil(() => done);
-        // µÈ´ı2s¿ªÊ¼¶Ô»°
+        // ç­‰å¾…2så¼€å§‹å¯¹è¯
         yield return new WaitForSecondsRealtime(2f);
-        // ¶Ô»°1
+        // å¯¹è¯1
         done = false;
         UIManager.Instance.ShowChat(dialogue1, () => done = true);
         yield return new WaitUntil(() => done);
-        //µÈ´ı1s¿ªÊ¼¶Ô»°2
+        //ç­‰å¾…1så¼€å§‹å¯¹è¯2
         yield return new WaitForSecondsRealtime(1f);
-        // ¶Ô»°2 - ¾Õ ä¾ÔÂ
+        // å¯¹è¯2 - èŠ æ¸šæœˆ
         done = false;
         UIManager.Instance.ShowChat(dialogue2, girl1Name, girl1, () => done = true);
         yield return new WaitUntil(() => done);
-        // ¶Ô»°3 - Ç³²Ö ÁİÁİ×Ó
+        // å¯¹è¯3 - æµ…ä»“ å‡›å‡›å­
         done = false;
         UIManager.Instance.ShowChat(dialogue3, girl2Name, girl2, () => done = true);
         yield return new WaitUntil(() => done);
-        // ºÚÄ»1Ãë²¢Òş²Ø²åÍ¼2
+        // é»‘å¹•1ç§’å¹¶éšè—æ’å›¾2
         done = false;
         UIManager.Instance.ShowCGPanel(blackScreen, 1f, () => done = true);
-        yield return new WaitForSecondsRealtime(1f); // µÈ´ı1Ãë£¬È·±£ºÚÄ»ÏÔÊ¾³öÀ´
+        yield return new WaitForSecondsRealtime(1f); // ç­‰å¾…1ç§’ï¼Œç¡®ä¿é»‘å¹•æ˜¾ç¤ºå‡ºæ¥
         UIManager.Instance.HideGameCGPanel();
         yield return new WaitUntil(() => done);
         done = false;
-        // Íæ¼ÒÍ·¶¥ÆøÅİ
+        // ç©å®¶å¤´é¡¶æ°”æ³¡
         if (player != null)
         {
             Vector3 playerHead = player.transform.position + Vector3.up * 2f;
             UIManager.Instance.ShowSpeakPanel(finalSpeak, playerHead, () => done = true);
         }
         yield return new WaitUntil(() => done);
-        //»Ö¸´
+        //æ¢å¤
         Time.timeScale = 1f;
 
         UIManager.Instance.ShowTextTip(levelName);

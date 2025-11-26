@@ -14,39 +14,39 @@ public class SettingsPanel : BasePanel
     {
         base.Awake();
 
-        // °ó¶¨»¬¶¯ÌõÊÂ¼ş
+        // ç»‘å®šæ»‘åŠ¨æ¡äº‹ä»¶
         musicSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
         soundSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
 
-        // °ó¶¨°´Å¥ÊÂ¼ş
+        // ç»‘å®šæŒ‰é’®äº‹ä»¶
         closeBtn.onClick.AddListener(OnClose);
     }
 
     protected override void OnShow()
     {
-        // ÏÔÊ¾Ê±´ÓDataManager¶ÁÈ¡±£´æµÄÒôÁ¿Öµ
+        // æ˜¾ç¤ºæ—¶ä»DataManagerè¯»å–ä¿å­˜çš„éŸ³é‡å€¼
         musicSlider.value = DataManager.Instance.GetMusicVolume();
         soundSlider.value = DataManager.Instance.GetSfxVolume();
     }
 
-    // ÒôÀÖÒôÁ¿¸Ä±ä
+    // éŸ³ä¹éŸ³é‡æ”¹å˜
     private void OnMusicVolumeChanged(float value)
     {
-        // ±£´æµ½DataManager
+        // ä¿å­˜åˆ°DataManager
         DataManager.Instance.SetMusicVolume(value);
 
-        // ÊµÊ±Ó¦ÓÃµ½AudioSource
+        // å®æ—¶åº”ç”¨åˆ°AudioSource
         AudioManager.Instance.SetMusicVolume(value);
     }
 
-    // ÒôĞ§ÒôÁ¿¸Ä±ä
+    // éŸ³æ•ˆéŸ³é‡æ”¹å˜
     private void OnSFXVolumeChanged(float value)
     {
         DataManager.Instance.SetSfxVolume(value);
         AudioManager.Instance.SetSfxVolume(value);
     }
 
-    // ¹Ø±Õ°´Å¥
+    // å…³é—­æŒ‰é’®
     private void OnClose()
     {
         Hide();

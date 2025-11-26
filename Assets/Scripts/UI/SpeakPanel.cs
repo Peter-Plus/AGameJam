@@ -11,23 +11,23 @@ public class SpeakPanel : BasePanel
 
     [Header("Display Settings")]
     public float autoHideTime = 3f;
-    public float typingSpeed = 0.05f; // ´ò×ÖËÙ¶È
+    public float typingSpeed = 0.05f; // æ‰“å­—é€Ÿåº¦
 
     [Header("Size Settings")]
     public Vector2 textPadding = new Vector2(20, 10);
     public float minWidth = 300f;
     public float maxWidth = 600f;
     public float widthK = 1.5f;
-    public float heightK = 5f; // ÎÄ±¾¸ß¶ÈµÄ·Å´óÏµÊı
-    public string t = "ÕâÊÇÒ»¸ö²âÊÔ¶Ô»°ÆøÅİµÄÄÚÈİ,ÓÃÓÚµ÷ÊÔÏÔÊ¾Ğ§¹û¡£";
+    public float heightK = 5f; // æ–‡æœ¬é«˜åº¦çš„æ”¾å¤§ç³»æ•°
+    public string t = "è¿™æ˜¯ä¸€ä¸ªæµ‹è¯•å¯¹è¯æ°”æ³¡çš„å†…å®¹,ç”¨äºè°ƒè¯•æ˜¾ç¤ºæ•ˆæœã€‚";
 
     private Coroutine autoHideCoroutine;
     private Coroutine typingCoroutine;
     private Action pendingCallback;
-    private string fullText; // ÍêÕûÎÄ±¾
+    private string fullText; // å®Œæ•´æ–‡æœ¬
 
     #region API
-    // ÏÔÊ¾¶Ô»°ÆøÅİ(ÊÀ½ç×ø±ê)
+    // æ˜¾ç¤ºå¯¹è¯æ°”æ³¡(ä¸–ç•Œåæ ‡)
     public void ShowSpeak(string text, Vector3 worldPosition, Action onComplete = null)
     {
         if (autoHideCoroutine != null)
@@ -42,16 +42,16 @@ public class SpeakPanel : BasePanel
         }
 
         fullText = text;
-        speakText.text = text; // ÏÈÉèÖÃÍêÕûÎÄ±¾ÓÃÓÚ¼ÆËã³ß´ç
+        speakText.text = text; // å…ˆè®¾ç½®å®Œæ•´æ–‡æœ¬ç”¨äºè®¡ç®—å°ºå¯¸
         AdjustPanelSize();
         transform.position = Camera.main.WorldToScreenPoint(worldPosition);
-        // Çå¿ÕÎÄ±¾
+        // æ¸…ç©ºæ–‡æœ¬
         speakText.text = "";
         Show();
         typingCoroutine = StartCoroutine(TypeText(onComplete));
     }
 
-    // ÏÔÊ¾¶Ô»°ÆøÅİ(ÆÁÄ»×ø±ê)
+    // æ˜¾ç¤ºå¯¹è¯æ°”æ³¡(å±å¹•åæ ‡)
     public void ShowSpeakAtScreenPosition(string text, Vector2 screenPosition, Action onComplete = null)
     {
         if (autoHideCoroutine != null)
@@ -66,7 +66,7 @@ public class SpeakPanel : BasePanel
         }
 
         fullText = text;
-        speakText.text = text; // ÏÈÉèÖÃÍêÕûÎÄ±¾ÓÃÓÚ¼ÆËã³ß´ç
+        speakText.text = text; // å…ˆè®¾ç½®å®Œæ•´æ–‡æœ¬ç”¨äºè®¡ç®—å°ºå¯¸
         AdjustPanelSize();
         transform.position = screenPosition;
 
@@ -74,7 +74,7 @@ public class SpeakPanel : BasePanel
         typingCoroutine = StartCoroutine(TypeText(onComplete));
     }
 
-    // ÊÖ¶¯Òş²Ø¶Ô»°ÆøÅİ
+    // æ‰‹åŠ¨éšè—å¯¹è¯æ°”æ³¡
     public void HideSpeak(Action onComplete = null)
     {
         if (autoHideCoroutine != null)
@@ -94,8 +94,8 @@ public class SpeakPanel : BasePanel
     }
     #endregion
 
-    #region ÄÚ²¿·½·¨
-    // µ÷ÕûÃæ°å´óĞ¡ÒÔÊÊÓ¦ÎÄ±¾³¤¶È
+    #region å†…éƒ¨æ–¹æ³•
+    // è°ƒæ•´é¢æ¿å¤§å°ä»¥é€‚åº”æ–‡æœ¬é•¿åº¦
     private void AdjustPanelSize()
     {
         if (speakText == null || backgroundRect == null) return;
@@ -110,25 +110,25 @@ public class SpeakPanel : BasePanel
         backgroundRect.sizeDelta = new Vector2(preferredWidth, preferredHeight);
     }
 
-    // ´ò×Ö»úĞ§¹û
+    // æ‰“å­—æœºæ•ˆæœ
     private IEnumerator TypeText( Action onComplete = null)
     {
-        // µÈ´ıµ­ÈëÍê³É
+        // ç­‰å¾…æ·¡å…¥å®Œæˆ
         yield return new WaitForSecondsRealtime(fadeTime);
 
-        // Öğ×ÖÏÔÊ¾
+        // é€å­—æ˜¾ç¤º
         foreach (char c in fullText)
         {
             speakText.text += c;
             yield return new WaitForSecondsRealtime(typingSpeed);
         }
 
-        // ´ò×ÖÍê³É,¿ªÊ¼×Ô¶¯Òş²Øµ¹¼ÆÊ±
-        Debug.Log("´ò×ÖÍê³É,¿ªÊ¼×Ô¶¯Òş²Øµ¹¼ÆÊ±");
+        // æ‰“å­—å®Œæˆ,å¼€å§‹è‡ªåŠ¨éšè—å€’è®¡æ—¶
+        Debug.Log("æ‰“å­—å®Œæˆ,å¼€å§‹è‡ªåŠ¨éšè—å€’è®¡æ—¶");
         autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(onComplete));
     }
 
-    // µÈ´ıµ­³öÍê³É
+    // ç­‰å¾…æ·¡å‡ºå®Œæˆ
     private IEnumerator WaitForFadeOutComplete()
     {
         yield return new WaitForSecondsRealtime(fadeTime);
@@ -136,19 +136,19 @@ public class SpeakPanel : BasePanel
         pendingCallback = null;
     }
 
-    // ×Ô¶¯Òş²Ø
+    // è‡ªåŠ¨éšè—
     private IEnumerator AutoHideAfterDelay(Action onComplete = null)
     {
-        // µÈ´ıÏÔÊ¾Ê±¼ä
+        // ç­‰å¾…æ˜¾ç¤ºæ—¶é—´
         yield return new WaitForSecondsRealtime(autoHideTime);
-        // µ­³ö
-        Debug.Log("×¼±¸µ­³ö");
+        // æ·¡å‡º
+        Debug.Log("å‡†å¤‡æ·¡å‡º");
         Hide(onComplete);
     }
 
     #endregion
 
-    //±ãÓÚµ÷ÊÔ,¹«¿ª·½·¨,ÓÒ¼ü×é¼şµ÷ÓÃ
+    //ä¾¿äºè°ƒè¯•,å…¬å¼€æ–¹æ³•,å³é”®ç»„ä»¶è°ƒç”¨
     [ContextMenu("Test Show Speak")]
     private void TestShowSpeak()
     {

@@ -2,20 +2,20 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    [Header("¸úËæÄ¿±ê")]
-    [SerializeField] private Transform target;  // PlayerµÄTransform
+    [Header("è·Ÿéšç›®æ ‡")]
+    [SerializeField] private Transform target;  // Playerçš„Transform
 
-    [Header("±ß½çÏŞÖÆ")]
-    public float BoundaryL = -10;  // ×ó±ß½ç
-    public float BoundaryR = 10;   // ÓÒ±ß½ç
+    [Header("è¾¹ç•Œé™åˆ¶")]
+    public float BoundaryL = -10;  // å·¦è¾¹ç•Œ
+    public float BoundaryR = 10;   // å³è¾¹ç•Œ
 
     private Camera cam;
     private float cameraHalfWidth;
 
     private void Awake()
     {
-        cam = GetComponent<Camera>();//±ØĞëÔÚAwakeÀï»ñÈ¡¶ø·ÇÖ±½Ó¸³Öµ
-        // ¼ÆËãÉãÏñ»úÊÓÒ°µÄÒ»°ë¿í¶È
+        cam = GetComponent<Camera>();//å¿…é¡»åœ¨Awakeé‡Œè·å–è€Œéç›´æ¥èµ‹å€¼
+        // è®¡ç®—æ‘„åƒæœºè§†é‡çš„ä¸€åŠå®½åº¦
         cameraHalfWidth = cam.orthographicSize * cam.aspect;
     }
 
@@ -23,16 +23,16 @@ public class CameraFollow : MonoBehaviour
     {
         if (target == null) return;
 
-        // »ñÈ¡µ±Ç°Î»ÖÃ
+        // è·å–å½“å‰ä½ç½®
         Vector3 newPosition = transform.position;
 
-        // ¸úËæÍæ¼ÒµÄX×ø±ê
+        // è·Ÿéšç©å®¶çš„Xåæ ‡
         newPosition.x = target.position.x;
 
-        // ÏŞÖÆÉãÏñ»ú±ß½ç
-        // ×ó±ßÔµ²»ÄÜĞ¡ÓÚBoundaryL
+        // é™åˆ¶æ‘„åƒæœºè¾¹ç•Œ
+        // å·¦è¾¹ç¼˜ä¸èƒ½å°äºBoundaryL
         float minX = BoundaryL + cameraHalfWidth;
-        // ÓÒ±ßÔµ²»ÄÜ´óÓÚBoundaryR
+        // å³è¾¹ç¼˜ä¸èƒ½å¤§äºBoundaryR
         float maxX = BoundaryR - cameraHalfWidth;
 
         newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);

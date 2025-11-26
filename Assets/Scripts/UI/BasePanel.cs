@@ -3,40 +3,40 @@ using System.Collections;
 using System;
 
 /// <summary>
-/// ËùÓĞUIÃæ°åµÄ»ùÀà£¬Ìá¹©ÏÔÊ¾/Òş²Ø/µ­Èëµ­³ö¹¦ÄÜ
+/// æ‰€æœ‰UIé¢æ¿çš„åŸºç±»ï¼Œæä¾›æ˜¾ç¤º/éšè—/æ·¡å…¥æ·¡å‡ºåŠŸèƒ½
 /// </summary>
 public abstract class BasePanel : MonoBehaviour
 {
     [Header("Base Panel Settings")]
-    [Tooltip("µ­Èëµ­³öÊ±¼ä")]
+    [Tooltip("æ·¡å…¥æ·¡å‡ºæ—¶é—´")]
     public float fadeTime = 0.3f;
 
-    [Tooltip("ÏÔÊ¾Ê±ÊÇ·ñÔİÍ£ÓÎÏ·")]
-    private bool pauseGameWhenShow = false;//¹Ø±ÕÃæ°åÔİÍ£ÊôĞÔ£¬²»ÔÙÓÃÃæ°å¿ØÖÆÓÎÏ·ÔİÍ£
-                                           //Ãæ°åÊ±¼äÏà¹ØÓÃTime.unscaledDeltaTimeºÍWaitForSecondsRealtime´úÌæ
+    [Tooltip("æ˜¾ç¤ºæ—¶æ˜¯å¦æš‚åœæ¸¸æˆ")]
+    private bool pauseGameWhenShow = false;//å…³é—­é¢æ¿æš‚åœå±æ€§ï¼Œä¸å†ç”¨é¢æ¿æ§åˆ¶æ¸¸æˆæš‚åœ
+                                           //é¢æ¿æ—¶é—´ç›¸å…³ç”¨Time.unscaledDeltaTimeå’ŒWaitForSecondsRealtimeä»£æ›¿
 
     protected CanvasGroup canvasGroup;
     protected bool isShowing = false;
 
     protected virtual void Awake()
     {
-        // ×Ô¶¯Ìí¼ÓCanvasGroup×é¼şÓÃÓÚµ­Èëµ­³ö
+        // è‡ªåŠ¨æ·»åŠ CanvasGroupç»„ä»¶ç”¨äºæ·¡å…¥æ·¡å‡º
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
         {
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
 
-        // ³õÊ¼»¯Ê±Òş²ØÃæ°å
+        // åˆå§‹åŒ–æ—¶éšè—é¢æ¿
         HideMe();
     }
 
     /// <summary>
-    /// ÏÔÊ¾Ãæ°å£¨´øµ­ÈëĞ§¹û£©
+    /// æ˜¾ç¤ºé¢æ¿ï¼ˆå¸¦æ·¡å…¥æ•ˆæœï¼‰
     /// </summary>
     public virtual void Show()
     {
-        // Í£Ö¹¿ÉÄÜÕıÔÚ½øĞĞµÄµ­³ö
+        // åœæ­¢å¯èƒ½æ­£åœ¨è¿›è¡Œçš„æ·¡å‡º
         StopAllCoroutines();
         gameObject.SetActive(true);
         isShowing = true;
@@ -59,7 +59,7 @@ public abstract class BasePanel : MonoBehaviour
     }
 
     /// <summary>
-    /// Òş²ØÃæ°å£¨´øµ­³öĞ§¹û£©
+    /// éšè—é¢æ¿ï¼ˆå¸¦æ·¡å‡ºæ•ˆæœï¼‰
     /// </summary>
     public virtual void Hide()
     {
@@ -69,7 +69,7 @@ public abstract class BasePanel : MonoBehaviour
             if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
         isShowing = false;
-        //ÏÈ¼ì²é¶ÔÏóÊÇ·ñactive£¬ÒÔ±ÜÃâÖØ¸´Òş²ØÊ±µÄÎÊÌâ
+        //å…ˆæ£€æŸ¥å¯¹è±¡æ˜¯å¦activeï¼Œä»¥é¿å…é‡å¤éšè—æ—¶çš„é—®é¢˜
         if (gameObject.activeSelf == false)
         {
             return;
@@ -92,7 +92,7 @@ public abstract class BasePanel : MonoBehaviour
 
         OnHide();
     }
-    //ÖØÔØÒş²Ø·½·¨£¬´ø»Øµ÷
+    //é‡è½½éšè—æ–¹æ³•ï¼Œå¸¦å›è°ƒ
     public virtual void Hide(Action onComplete)
     {
         isShowing = false;
@@ -115,7 +115,7 @@ public abstract class BasePanel : MonoBehaviour
         }
     }
     /// <summary>
-    /// µ­ÈëĞ­³Ì
+    /// æ·¡å…¥åç¨‹
     /// </summary>
     protected IEnumerator FadeIn()
     {
@@ -130,7 +130,7 @@ public abstract class BasePanel : MonoBehaviour
     }
 
     /// <summary>
-    /// µ­³öĞ­³Ì
+    /// æ·¡å‡ºåç¨‹
     /// </summary>
     protected IEnumerator FadeOut()
     {
@@ -145,7 +145,7 @@ public abstract class BasePanel : MonoBehaviour
         gameObject.SetActive(false);
     }
     /// <summary>
-    ///  ´ø»Øµ÷µÄµ­³öĞ­³Ì
+    ///  å¸¦å›è°ƒçš„æ·¡å‡ºåç¨‹
     /// </summary>
     /// <param name="onComplete"></param>
     /// <returns></returns>
@@ -160,32 +160,32 @@ public abstract class BasePanel : MonoBehaviour
         }
         canvasGroup.alpha = 0;
         Debug.Log("FadeOut complete, invoking callback and disabling panel.");
-        onComplete?.Invoke(); // ÏÈ»Øµ÷
-        gameObject.SetActive(false); // ÔÙ½ûÓÃ
+        onComplete?.Invoke(); // å…ˆå›è°ƒ
+        gameObject.SetActive(false); // å†ç¦ç”¨
     }
     /// <summary>
-    /// ¿ìËÙÒş²ØÃæ°å£¨ÎŞµ­³öĞ§¹û£©
+    /// å¿«é€Ÿéšè—é¢æ¿ï¼ˆæ— æ·¡å‡ºæ•ˆæœï¼‰
     /// </summary>
     public void HideMe()
     {
         gameObject.SetActive(false);
     }
 
-    //Q ÏÂÃæÕâÁ½¸ö·½·¨ÓĞÊ²Ã´ÓÃ´¦£¿
-    //A ÕâÁ½¸ö·½·¨ÊÇÎª×ÓÀàÌá¹©µÄ¹³×Ó·½·¨£¬ÔÊĞí×ÓÀàÔÚÃæ°åÏÔÊ¾»òÒş²ØÊ±Ö´ĞĞÌØ¶¨µÄÂß¼­¡£
-    //ÀıÈç£¬×ÓÀà¿ÉÒÔÖØĞ´OnShow·½·¨À´³õÊ¼»¯Ãæ°åÄÚÈİ£¬»òÕßÖØĞ´OnHide·½·¨À´ÇåÀí×ÊÔ´»ò±£´æ×´Ì¬¡£
-    //Q ÎÒ×îÌÖÑá¹³×ÓÄãÖªµÀÂğ£¿
+    //Q ä¸‹é¢è¿™ä¸¤ä¸ªæ–¹æ³•æœ‰ä»€ä¹ˆç”¨å¤„ï¼Ÿ
+    //A è¿™ä¸¤ä¸ªæ–¹æ³•æ˜¯ä¸ºå­ç±»æä¾›çš„é’©å­æ–¹æ³•ï¼Œå…è®¸å­ç±»åœ¨é¢æ¿æ˜¾ç¤ºæˆ–éšè—æ—¶æ‰§è¡Œç‰¹å®šçš„é€»è¾‘ã€‚
+    //ä¾‹å¦‚ï¼Œå­ç±»å¯ä»¥é‡å†™OnShowæ–¹æ³•æ¥åˆå§‹åŒ–é¢æ¿å†…å®¹ï¼Œæˆ–è€…é‡å†™OnHideæ–¹æ³•æ¥æ¸…ç†èµ„æºæˆ–ä¿å­˜çŠ¶æ€ã€‚
+    //Q æˆ‘æœ€è®¨åŒé’©å­ä½ çŸ¥é“å—ï¼Ÿ
     /// <summary>
-    /// ×ÓÀàÖØĞ´£ºÃæ°åÏÔÊ¾Ê±µ÷ÓÃ
+    /// å­ç±»é‡å†™ï¼šé¢æ¿æ˜¾ç¤ºæ—¶è°ƒç”¨
     /// </summary>
     protected virtual void OnShow() { }
     /// <summary>
-    /// ×ÓÀàÖØĞ´£ºÃæ°åÒş²ØÊ±µ÷ÓÃ
+    /// å­ç±»é‡å†™ï¼šé¢æ¿éšè—æ—¶è°ƒç”¨
     /// </summary>
     protected virtual void OnHide() { }
 
 
-    //µ÷ÊÔÊ¹ÓÃ·½·¨£º£¨ÓÒ¼ü×é¼şÊ¹ÓÃ£©
+    //è°ƒè¯•ä½¿ç”¨æ–¹æ³•ï¼šï¼ˆå³é”®ç»„ä»¶ä½¿ç”¨ï¼‰
     [ContextMenu("Toggle Panel Visibility")]
     private void ShowInDebug()
     {

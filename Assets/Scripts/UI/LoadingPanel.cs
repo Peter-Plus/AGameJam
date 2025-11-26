@@ -9,7 +9,7 @@ public class LoadingPanel : BasePanel
     protected override void Awake()
     {
         base.Awake();
-        // �Զ����غ�ĻͼƬ
+        // 自动加载黑幕图片
         if (loadingImage != null)
         {
             loadingImage.sprite = Resources.Load<Sprite>("CG/BlackScreen");

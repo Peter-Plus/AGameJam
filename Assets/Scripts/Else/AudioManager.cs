@@ -1,24 +1,24 @@
 using UnityEngine;
 
 /// <summary>
-/// È«¾ÖÒôÆµ¹ÜÀíÆ÷ - DontDestroyOnLoadµ¥Àı
+/// å…¨å±€éŸ³é¢‘ç®¡ç†å™¨ - DontDestroyOnLoadå•ä¾‹
 /// </summary>
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
     [Header("Audio Sources")]
-    public AudioSource musicSource;  // ±³¾°ÒôÀÖ
-    public AudioSource sfxSource;    // ÒôĞ§
+    public AudioSource musicSource;  // èƒŒæ™¯éŸ³ä¹
+    public AudioSource sfxSource;    // éŸ³æ•ˆ
 
     [Header("Audio Clips")]
-    public AudioClip mainMenuMusic; //Ö÷½çÃæÒôÀÖ
+    public AudioClip mainMenuMusic; //ä¸»ç•Œé¢éŸ³ä¹
     public AudioClip battleMusic;
     public AudioClip bossMusic;
 
-    #region ³¡¾°ÒôÀÖÇĞ»»API
+    #region åœºæ™¯éŸ³ä¹åˆ‡æ¢API
     /// <summary>
-    /// ÇĞ»»µ½Ö÷²Ëµ¥ÒôÀÖ
+    /// åˆ‡æ¢åˆ°ä¸»èœå•éŸ³ä¹
     /// </summary>
     public void PlayMainMenuMusic()
     {
@@ -26,7 +26,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇĞ»»µ½Õ½¶·ÒôÀÖ
+    /// åˆ‡æ¢åˆ°æˆ˜æ–—éŸ³ä¹
     /// </summary>
     public void PlayBattleMusic()
     {
@@ -34,7 +34,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇĞ»»µ½BossÒôÀÖ
+    /// åˆ‡æ¢åˆ°BosséŸ³ä¹
     /// </summary>
     public void PlayBossMusic()
     {
@@ -42,19 +42,19 @@ public class AudioManager : MonoBehaviour
     }
     #endregion
 
-    #region Íâ²¿ÒôÀÖAPI
+    #region å¤–éƒ¨éŸ³ä¹API
     public void PlayerMainMusic()
     {
         musicSource = GetComponent<AudioSource>();
         PlayMusic(mainMenuMusic);
     }
 
-    //²¥·Å±³¾°ÒôÀÖAPI
+    //æ’­æ”¾èƒŒæ™¯éŸ³ä¹API
     public void PlayMusic(AudioClip clip)
     {
         if (clip == null) return;
-        //QÏÂÃæÕâ¾äÊÇÊ²Ã´ÒâË¼£¿
-        //A Èç¹ûµ±Ç°²¥·ÅµÄÒôÀÖ¾ÍÊÇÒª²¥·ÅµÄÒôÀÖ£¬²¢ÇÒÕıÔÚ²¥·ÅÖĞ£¬Ôò²»×öÈÎºÎ²Ù×÷£¬±ÜÃâÖØ¸´²¥·ÅÍ¬Ò»ÒôÀÖ¡£
+        //Qä¸‹é¢è¿™å¥æ˜¯ä»€ä¹ˆæ„æ€ï¼Ÿ
+        //A å¦‚æœå½“å‰æ’­æ”¾çš„éŸ³ä¹å°±æ˜¯è¦æ’­æ”¾çš„éŸ³ä¹ï¼Œå¹¶ä¸”æ­£åœ¨æ’­æ”¾ä¸­ï¼Œåˆ™ä¸åšä»»ä½•æ“ä½œï¼Œé¿å…é‡å¤æ’­æ”¾åŒä¸€éŸ³ä¹ã€‚
         if (musicSource.clip == clip && musicSource.isPlaying)
             return;
         musicSource.clip = clip;
@@ -62,7 +62,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Í£Ö¹±³¾°ÒôÀÖAPI
+    /// åœæ­¢èƒŒæ™¯éŸ³ä¹API
     /// </summary>
     public void StopMusic()
     {
@@ -70,7 +70,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÔİÍ£±³¾°ÒôÀÖAPI
+    /// æš‚åœèƒŒæ™¯éŸ³ä¹API
     /// </summary>
     public void PauseMusic()
     {
@@ -78,7 +78,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// »Ö¸´±³¾°ÒôÀÖAPI
+    /// æ¢å¤èƒŒæ™¯éŸ³ä¹API
     /// </summary>
     public void ResumeMusic()
     {
@@ -86,26 +86,26 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉèÖÃÒôÀÖÒôÁ¿API
+    /// è®¾ç½®éŸ³ä¹éŸ³é‡API
     /// </summary>
     public void SetMusicVolume(float volume)
     {
-        musicSource.volume = Mathf.Clamp01(volume);// ½«ÒôÁ¿ÏŞÖÆÔÚ0µ½1Ö®¼ä
+        musicSource.volume = Mathf.Clamp01(volume);// å°†éŸ³é‡é™åˆ¶åœ¨0åˆ°1ä¹‹é—´
     }
     #endregion
 
-    #region ÒôĞ§¿ØÖÆAPI
+    #region éŸ³æ•ˆæ§åˆ¶API
     /// <summary>
-    /// ²¥·Åµ¥´ÎÒôĞ§
+    /// æ’­æ”¾å•æ¬¡éŸ³æ•ˆ
     /// </summary>
     public void PlaySFX(AudioClip clip)
     {
         if (clip == null) return;
-        sfxSource.PlayOneShot(clip);// Ê¹ÓÃÄ¬ÈÏÒôÁ¿²¥·ÅÒôĞ§
+        sfxSource.PlayOneShot(clip);// ä½¿ç”¨é»˜è®¤éŸ³é‡æ’­æ”¾éŸ³æ•ˆ
     }
 
     /// <summary>
-    /// ²¥·ÅÒôĞ§£¨Ö¸¶¨ÒôÁ¿£©
+    /// æ’­æ”¾éŸ³æ•ˆï¼ˆæŒ‡å®šéŸ³é‡ï¼‰
     /// </summary>
     public void PlaySFX(AudioClip clip, float volumeScale)
     {
@@ -114,7 +114,7 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉèÖÃÒôĞ§ÒôÁ¿
+    /// è®¾ç½®éŸ³æ•ˆéŸ³é‡
     /// </summary>
     public void SetSfxVolume(float volume)
     {
@@ -126,19 +126,19 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        // µ¥ÀıÄ£Ê½
+        // å•ä¾‹æ¨¡å¼
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        // ´ÓDataManager¼ÓÔØÒôÁ¿ÉèÖÃ
+        // ä»DataManageråŠ è½½éŸ³é‡è®¾ç½®
         LoadVolumeSettings();
     }
 
     /// <summary>
-    /// ´ÓDataManager¼ÓÔØÒôÁ¿ÉèÖÃ
+    /// ä»DataManageråŠ è½½éŸ³é‡è®¾ç½®
     /// </summary>
     private void LoadVolumeSettings()
     {

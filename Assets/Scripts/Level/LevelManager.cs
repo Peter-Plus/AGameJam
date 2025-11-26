@@ -62,7 +62,7 @@ public class LevelManager : MonoBehaviour
         {
             //UIManager.Instance.ShowPausePanel();
             //isLevelActive=false;
-            if(isLevelActive)
+            if (isLevelActive)
             {
                 UIManager.Instance.ShowPausePanel();
                 isLevelActive = false;

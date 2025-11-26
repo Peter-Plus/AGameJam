@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class HealthPots : MonoBehaviour
 {
-    //ÑªÆ¿
+    //è¡€ç“¶
 
-    //µ±Íæ¼ÒÅöµ½ÑªÆ¿Ê±£¬Ôö¼ÓÍæ¼ÒµÄÉúÃüÖµ
+    //å½“ç©å®¶ç¢°åˆ°è¡€ç“¶æ—¶ï¼Œå¢åŠ ç©å®¶çš„ç”Ÿå‘½å€¼
     private void OnTriggerEnter(Collider collision)
     {
         if (collision.CompareTag("Player"))

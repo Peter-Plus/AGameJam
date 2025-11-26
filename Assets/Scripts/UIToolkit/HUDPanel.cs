@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 using System.Collections;
 
 /// <summary>
-/// HUDÃæ°å  Ê¹ÓÃUI ToolkitÊµÏÖ
+/// HUDé¢æ¿  ä½¿ç”¨UI Toolkitå®ç°
 /// UITOOKIT!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 /// </summary>
 public class HUDPanel : MonoBehaviour
@@ -11,7 +11,7 @@ public class HUDPanel : MonoBehaviour
     [Header("UI Document")]
     public UIDocument uiDocument;
 
-    // UIÔªËØÒıÓÃ
+    // UIå…ƒç´ å¼•ç”¨
     private VisualElement root;
     private Label levelLabel;
     private Label hpLabel;
@@ -26,15 +26,15 @@ public class HUDPanel : MonoBehaviour
     private Label skillCooldownText;
     private VisualElement skillCooldownOverlay;
 
-    // ÀäÈ´Ïà¹Ø
-    private bool isVisible = false; // HUDÊÇ·ñ¿É¼û
+    // å†·å´ç›¸å…³
+    private bool isVisible = false; // HUDæ˜¯å¦å¯è§
     private PlayerCore registeredPlayer = null;
 
 
-    #region ¸üĞÂUI·½·¨
+    #region æ›´æ–°UIæ–¹æ³•
 
     /// <summary>
-    /// ÏÔÊ¾HUD
+    /// æ˜¾ç¤ºHUD
     /// </summary>
     [ContextMenu("show")]
     public void Show()
@@ -44,13 +44,13 @@ public class HUDPanel : MonoBehaviour
         root.style.display = DisplayStyle.Flex;
         isVisible = true;
 
-        // ´ÓDataManager»ñÈ¡Êı¾İ²¢¸üĞÂUI
+        // ä»DataManagerè·å–æ•°æ®å¹¶æ›´æ–°UI
         RefreshAllUI();
 
     }
 
     /// <summary>
-    /// Òş²ØHUD
+    /// éšè—HUD
     /// </summary>
     public void Hide()
     {
@@ -62,7 +62,7 @@ public class HUDPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂÑªÌõUI
+    /// æ›´æ–°è¡€æ¡UI
     /// </summary>
     public void UpdateHpUI()
     {
@@ -78,7 +78,7 @@ public class HUDPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂÀ¶ÌõUI
+    /// æ›´æ–°è“æ¡UI
     /// </summary>
     public void UpdateMpUI()
     {
@@ -94,7 +94,7 @@ public class HUDPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂ¾­ÑéÌõUI
+    /// æ›´æ–°ç»éªŒæ¡UI
     /// </summary>
     public void UpdateExpUI()
     {
@@ -111,7 +111,7 @@ public class HUDPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂµÈ¼¶UI
+    /// æ›´æ–°ç­‰çº§UI
     /// </summary>
     public void UpdateLevelUI()
     {
@@ -122,7 +122,7 @@ public class HUDPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂÑªÆ¿UI
+    /// æ›´æ–°è¡€ç“¶UI
     /// </summary>
     public void UpdatePotionUI()
     {
@@ -133,8 +133,8 @@ public class HUDPanel : MonoBehaviour
     }
     #endregion
 
-    #region ¼¼ÄÜÀäÈ´Ïà¹Ø
-    //×¢²áÍæ¼ÒĞÅÏ¢
+    #region æŠ€èƒ½å†·å´ç›¸å…³
+    //æ³¨å†Œç©å®¶ä¿¡æ¯
     public void RegisterPlayer(PlayerCore player)
     {
         if (player == null) return;
@@ -144,22 +144,22 @@ public class HUDPanel : MonoBehaviour
     private void Update()
     {
         if (!isVisible || registeredPlayer == null) return;
-        // ¸üĞÂ¼¼ÄÜÀäÈ´
+        // æ›´æ–°æŠ€èƒ½å†·å´
         UpdateSkillCDUI();
         UpdatePotionCDUI();
     }
 
     private void UpdateSkillCDUI()
     {
-        float remaining = registeredPlayer.GetSkillCooldownRemaining();//»ñÈ¡Ê£ÓàÀäÈ´Ê±¼ä
-        float duration = registeredPlayer.GetSkillCooldownDuration();// »ñÈ¡ÀäÈ´×ÜÊ±¼ä
+        float remaining = registeredPlayer.GetSkillCooldownRemaining();//è·å–å‰©ä½™å†·å´æ—¶é—´
+        float duration = registeredPlayer.GetSkillCooldownDuration();// è·å–å†·å´æ€»æ—¶é—´
 
         if (remaining > 0)
         {
-            skillCooldownText.text = Mathf.CeilToInt(remaining).ToString();// ÏÔÊ¾Ê£ÓàÊ±¼ä£¨ÏòÉÏÈ¡Õû£©
-            //Mathf.CeilToInt()Õâ¸öAPIµÄ×÷ÓÃÊÇ½«Ò»¸ö¸¡µãÊıÏòÉÏÈ¡ÕûÎª×î½Ó½üµÄÕûÊı¡£
-            skillCooldownOverlay.style.height = Length.Percent((remaining / duration) * 100);// ¸üĞÂÕÚÕÖ¸ß¶È
-            //Length.Percent()Õâ¸öAPIµÄ×÷ÓÃÊÇ´´½¨Ò»¸ö±íÊ¾°Ù·Ö±È³¤¶ÈµÄLength¶ÔÏó£¬Í¨³£ÓÃÓÚUI²¼¾ÖÖĞÖ¸¶¨ÔªËØµÄ³ß´ç»òÎ»ÖÃ¡£
+            skillCooldownText.text = Mathf.CeilToInt(remaining).ToString();// æ˜¾ç¤ºå‰©ä½™æ—¶é—´ï¼ˆå‘ä¸Šå–æ•´ï¼‰
+            //Mathf.CeilToInt()è¿™ä¸ªAPIçš„ä½œç”¨æ˜¯å°†ä¸€ä¸ªæµ®ç‚¹æ•°å‘ä¸Šå–æ•´ä¸ºæœ€æ¥è¿‘çš„æ•´æ•°ã€‚
+            skillCooldownOverlay.style.height = Length.Percent((remaining / duration) * 100);// æ›´æ–°é®ç½©é«˜åº¦
+            //Length.Percent()è¿™ä¸ªAPIçš„ä½œç”¨æ˜¯åˆ›å»ºä¸€ä¸ªè¡¨ç¤ºç™¾åˆ†æ¯”é•¿åº¦çš„Lengthå¯¹è±¡ï¼Œé€šå¸¸ç”¨äºUIå¸ƒå±€ä¸­æŒ‡å®šå…ƒç´ çš„å°ºå¯¸æˆ–ä½ç½®ã€‚
         }
         else
         {
@@ -183,7 +183,7 @@ public class HUDPanel : MonoBehaviour
     }
     #endregion
 
-    #region ÄÚ²¿
+    #region å†…éƒ¨
     private void Awake()
     {
         if (uiDocument == null)
@@ -191,10 +191,10 @@ public class HUDPanel : MonoBehaviour
             uiDocument = GetComponent<UIDocument>();
         }
 
-        // »ñÈ¡¸ùÔªËØ
+        // è·å–æ ¹å…ƒç´ 
         root = uiDocument.rootVisualElement;
 
-        // »ñÈ¡ËùÓĞUIÔªËØÒıÓÃ
+        // è·å–æ‰€æœ‰UIå…ƒç´ å¼•ç”¨
         levelLabel = root.Q<Label>("LevelLabel");
         hpLabel = root.Q<Label>("HpLabel");
         mpLabel = root.Q<Label>("MpLabel");
@@ -208,15 +208,15 @@ public class HUDPanel : MonoBehaviour
         skillCooldownText = root.Q<Label>("SkillCooldown");
         skillCooldownOverlay = root.Q<VisualElement>("SkillCooldownOverlay");
 
-        // ¼ÓÔØÑªÆ¿Í¼±ê
+        // åŠ è½½è¡€ç“¶å›¾æ ‡
         LoadPotionIcon();
 
-        // ³õÊ¼Òş²Ø
+        // åˆå§‹éšè—
         Hide();
     }
 
     /// <summary>
-    /// ¼ÓÔØÑªÆ¿Í¼±ê
+    /// åŠ è½½è¡€ç“¶å›¾æ ‡
     /// </summary>
     private void LoadPotionIcon()
     {
@@ -227,12 +227,12 @@ public class HUDPanel : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("HUDPanel: Î´ÕÒµ½ÑªÆ¿Í¼±ê Resources/Texture/UI/HealthPots.png");
+            Debug.LogWarning("HUDPanel: æœªæ‰¾åˆ°è¡€ç“¶å›¾æ ‡ Resources/Texture/UI/HealthPots.png");
         }
     }
 
     /// <summary>
-    /// Ë¢ĞÂËùÓĞUI
+    /// åˆ·æ–°æ‰€æœ‰UI
     /// </summary>
     private void RefreshAllUI()
     {

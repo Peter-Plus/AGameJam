@@ -16,31 +16,31 @@ public class UIManager : MonoBehaviour
     public Transform loadingUI;
 
     [Header("Dialogue UI")]
-    public ChatPanel chatPanel; //¶Ô»°Ãæ°å
-    public TipPanel tipPanel; //ÌáÊ¾Ãæ°å
-    public TextTipPanel textTipPanel; //Æ®×ÖÌáÊ¾Ãæ°å
-    public SpeakPanel speakPanel; //¶Ô»°ÆøÅİÃæ°å
+    public ChatPanel chatPanel; //å¯¹è¯é¢æ¿
+    public TipPanel tipPanel; //æç¤ºé¢æ¿
+    public TextTipPanel textTipPanel; //é£˜å­—æç¤ºé¢æ¿
+    public SpeakPanel speakPanel; //å¯¹è¯æ°”æ³¡é¢æ¿
 
     [Header("Loading UI")]
-    public LoadingPanel loadingPanel; //¼ÓÔØÃæ°å
-    public CGPanel cgPanel; //CG²å»­Ãæ°å
+    public LoadingPanel loadingPanel; //åŠ è½½é¢æ¿
+    public CGPanel cgPanel; //CGæ’ç”»é¢æ¿
 
     [Header("Game UI")]
-    public HUDPanel HUDPanel; //ÓÎÏ·ÄÚHUDÃæ°å
-    public GameCGPanel gameCGPanel; //ÓÎÏ·CGÃæ°å ²ã¼¶¸üµÍ
+    public HUDPanel HUDPanel; //æ¸¸æˆå†…HUDé¢æ¿
+    public GameCGPanel gameCGPanel; //æ¸¸æˆCGé¢æ¿ å±‚çº§æ›´ä½
 
     [Header("Menu UI")]
-    public BeginPanel beginPanel; //¿ªÊ¼²Ëµ¥Ãæ°å
+    public BeginPanel beginPanel; //å¼€å§‹èœå•é¢æ¿
     public SettingsPanel settingsPanel;
-    public PausePanel pausePanel; //ÔİÍ£²Ëµ¥Ãæ°å
+    public PausePanel pausePanel; //æš‚åœèœå•é¢æ¿
 
     void Awake()
     {
-        //µ¥ÀıÄ£Ê½
+        //å•ä¾‹æ¨¡å¼
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        //³õÊ¼»¯UI²ã¼¶
+        //åˆå§‹åŒ–UIå±‚çº§
         InitializeLayers();
     }
 
@@ -48,11 +48,11 @@ public class UIManager : MonoBehaviour
     {
         if (mainCanvas == null)
         {
-            Debug.LogError("UIManager: CanvasÒıÓÃÎ´ÅäÖÃ!");
+            Debug.LogError("UIManager: Canvaså¼•ç”¨æœªé…ç½®!");
             return;
         }
 
-        // È·±£ËùÓĞUI²ã´æÔÚ
+        // ç¡®ä¿æ‰€æœ‰UIå±‚å­˜åœ¨
         if (gameUI == null) gameUI = CreateLayer("GameUI", 0);
         if (menuUI == null) menuUI = CreateLayer("MenuUI", 10);
         if (dialogueUI == null) dialogueUI = CreateLayer("DialogueUI", 20);
@@ -73,80 +73,80 @@ public class UIManager : MonoBehaviour
         return layer.transform;
     }
 
-    #region ¶Ô»°¿òÏà¹ØAPI
+    #region å¯¹è¯æ¡†ç›¸å…³API
     /// <summary>
-    /// ÏÔÊ¾¶Ô»°¿ò
+    /// æ˜¾ç¤ºå¯¹è¯æ¡†
     /// </summary>
     public void ShowChat(string dialogue, Action onComplete = null)
     {
         if (chatPanel == null)
         {
-            Debug.LogError("UIManager: ChatPanelÎ´ÅäÖÃ!");
+            Debug.LogError("UIManager: ChatPanelæœªé…ç½®!");
             return;
         }
         chatPanel.ShowDialogue(dialogue, onComplete);
     }
 
     /// <summary>
-    /// ÏÔÊ¾¶Ô»°¿ò£¨´ø½ÇÉ«Ãû£©
+    /// æ˜¾ç¤ºå¯¹è¯æ¡†ï¼ˆå¸¦è§’è‰²åï¼‰
     /// </summary>
     public void ShowChat(string dialogue, string characterName, Action onComplete = null)
     {
         if (chatPanel == null)
         {
-            Debug.LogError("UIManager: ChatPanelÎ´ÅäÖÃ!");
+            Debug.LogError("UIManager: ChatPanelæœªé…ç½®!");
             return;
         }
         chatPanel.ShowDialogue(dialogue, characterName, onComplete);
     }
 
     /// <summary>
-    /// ÏÔÊ¾¶Ô»°¿ò£¨´ø½ÇÉ«ÃûºÍÁ¢»æ£©
+    /// æ˜¾ç¤ºå¯¹è¯æ¡†ï¼ˆå¸¦è§’è‰²åå’Œç«‹ç»˜ï¼‰
     /// </summary>
     public void ShowChat(string dialogue, string characterName, Sprite characterSprite, Action onComplete = null)
     {
         if (chatPanel == null)
         {
-            Debug.LogError("UIManager: ChatPanelÎ´ÅäÖÃ!");
+            Debug.LogError("UIManager: ChatPanelæœªé…ç½®!");
             return;
         }
         chatPanel.ShowDialogue(dialogue, characterName, characterSprite, onComplete);
     }
     #endregion
 
-    #region ÌáÊ¾¿òÏà¹Ø
+    #region æç¤ºæ¡†ç›¸å…³
     /// <summary>
-    /// ÏÔÊ¾ÌáÊ¾¿ò
+    /// æ˜¾ç¤ºæç¤ºæ¡†
     /// </summary>
     public void ShowTip(string tip, Action onConfirm = null)
     {
         if (tipPanel == null)
         {
-            Debug.LogError("UIManager: TipPanelÎ´ÅäÖÃ!");
+            Debug.LogError("UIManager: TipPanelæœªé…ç½®!");
             return;
         }
         tipPanel.ShowTip(tip, onConfirm);
     }
     #endregion
 
-    #region Æ®×ÖÌáÊ¾
+    #region é£˜å­—æç¤º
     /// <summary>
-    /// ÏÔÊ¾Æ®×ÖÌáÊ¾
+    /// æ˜¾ç¤ºé£˜å­—æç¤º
     /// </summary>
     public void ShowTextTip(string text)
     {
         if (textTipPanel == null)
         {
-            Debug.LogError("UIManager: TextTipPanelÎ´ÅäÖÃ!");
+            Debug.LogError("UIManager: TextTipPanelæœªé…ç½®!");
             return;
         }
         textTipPanel.ShowTip(text);
     }
     #endregion
 
-    #region ¼ÓÔØ½çÃæ
+    #region åŠ è½½ç•Œé¢
     /// <summary>
-    /// ÏÔÊ¾/Òş²Ø¼ÓÔØ½çÃæ
+    /// æ˜¾ç¤º/éšè—åŠ è½½ç•Œé¢
     /// </summary>
     public void ShowLoadingPanel(bool show)
     {
@@ -162,20 +162,20 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-    #region ÓÎÏ·HUDÃæ°å
-    // ×¢²áÍæ¼ÒAPI
+    #region æ¸¸æˆHUDé¢æ¿
+    // æ³¨å†Œç©å®¶API
     public void RegisterPlayer(PlayerCore player)
     {
         HUDPanel.RegisterPlayer(player);
     }
     /// <summary>
-    /// ÏÔÊ¾/Òş²ØÓÎÏ·ÄÚHUD
+    /// æ˜¾ç¤º/éšè—æ¸¸æˆå†…HUD
     /// </summary>
     public void ShowGameUI(bool show)
     {
         if (HUDPanel == null)
         {
-            Debug.LogError("UIManager: HUDPanelÎ´ÅäÖÃ!");
+            Debug.LogError("UIManager: HUDPanelæœªé…ç½®!");
             return;
         }
 
@@ -190,7 +190,7 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂÑªÁ¿ÏÔÊ¾
+    /// æ›´æ–°è¡€é‡æ˜¾ç¤º
     /// </summary>
     public void UpdateHpUI()
     {
@@ -199,7 +199,7 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂÀ¶Á¿ÏÔÊ¾
+    /// æ›´æ–°è“é‡æ˜¾ç¤º
     /// </summary>
     public void UpdateMpUI()
     {
@@ -208,7 +208,7 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂ¾­ÑéÏÔÊ¾
+    /// æ›´æ–°ç»éªŒæ˜¾ç¤º
     /// </summary>
     public void UpdateExpUI()
     {
@@ -217,7 +217,7 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂµÈ¼¶ÏÔÊ¾
+    /// æ›´æ–°ç­‰çº§æ˜¾ç¤º
     /// </summary>
     public void UpdateLevelUI()
     {
@@ -226,7 +226,7 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂÑªÆ¿ÊıÁ¿ÏÔÊ¾
+    /// æ›´æ–°è¡€ç“¶æ•°é‡æ˜¾ç¤º
     /// </summary>
     public void UpdatePotionUI()
     {
@@ -235,7 +235,7 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Ê¹ÓÃÑªÆ¿Ê±µ÷ÓÃ
+    /// ä½¿ç”¨è¡€ç“¶æ—¶è°ƒç”¨
     /// </summary>
     public void OnUsedPotion()
     {
@@ -244,30 +244,30 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    #region ÓÎÏ·²Ëµ¥Ãæ°å
-    //ÏÔÊ¾ÉèÖÃÃæ°å
+    #region æ¸¸æˆèœå•é¢æ¿
+    //æ˜¾ç¤ºè®¾ç½®é¢æ¿
     public void ShowSettingsPanel()
     {
         settingsPanel.Show();
     }
-    //ÏÔÊ¾ÔİÍ£Ãæ°å
+    //æ˜¾ç¤ºæš‚åœé¢æ¿
     public void ShowPausePanel()
     {
         pausePanel.Show();
     }
-    //ÏÔÊ¾¿ªÊ¼Ãæ°å
+    //æ˜¾ç¤ºå¼€å§‹é¢æ¿
     public void ShowBeginPanel()
     {
         beginPanel.Show();
     }
-    //Òş²ØËùÓĞ²Ëµ¥Ãæ°å
+    //éšè—æ‰€æœ‰èœå•é¢æ¿
     public void HideAllMenuPanels()
     {
         settingsPanel.Hide();
         pausePanel.Hide();
         beginPanel.Hide();
     }
-    //Òş²ØÉèÖÃÃæ°å
+    //éšè—è®¾ç½®é¢æ¿
     public void HideSettingsPanel()
     {
         settingsPanel.Hide();
@@ -282,7 +282,7 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    #region CGÃæ°åÏà¹Ø
+    #region CGé¢æ¿ç›¸å…³
     public void ShowCGPanel(Sprite cgSprite, Action onComplete = null)
     {
         cgPanel.ShowCG(cgSprite, onComplete);
@@ -304,7 +304,7 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    #region ÓÎÏ·CGÃæ°åÏà¹Ø
+    #region æ¸¸æˆCGé¢æ¿ç›¸å…³
 
     public void ShowGameCGPanel(Sprite cgSprite, Action onComplete = null)
     {
@@ -329,7 +329,7 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    #region ¶Ô»°ÅİÅİÏà¹Ø
+    #region å¯¹è¯æ³¡æ³¡ç›¸å…³
     public void ShowSpeakPanel(string text, Vector3 worldPosition, Action onComplete = null)
     {
         speakPanel.ShowSpeak(text, worldPosition, onComplete);

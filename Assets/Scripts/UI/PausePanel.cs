@@ -11,7 +11,7 @@ public class PausePanel : BasePanel
     protected override void Awake()
     {
         base.Awake();
-        // 绑定按钮事件
+        // 缁戝畾鎸夐挳浜嬩欢
         resumeBtn.onClick.AddListener(OnResume);
     }
 
@@ -19,6 +19,6 @@ public class PausePanel : BasePanel
     {
         Hide();
 
-        Time.timeScale = 1f; // 恢复游戏时间
+        Time.timeScale = 1f; // 鎭㈠娓告垙鏃堕棿
     }
 }

@@ -2,21 +2,21 @@ using UnityEngine;
 
 public class Snowfall : MonoBehaviour
 {
-    [Header("²ÄÖÊ")]
+    [Header("æè´¨")]
     public Material snowMaterial;
 
-    [Header("»ù´¡²ÎÊı")]
+    [Header("åŸºç¡€å‚æ•°")]
     public int maxSnowflakes = 800;
-    public float spawnWidth = 25f;// Éú³É·¶Î§¿í¶È
-    public float fallSpeed = 1.5f;// ÏÂÂäËÙ¶È
-    public Vector2 snowflakeSize = new Vector2(0.1f, 0.2f); // ³ß´ç
+    public float spawnWidth = 25f;// ç”ŸæˆèŒƒå›´å®½åº¦
+    public float fallSpeed = 1.5f;// ä¸‹è½é€Ÿåº¦
+    public Vector2 snowflakeSize = new Vector2(0.1f, 0.2f); // å°ºå¯¸
 
-    [Header("·çÁ¦Ğ§¹û")]
+    [Header("é£åŠ›æ•ˆæœ")]
     public bool enableWind = true;
     public float windStrength = 1f;
     public float windChangeSpeed = 0.5f;
 
-    [Header("Éî¶È²ã´Î")]
+    [Header("æ·±åº¦å±‚æ¬¡")]
     public bool enableDepthLayers = true;
 
     private ParticleSystem[] snowLayers;
@@ -38,7 +38,7 @@ public class Snowfall : MonoBehaviour
 
     void CreateLayeredSnow()
     {
-        // ´´½¨3²ãÑ©»¨£¨½ü¡¢ÖĞ¡¢Ô¶£©
+        // åˆ›å»º3å±‚é›ªèŠ±ï¼ˆè¿‘ã€ä¸­ã€è¿œï¼‰
         snowLayers = new ParticleSystem[3];
 
         for (int i = 0; i < 3; i++)
@@ -50,8 +50,8 @@ public class Snowfall : MonoBehaviour
             ParticleSystem ps = layer.AddComponent<ParticleSystem>();
             snowLayers[i] = ps;
 
-            float depthScale = 1f - i * 0.3f; // Ô¶´¦µÄĞ¡Ò»Ğ©
-            float speedScale = 1f - i * 0.2f; // Ô¶´¦ÂıÒ»Ğ©
+            float depthScale = 1f - i * 0.3f; // è¿œå¤„çš„å°ä¸€äº›
+            float speedScale = 1f - i * 0.2f; // è¿œå¤„æ…¢ä¸€äº›
 
             SetupParticleSystem(ps, depthScale, speedScale);
         }
@@ -111,7 +111,7 @@ public class Snowfall : MonoBehaviour
 
     void UpdateWind()
     {
-        // ·çÁ¦ËæÊ±¼ä±ä»¯
+        // é£åŠ›éšæ—¶é—´å˜åŒ–
         currentWindX = Mathf.Sin(Time.time * windChangeSpeed) * windStrength;
 
         if (snowLayers != null)

@@ -5,8 +5,8 @@ using System.Reflection;
 using UnityEngine;
 
 /// <summary>
-/// PlayerPrefsµ¥Àı¹ÜÀíÆ÷
-/// Ö§³Ö×Ô¶¯ĞòÁĞ»¯Àà¡¢List¡¢DictionaryµÈ¸´ÔÓÊı¾İ½á¹¹
+/// PlayerPrefså•ä¾‹ç®¡ç†å™¨
+/// æ”¯æŒè‡ªåŠ¨åºåˆ—åŒ–ç±»ã€Listã€Dictionaryç­‰å¤æ‚æ•°æ®ç»“æ„
 /// </summary>
 public class PlayerPrefsMgr
 {
@@ -15,7 +15,7 @@ public class PlayerPrefsMgr
 
     private PlayerPrefsMgr() { }
 
-    #region »ù´¡·½·¨ - Ö±½Ó·â×°PlayerPrefs
+    #region åŸºç¡€æ–¹æ³• - ç›´æ¥å°è£…PlayerPrefs
     public void SaveInt(string key, int value)
     {
         PlayerPrefs.SetInt(key, value);
@@ -77,9 +77,9 @@ public class PlayerPrefsMgr
     }
     #endregion
 
-    #region ¸ß¼¶·½·¨ - ×Ô¶¯ĞòÁĞ»¯¶ÔÏó
+    #region é«˜çº§æ–¹æ³• - è‡ªåŠ¨åºåˆ—åŒ–å¯¹è±¡
     /// <summary>
-    /// ±£´æÈÎÒâ¶ÔÏó
+    /// ä¿å­˜ä»»æ„å¯¹è±¡
     /// </summary>
     public void SaveObject(object data, string keyName)
     {
@@ -97,7 +97,7 @@ public class PlayerPrefsMgr
     }
 
     /// <summary>
-    /// ¼ÓÔØ¶ÔÏó
+    /// åŠ è½½å¯¹è±¡
     /// </summary>
     public T LoadObject<T>(string keyName) where T : new()
     {
@@ -123,7 +123,7 @@ public class PlayerPrefsMgr
     }
 
     /// <summary>
-    /// ÅĞ¶ÏÊÇ·ñ´æÔÚ¸Ã¶ÔÏó
+    /// åˆ¤æ–­æ˜¯å¦å­˜åœ¨è¯¥å¯¹è±¡
     /// </summary>
     /// <param name="keyName"></param>
     /// <param name="type"></param>
@@ -133,21 +133,21 @@ public class PlayerPrefsMgr
         FieldInfo[] fields = type.GetFields();
         if (fields.Length == 0) return false;
 
-        // ¼ì²éµÚÒ»¸ö×Ö¶ÎµÄkey
+        // æ£€æŸ¥ç¬¬ä¸€ä¸ªå­—æ®µçš„key
         FieldInfo firstField = fields[0];
         string firstKey = $"{keyName}_{type.Name}_{firstField.FieldType.Name}_{firstField.Name}";
         return PlayerPrefs.HasKey(firstKey);
     }
     #endregion
 
-    #region ÄÚ²¿µİ¹é·½·¨
+    #region å†…éƒ¨é€’å½’æ–¹æ³•
     private void SaveValue(object value, string key)
     {
         if (value == null) return;
 
         Type valueType = value.GetType();
 
-        // »ù´¡ÀàĞÍ
+        // åŸºç¡€ç±»å‹
         if (valueType == typeof(int))
             PlayerPrefs.SetInt(key, (int)value);
         else if (valueType == typeof(float))
@@ -179,7 +179,7 @@ public class PlayerPrefsMgr
                 index++;
             }
         }
-        // ×Ô¶¨ÒåÀà
+        // è‡ªå®šä¹‰ç±»
         else
         {
             SaveObject(value, key);
@@ -190,7 +190,7 @@ public class PlayerPrefsMgr
     {
         if (!PlayerPrefs.HasKey(key)) return GetDefaultValue(fieldType);
 
-        // »ù´¡ÀàĞÍ
+        // åŸºç¡€ç±»å‹
         if (fieldType == typeof(int))
             return PlayerPrefs.GetInt(key, 0);
         else if (fieldType == typeof(float))
@@ -225,7 +225,7 @@ public class PlayerPrefsMgr
             }
             return dict;
         }
-        // ×Ô¶¨ÒåÀà£¬µİ¹éÊµÏÖ
+        // è‡ªå®šä¹‰ç±»ï¼Œé€’å½’å®ç°
         else
         {
             return LoadObject(fieldType, key);
