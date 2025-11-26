@@ -54,7 +54,13 @@ public class PlayerCore : MonoBehaviour
         canMove = value;
     }
     // 玩家是否可以移动
-    public bool CanMove() => canMove;
+    public bool CanMove()
+    {
+        if(!isLive) return false;
+        if(!canMove) return false;
+        if(Time.timeScale==0f) return false;// 游戏暂停时不可移动
+        return true;
+    }
     // 玩家是否存活
     public bool IsLive() => isLive;
     // 获取技能冷却剩余时间
@@ -311,8 +317,6 @@ public class PlayerCore : MonoBehaviour
         currentExp = DataManager.Instance.GetExp();
         currentAttack = DataManager.Instance.GetAttack();
         currentDefense = DataManager.Instance.GetDefense();
-
-        Debug.Log($"[PlayerCore] 玩家属性加载 - Lv.{currentLevel} HP:{currentHp}/{currentMaxHp} EXP:{currentExp}/{GetMaxExpForCurrentLevel()}");
     }
 
     // 消耗法力值

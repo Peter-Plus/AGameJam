@@ -216,6 +216,7 @@ MonoBehaviour:
   defenseGrowthPerLevel: 2
   attackCooldown: 0.5
   enableAttackEffect: 0
+  canMove: 1
 --- !u!54 &1966507218209494304
 Rigidbody:
   m_ObjectHideFlags: 0

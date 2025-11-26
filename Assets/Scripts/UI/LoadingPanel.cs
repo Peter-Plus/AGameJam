@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,13 +18,45 @@ public class LoadingPanel : BasePanel
         }
     }
 
-    public void ShowLoading()
+    public void ShowLoading(Action onComplete = null)
     {
         Show();
+        if(onComplete!=null)
+        {
+            DOVirtual.DelayedCall(fadeTime, () =>
+            {
+                onComplete?.Invoke();
+            }).SetUpdate(true);
+        }
     }
 
-    public void HideLoading()
+    public void ShowLoading(float customFadeTime, Action onComplete = null)
     {
-        Hide();
+        float originalFadeTime = fadeTime;
+        fadeTime = customFadeTime;
+
+        if (onComplete == null)
+        {
+            Show();
+        }
+        else
+        {
+            Show();
+            DOVirtual.DelayedCall(fadeTime, () => onComplete?.Invoke()).SetUpdate(true);
+        }
+
+        fadeTime = originalFadeTime;
+    }
+
+    public void HideLoading(Action onComplete = null)
+    {
+        Hide(onComplete);
+    }
+    public void HideLoading(float customFadeTime, Action onComplete = null)
+    {
+        float originalFadeTime = fadeTime;
+        fadeTime = customFadeTime;
+        Hide(onComplete);
+        fadeTime = originalFadeTime;
     }
 }

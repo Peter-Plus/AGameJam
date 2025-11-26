@@ -1,10 +1,21 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MainManager : LevelManager
 {
-    // Start is called before the first frame update
+    [Header("Background")]
+    public SpriteRenderer MainBK;
+
+    public void ScaleBackground(float scaleMultiplier, float duration)
+    {
+        if (MainBK != null)
+        {
+            Vector3 targetScale = MainBK.transform.localScale * scaleMultiplier;
+            MainBK.transform.DOScale(targetScale, duration).SetEase(Ease.InQuad);
+        }
+    }
     void Start()
     {
         //显示菜单面板

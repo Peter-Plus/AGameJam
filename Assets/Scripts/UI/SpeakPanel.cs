@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-using System.Collections;
+using DG.Tweening;
 
 public class SpeakPanel : BasePanel
 {
@@ -10,7 +10,7 @@ public class SpeakPanel : BasePanel
     public RectTransform backgroundRect;
 
     [Header("Display Settings")]
-    public float autoHideTime = 3f;
+    public float autoHideTime = 2f;// 自动隐藏时间
     public float typingSpeed = 0.05f; // 打字速度
 
     [Header("Size Settings")]
@@ -21,76 +21,89 @@ public class SpeakPanel : BasePanel
     public float heightK = 5f; // 文本高度的放大系数
     public string t = "这是一个测试对话气泡的内容,用于调试显示效果。";
 
-    private Coroutine autoHideCoroutine;
-    private Coroutine typingCoroutine;
+    private Tween autoHideTween;
+    private Tween typingTween;
     private Action pendingCallback;
     private string fullText; // 完整文本
 
     #region API
-    // 显示对话气泡(世界坐标)
-    public void ShowSpeak(string text, Vector3 worldPosition, Action onComplete = null)
+    // 显示对话气泡(世界坐标/屏幕坐标)
+    public void ShowSpeak(string text, Vector3 worldPosition,bool useWorldPosition= true, Action onComplete = null)
     {
-        if (autoHideCoroutine != null)
-        {
-            StopCoroutine(autoHideCoroutine);
-            autoHideCoroutine = null;
-        }
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-            typingCoroutine = null;
-        }
+        autoHideTween?.Kill();
+        typingTween?.Kill();
 
         fullText = text;
         speakText.text = text; // 先设置完整文本用于计算尺寸
         AdjustPanelSize();
-        transform.position = Camera.main.WorldToScreenPoint(worldPosition);
+        if(useWorldPosition)
+            transform.position = Camera.main.WorldToScreenPoint(worldPosition);
+        else
+            transform.position = worldPosition;
         // 清空文本
         speakText.text = "";
         Show();
-        typingCoroutine = StartCoroutine(TypeText(onComplete));
+        //开始打字并开始倒计时隐藏
+        StartTyping(onComplete,autoHideTime);
     }
 
-    // 显示对话气泡(屏幕坐标)
-    public void ShowSpeakAtScreenPosition(string text, Vector2 screenPosition, Action onComplete = null)
+    // 可传入显示时间参数和现实方式的重载方法
+    public void ShowSpeak(string text,Vector3 position,float displayTime,bool ifUseFade = true,bool useWorldPosition=true, Action onComplete = null)
     {
-        if (autoHideCoroutine != null)
-        {
-            StopCoroutine(autoHideCoroutine);
-            autoHideCoroutine = null;
-        }
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-            typingCoroutine = null;
-        }
+        autoHideTween?.Kill();
+        typingTween?.Kill();
 
         fullText = text;
-        speakText.text = text; // 先设置完整文本用于计算尺寸
+        speakText.text = text;
         AdjustPanelSize();
-        transform.position = screenPosition;
+        // 根据坐标类型设置位置
+        if (useWorldPosition)
+            transform.position = Camera.main.WorldToScreenPoint(position);
+        else
+            transform.position = position;
 
-        Show();
-        typingCoroutine = StartCoroutine(TypeText(onComplete));
+        speakText.text = "";
+        if(ifUseFade)
+        {
+            Show();
+            DOVirtual.DelayedCall(fadeTime,() =>
+            {
+                speakText.DOText(fullText,fullText.Length*typingSpeed)
+                .SetEase(Ease.Linear)
+                .SetUpdate(true)
+                .OnComplete(() =>
+                {
+                    autoHideTween = DOVirtual.DelayedCall(displayTime, () =>
+                    {
+                        HideSpeak(onComplete);
+                    }).SetUpdate(true);
+                });
+            }).SetUpdate(true);
+        }
+        else
+        {
+            canvasGroup.alpha = 1f;
+            gameObject.SetActive(true);
+            isShowing = true;
+            speakText.DOText(fullText, fullText.Length * typingSpeed)
+                .SetEase(Ease.Linear)
+                .SetUpdate(true)
+                .OnComplete(() =>
+                {
+                    autoHideTween = DOVirtual.DelayedCall(displayTime, () =>
+                    {
+                        HideSpeak(onComplete);
+                    }).SetUpdate(true);
+                });
+        }
     }
 
     // 手动隐藏对话气泡
     public void HideSpeak(Action onComplete = null)
     {
-        if (autoHideCoroutine != null)
-        {
-            StopCoroutine(autoHideCoroutine);
-            autoHideCoroutine = null;
-        }
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-            typingCoroutine = null;
-        }
-        pendingCallback = onComplete;
-
-        Hide();
-        StartCoroutine(WaitForFadeOutComplete());
+        autoHideTween?.Kill();
+        typingTween?.Kill();
+        Hide(onComplete);
     }
     #endregion
 
@@ -110,40 +123,25 @@ public class SpeakPanel : BasePanel
         backgroundRect.sizeDelta = new Vector2(preferredWidth, preferredHeight);
     }
 
-    // 打字机效果
-    private IEnumerator TypeText( Action onComplete = null)
+    private void StartTyping(Action onComplete,float hideTime)
     {
-        // 等待淡入完成
-        yield return new WaitForSecondsRealtime(fadeTime);
-
-        // 逐字显示
-        foreach (char c in fullText)
+        //X
+        DOVirtual.DelayedCall(fadeTime,() =>
         {
-            speakText.text += c;
-            yield return new WaitForSecondsRealtime(typingSpeed);
-        }
-
-        // 打字完成,开始自动隐藏倒计时
-        Debug.Log("打字完成,开始自动隐藏倒计时");
-        autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(onComplete));
-    }
-
-    // 等待淡出完成
-    private IEnumerator WaitForFadeOutComplete()
-    {
-        yield return new WaitForSecondsRealtime(fadeTime);
-        pendingCallback?.Invoke();
-        pendingCallback = null;
-    }
-
-    // 自动隐藏
-    private IEnumerator AutoHideAfterDelay(Action onComplete = null)
-    {
-        // 等待显示时间
-        yield return new WaitForSecondsRealtime(autoHideTime);
-        // 淡出
-        Debug.Log("准备淡出");
-        Hide(onComplete);
+            // 打字机效果
+            speakText.text = "";
+            speakText.DOText(fullText,fullText.Length*typingSpeed)
+            .SetEase(Ease.Linear)
+            .SetUpdate(true)
+            .OnComplete(() =>
+            {
+                // 打字完成后开始自动隐藏倒计时
+                autoHideTween = DOVirtual.DelayedCall(hideTime, () =>
+                {
+                    HideSpeak(onComplete);
+                }).SetUpdate(true);
+            });
+        }).SetUpdate(true);
     }
 
     #endregion

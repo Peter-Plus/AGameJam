@@ -76,17 +76,17 @@ public class Leve14Manager : LevelManager
         yield return new WaitForSecondsRealtime(2f);
         // 对话1
         done = false;
-        UIManager.Instance.ShowChat(dialogue1, () => done = true);
+        UIManager.Instance.ShowChat(dialogue1,false, () => done = true);
         yield return new WaitUntil(() => done);
         //等待1s开始对话2
         yield return new WaitForSecondsRealtime(1f);
         // 对话2 - 菊 渚月
         done = false;
-        UIManager.Instance.ShowChat(dialogue2, girl1Name, girl1, () => done = true);
+        UIManager.Instance.ShowChat(dialogue2, girl1Name, girl1, true,true, () => done = true);
         yield return new WaitUntil(() => done);
         // 对话3 - 浅仓 凛凛子
         done = false;
-        UIManager.Instance.ShowChat(dialogue3, girl2Name, girl2, () => done = true);
+        UIManager.Instance.ShowChat(dialogue3, girl2Name, girl2, true, false, () => done = true);
         yield return new WaitUntil(() => done);
         // 黑幕1秒并隐藏插图2
         done = false;

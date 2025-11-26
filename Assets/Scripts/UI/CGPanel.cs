@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-using System.Collections;
+using DG.Tweening;
 
 /// <summary>
 /// CG插画面板,用于显示插图和黑幕,使用BasePanel的淡入淡出效果
@@ -9,121 +9,91 @@ using System.Collections;
 public class CGPanel : BasePanel
 {
     [Header("UI References")]
-    [Tooltip("用于显示CG图片的Image组件")]
     public Image cgImage;
 
-    private Coroutine autoHideCoroutine;// 自动隐藏协程引用
+    private Tween autoHideTween;// 自动隐藏的Tween
     private Action pendingCallback;// 待调用的回调函数
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
     #region API
-    //提供一个不淡入但淡出的显示CG的方法
+    //不淡入但淡出的显示CG的方法
     public void ShowCGInstant(Sprite sprite,float displayTime, Action onComplete = null)
     {
-        // 停止之前的自动隐藏协程
-        if (autoHideCoroutine != null)
-        {
-            StopCoroutine(autoHideCoroutine);
-            autoHideCoroutine = null;
-        }
+        autoHideTween?.Kill();
         // 设置图片
         cgImage.sprite = sprite;
+        // 不再通过基类的Show方法淡入
         // 直接设置透明度为1
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
         //激活对象
         this.gameObject.SetActive(true);
-        // 启动自动隐藏协程
-        autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(displayTime, onComplete));
+        //等待显示时间后淡出
+        autoHideTween = DOVirtual.DelayedCall(displayTime, () =>
+        {
+            HideCG(onComplete);// 淡出并调用回调
+        }).SetUpdate(true);
     }
 
+    public void ShowCGInstant(Sprite sprite)
+    {
+        autoHideTween?.Kill();
+        // 设置图片
+        cgImage.sprite = sprite;
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+        //激活对象
+        this.gameObject.SetActive(true);
+        //该操作不耗时间，不需要回调
+    }
 
     // 显示CG图片,淡入完成后调用回调
     public void ShowCG(Sprite sprite, Action onComplete = null)
     {
-        // 万一有，停止之前的自动隐藏协程
-        if (autoHideCoroutine != null)
-        {
-            StopCoroutine(autoHideCoroutine);
-            autoHideCoroutine = null;
-        }
-        // 设置图片
+        autoHideTween?.Kill();
         cgImage.sprite = sprite;
-        // 保存回调,在淡入完成后调用
         pendingCallback = onComplete;
-
-        // 显示面板
         Show();
-        StartCoroutine(WaitForFadeInComplete());
+        autoHideTween = DOVirtual.DelayedCall(fadeTime, () =>
+        {
+            pendingCallback?.Invoke();
+            pendingCallback = null;
+        }).SetUpdate(true);
     }
 
     // 显示CG图片,并在指定时间后自动隐藏
     public void ShowCG(Sprite sprite, float displayTime, Action onComplete = null)
     {
-        // 停止之前的自动隐藏协程
-        if (autoHideCoroutine != null)
-        {
-            StopCoroutine(autoHideCoroutine);
-            autoHideCoroutine = null;
-        }
-        // 设置图片
+        autoHideTween?.Kill();
         cgImage.sprite = sprite;
-        // 显示面板(使用BasePanel的淡入)
         Show();
-        // 启动自动隐藏协程
-        autoHideCoroutine = StartCoroutine(AutoHideAfterDelay(displayTime, onComplete));
+        autoHideTween = DOVirtual.DelayedCall(fadeTime + displayTime, () =>
+        {
+            HideCG(onComplete);// 淡出并调用回调
+        }).SetUpdate(true);
     }
 
     // 隐藏CG(淡出),淡出完成后调用回调
     public void HideCG(Action onComplete = null)
     {
-        // 停止自动隐藏协程
-        if (autoHideCoroutine != null)
-        {
-            StopCoroutine(autoHideCoroutine);
-            autoHideCoroutine = null;
-        }
-        // 保存回调
-        pendingCallback = onComplete;
+        autoHideTween?.Kill();
+        Hide(onComplete);
+    }
 
-        // 隐藏面板(使用BasePanel的淡出)
-        Hide();
-        StartCoroutine(WaitForFadeOutComplete());
+    // 立即隐藏CG
+    public void HideCGInstant()
+    {
+        autoHideTween?.Kill();
+        base.HideInstant();
     }
     #endregion
 
     #region 内部
-    // 等待淡入完成
-    private IEnumerator WaitForFadeInComplete()
+    protected override void OnDestroy()
     {
-        yield return new WaitForSecondsRealtime(fadeTime);
-        pendingCallback?.Invoke();
-        pendingCallback = null;
-    }
-
-    // 等待淡出完成
-    private IEnumerator WaitForFadeOutComplete()
-    {
-        yield return new WaitForSecondsRealtime(fadeTime);
-        pendingCallback?.Invoke();
-        pendingCallback = null;
-    }
-
-    // 延迟后自动隐藏
-    private IEnumerator AutoHideAfterDelay(float displayTime, Action onComplete = null)
-    {
-        Debug.Log($"开始自动隐藏协程, 显示时间: {displayTime}s");
-        // 等待淡入完成
-        yield return new WaitForSecondsRealtime(fadeTime);
-        // 等待显示时间
-        yield return new WaitForSecondsRealtime(displayTime);
-        // 淡出并调用回调
-        Hide(onComplete);
+        base.OnDestroy();
+        autoHideTween?.Kill();
     }
     #endregion
 }

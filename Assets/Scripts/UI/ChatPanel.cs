@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections;
+using DG.Tweening;
 
 /// <summary>
 /// 对话面板，支持打字机效果、角色姓名框、角色立绘
@@ -9,95 +10,59 @@ using System.Collections;
 public class ChatPanel : BasePanel
 {
     [Header("UI References")]
-    [Tooltip("对话文本")]
     public Text dialogueText;
-
-    [Tooltip("角色名字的底框图")]
     public RectTransform nameBox;
-    public float nameBoxPadding = 40f;
-    public float widthK = 1.2f;
-    public float transK = 1.1f;
-    public float transOffsetX = -705f; // 姓名框初始 X 位置
-
-    [Tooltip("角色名字文本（可选）")]
+    public float nameBoxPadding = 40f;// 姓名框内边距,调试位置用
+    public float widthK = 1.2f;//调试用
+    public float transK = 1.1f;//调试用
+    public float transOffsetX = -705f; // 姓名框初始 X 位置，调试用
+    public Button continueButton;
+    public Image maskImage;
     public Text nameText;
-
-    [Tooltip("角色立绘（可选）")]
     public Image charaImage;
 
-    [Tooltip("继续按钮")]
-    public Button continueButton;
-
-    [Tooltip("遮罩，用于禁止点击下层UI（可选）")]
-    public Image maskImage;
-
     [Header("Typing Settings")]
-    [Tooltip("打字机速度")]
     public float typingSpeed = 0.05f;
-
     private string currentDialogue;
+    private bool quickContinue = false;
     private Action onCompleteCallback;
-    private Coroutine typingCoroutine;
+    private Tween typingTween;// 打字机动画
 
     protected override void Awake()
     {
         base.Awake();
-
-        // 绑定按钮点击事件
         if (continueButton != null)
         {
             continueButton.onClick.AddListener(OnContinueClick);
         }
     }
 
-    /// <summary>
-    /// 显示无角色名与立绘的对话
-    /// </summary>
-    public void ShowDialogue(string dialogue, Action onComplete = null)
+    // 显示无角色名与立绘的对话(旁白)
+    public void ShowDialogue(string dialogue,bool canSkip = true, Action onComplete = null)
     {
-        ShowDialogue(dialogue, "", null, onComplete);
+        ShowDialogue(dialogue, "", null, canSkip,false, onComplete);
     }
 
-    /// <summary>
-    /// 显示带角色名的对话
-    /// </summary>
-    public void ShowDialogue(string dialogue, string characterName, Action onComplete = null)
+    // 显示完整对话（文本、姓名、立绘）
+    public void ShowDialogue(string dialogue, string characterName, Sprite characterSprite, bool canSkip = true,bool quickNext=false, Action onComplete = null)
     {
-        ShowDialogue(dialogue, characterName, null, onComplete);
-    }
-
-    /// <summary>
-    /// 显示完整对话（文本、姓名、立绘）
-    /// </summary>
-    public void ShowDialogue(string dialogue, string characterName, Sprite characterSprite, Action onComplete = null)
-    {
-        currentDialogue = dialogue;
-        onCompleteCallback = onComplete;
-
+        currentDialogue = dialogue;// 设置当前对话文本
+        onCompleteCallback = onComplete;// 设置回调
+        if(!quickNext) quickContinue = quickNext;
         // ----- 设置角色名字 -----
-        if (nameText != null)
+        nameText.text = characterName;
+        bool hasName = !string.IsNullOrEmpty(characterName);
+        nameText.gameObject.SetActive(hasName);// 根据是否有名字显示姓名name文本
+        nameBox.gameObject.SetActive(hasName);// 根据是否有名字显示姓名框NameBox
+        if (hasName)
         {
-            nameText.text = characterName;
-            bool hasName = !string.IsNullOrEmpty(characterName);
-            nameText.gameObject.SetActive(hasName);
-
-            if (nameBox != null)
-            {
-                nameBox.gameObject.SetActive(hasName);
-
-                if (hasName)
-                {
-                    Canvas.ForceUpdateCanvases(); // 强制更新布局
-
-                    float nameWidth = nameText.preferredWidth + nameBoxPadding;
-                    nameBox.sizeDelta = new Vector2(nameWidth * widthK, nameBox.sizeDelta.y);
-
-                    // 修改姓名框X坐标
-                    Vector2 pos = nameBox.anchoredPosition;
-                    pos.x = transOffsetX + (nameWidth / 2f) * transK;
-                    nameBox.anchoredPosition = pos;
-                }
-            }
+            Canvas.ForceUpdateCanvases(); // 强制更新布局
+            float nameWidth = nameText.preferredWidth + nameBoxPadding;
+            nameBox.sizeDelta = new Vector2(nameWidth * widthK, nameBox.sizeDelta.y);
+            // 修改姓名框X坐标
+            Vector2 pos = nameBox.anchoredPosition;
+            pos.x = transOffsetX + (nameWidth / 2f) * transK;
+            nameBox.anchoredPosition = pos;
         }
 
         // ----- 设置立绘 -----
@@ -111,61 +76,45 @@ public class ChatPanel : BasePanel
         Show();
 
         // ----- 开始打字机 -----
-        if (dialogueText != null)
-        {
-            dialogueText.text = "";
-            if (typingCoroutine != null)
+        typingTween?.Kill();
+        dialogueText.text = "";
+        continueButton.interactable = canSkip;// 根据是否允许跳过设置继续按钮状态
+        typingTween = dialogueText.DOText(currentDialogue, currentDialogue.Length * typingSpeed)
+            .SetEase(Ease.Linear)
+            .SetUpdate(true)
+            .OnComplete(() =>
             {
-                StopCoroutine(typingCoroutine);
-            }
-            typingCoroutine = StartCoroutine(TypeText());
-        }
-
-        // 在打字期间不允许点击继续
-        if (continueButton != null)
-        {
-            continueButton.interactable = false;
-        }
+                // 打字完成，允许点击继续
+                if (continueButton != null)
+                {
+                    continueButton.interactable = true;
+                }
+            });
     }
 
-    /// <summary>
-    /// 打字机效果
-    /// </summary>
-    private IEnumerator TypeText()
-    {
-        foreach (char c in currentDialogue)
-        {
-            dialogueText.text += c;
-            yield return new WaitForSecondsRealtime(typingSpeed);
-        }
-
-        // 打字完成，允许点击继续
-        if (continueButton != null)
-        {
-            continueButton.interactable = true;
-        }
-    }
-
-    /// <summary>
-    /// 继续按钮逻辑
-    /// </summary>
     private void OnContinueClick()
     {
-        // 如果打字未完成，则立即显示完整文本
-        if (typingCoroutine != null && dialogueText.text.Length < currentDialogue.Length)
+        // 如果打字未完成，立即完成
+        if (typingTween != null && typingTween.IsActive() && !typingTween.IsComplete())
         {
-            StopCoroutine(typingCoroutine);
-            dialogueText.text = currentDialogue;
-            continueButton.interactable = true;
+            typingTween.Complete();
             return;
         }
-
-        // 关闭面板
-        Hide();
-
-        // 回调
+        if(!quickContinue)
+        {
+            Hide();
+        }
+        else
+        {
+            currentTween?.Kill();
+            isShowing = false;
+            canvasGroup.alpha = 0;
+            gameObject.SetActive(false);
+        }
         onCompleteCallback?.Invoke();
         onCompleteCallback = null;
+        quickContinue = true;
+        Debug.Log("是否快速继续标志已重置！");
     }
 
     protected override void OnShow()
@@ -174,22 +123,27 @@ public class ChatPanel : BasePanel
         if (maskImage != null)
         {
             maskImage.gameObject.SetActive(true);
+            CanvasGroup maskGP = maskImage.GetComponent<CanvasGroup>();
+            if(maskGP==null) maskGP = maskImage.gameObject.AddComponent<CanvasGroup>();
+            maskGP.alpha = 0;
+            maskGP.DOFade(1f, fadeTime).SetUpdate(true);
         }
     }
-
     protected override void OnHide()
     {
-        // 隐藏遮罩
-        if (maskImage != null)
+        if(maskImage!=null)
         {
-            maskImage.gameObject.SetActive(false);
+            CanvasGroup maskGP = maskImage.GetComponent<CanvasGroup>();
+            if(maskGP!=null)
+            {
+                maskGP.DOFade(0f, fadeTime).SetUpdate(true)
+                    .OnComplete(() => maskImage.gameObject.SetActive(false));
+            }
+            else
+            {
+                maskImage.gameObject.SetActive(false);
+            }
         }
-
-        // 停止打字机
-        if (typingCoroutine != null)
-        {
-            StopCoroutine(typingCoroutine);
-            typingCoroutine = null;
-        }
+        typingTween?.Kill();
     }
 }

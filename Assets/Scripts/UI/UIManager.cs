@@ -74,43 +74,16 @@ public class UIManager : MonoBehaviour
     }
 
     #region 对话框相关API
-    /// <summary>
-    /// 显示对话框
-    /// </summary>
-    public void ShowChat(string dialogue, Action onComplete = null)
+    // 显示对话框 旁白
+    public void ShowChat(string dialogue,bool canSkip, Action onComplete = null)
     {
-        if (chatPanel == null)
-        {
-            Debug.LogError("UIManager: ChatPanel未配置!");
-            return;
-        }
-        chatPanel.ShowDialogue(dialogue, onComplete);
+        chatPanel.ShowDialogue(dialogue,canSkip, onComplete);
     }
 
-    /// <summary>
-    /// 显示对话框（带角色名）
-    /// </summary>
-    public void ShowChat(string dialogue, string characterName, Action onComplete = null)
+    // 显示对话框（带角色名和立绘）
+    public void ShowChat(string dialogue, string characterName, Sprite characterSprite, bool canSkip,bool quickNext,Action onComplete = null)
     {
-        if (chatPanel == null)
-        {
-            Debug.LogError("UIManager: ChatPanel未配置!");
-            return;
-        }
-        chatPanel.ShowDialogue(dialogue, characterName, onComplete);
-    }
-
-    /// <summary>
-    /// 显示对话框（带角色名和立绘）
-    /// </summary>
-    public void ShowChat(string dialogue, string characterName, Sprite characterSprite, Action onComplete = null)
-    {
-        if (chatPanel == null)
-        {
-            Debug.LogError("UIManager: ChatPanel未配置!");
-            return;
-        }
-        chatPanel.ShowDialogue(dialogue, characterName, characterSprite, onComplete);
+        chatPanel.ShowDialogue(dialogue, characterName, characterSprite, canSkip,quickNext,onComplete);
     }
     #endregion
 
@@ -148,15 +121,26 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// 显示/隐藏加载界面
     /// </summary>
-    public void ShowLoadingPanel(bool show)
+    public void ShowLoadingPanel(bool show,Action onComplete=null)
     {
         if (show)
         {
-            loadingPanel.ShowLoading();
+            loadingPanel.ShowLoading(onComplete);
         }
         else
         {
-            loadingPanel.HideLoading();
+            loadingPanel.HideLoading(onComplete);
+        }
+    }
+    public void ShowLoadingPanel(bool show, float customFadeTime, Action onComplete = null)
+    {
+        if (show)
+        {
+            loadingPanel.ShowLoading(customFadeTime, onComplete);
+        }
+        else
+        {
+            loadingPanel.HideLoading(customFadeTime, onComplete);
         }
     }
 
@@ -302,6 +286,16 @@ public class UIManager : MonoBehaviour
     {
         cgPanel.ShowCGInstant(cgSprite, displayTime, onComplete);
     }
+
+    public void ShowCGPanelInstant(Sprite cgSprite)
+    {
+        cgPanel.ShowCGInstant(cgSprite);
+    }
+
+    public void HideCGPanelInstant()
+    {
+        cgPanel.HideCGInstant();
+    }
     #endregion
 
     #region 游戏CG面板相关
@@ -323,21 +317,30 @@ public class UIManager : MonoBehaviour
     {
         gameCGPanel.ShowCGInstant(cgSprite, displayTime, onComplete);
     }
-    public void ShowGameCGPanelInstant(Sprite cgSprite, Action onComplete = null)
+    public void ShowGameCGPanelInstant(Sprite cgSprite)
     {
-        gameCGPanel.ShowCGInstant(cgSprite, onComplete);
+        gameCGPanel.ShowCGInstant(cgSprite);
+    }
+    public void HideGameCGPanelInstant()
+    {
+        gameCGPanel.HideCGInstant();
     }
     #endregion
 
     #region 对话泡泡相关
     public void ShowSpeakPanel(string text, Vector3 worldPosition, Action onComplete = null)
     {
-        speakPanel.ShowSpeak(text, worldPosition, onComplete);
+        speakPanel.ShowSpeak(text, worldPosition,true, onComplete);
     }
 
-    public void ShowSpeakPanelAtScreen(string text, Vector2 screenPosition, Action onComplete = null)
+    public void ShowSpeakPanelWithScreenPos(string text, Vector2 screenPosition, Action onComplete = null)
     {
-        speakPanel.ShowSpeakAtScreenPosition(text, screenPosition, onComplete);
+        speakPanel.ShowSpeak(text, screenPosition, false,onComplete);
+    }
+
+    public void ShowSpeakPanel(string text, Vector3 position, float displayTime, bool ifUseFade = true, bool useWorldPosition = true, Action onComplete = null)
+    {
+        speakPanel.ShowSpeak(text, position, displayTime, ifUseFade,useWorldPosition, onComplete);
     }
 
     public void HideSpeakPanel(Action onComplete = null)

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,15 @@ public class BeginPanel : BasePanel
     public Button BeginButton;
     public Button SettingsButton;
     public Button ExitButton;
+    public Text Title;
+    public Text TitleBox;
+
+    [Header("Animation Settings")]
+    public float buttonMoveDistance = 200f;
+    public float titleMoveDistance = 200f;
+    public float moveAnimDuration = 0.5f;// 按钮和标题移动动画时间
+    public float bgScaleDuration = 1f;// 背景缩放时间=加载时间
+    public float bgTargetScale = 1.2f;
 
     protected override void Awake()
     {
@@ -31,20 +41,41 @@ public class BeginPanel : BasePanel
 
     private void OnBeginClick()
     {
-        //开始游戏逻辑
-        //根据存档判断玩家是新的游戏还是继续游戏
-        //显示加载面板
-        UIManager.Instance.ShowLoadingPanel(true);
-        Hide(()=>
+        // 禁用按钮避免重复点击
+        BeginButton.interactable = false;
+        SettingsButton.interactable = false;
+        ExitButton.interactable = false;
+        Sequence seq = DOTween.Sequence();
+        // 标题向上移动
+        if (Title != null)
+            seq.Join(Title.transform.DOLocalMoveY(Title.transform.localPosition.y + titleMoveDistance, moveAnimDuration));
+        if (TitleBox != null)
+            seq.Join(TitleBox.transform.DOLocalMoveY(TitleBox.transform.localPosition.y + titleMoveDistance, moveAnimDuration));
+
+        // 按钮父物体向下，这里图片本身是按钮的父物体
+        seq.Join(BeginButton.transform.parent.DOLocalMoveY(BeginButton.transform.parent.localPosition.y - buttonMoveDistance, moveAnimDuration));
+        seq.Join(SettingsButton.transform.parent.DOLocalMoveY(SettingsButton.transform.parent.localPosition.y - buttonMoveDistance, moveAnimDuration));
+        seq.Join(ExitButton.transform.parent.DOLocalMoveY(ExitButton.transform.parent.localPosition.y - buttonMoveDistance, moveAnimDuration));
+        
+        seq.OnComplete(() =>
         {
-            int passedLevelCount = DataManager.Instance.GetPassedLevelCount();
-            if (passedLevelCount == 0) GameLevelManager.Instance.LoadInitialLevel(); //加载初始交互关卡
-            else GameLevelManager.Instance.LoadNextLevel(); //加载下一个关卡 
+            MainManager mgr = MainManager.Instance as MainManager;
+            if(mgr != null) mgr.ScaleBackground(bgTargetScale, bgScaleDuration);
+
+            UIManager.Instance.ShowLoadingPanel(true,bgScaleDuration, () =>
+            {
+                Hide(() =>
+                {
+                    int passedLevelCount = DataManager.Instance.GetPassedLevelCount();
+                    if (passedLevelCount == 0) GameLevelManager.Instance.LoadInitialLevel();
+                    else GameLevelManager.Instance.LoadNextLevel();
+                });
+            });
         });
     }
     private void OnSettingsClick()
     {
-        UIManager.Instance.settingsPanel.Show();
+        UIManager.Instance.ShowSettingsPanel();
     }
 
     private void OnExitClick()

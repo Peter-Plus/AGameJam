@@ -75,51 +75,52 @@ public class Level0Manager : LevelManager
         Sprite girl1 = Resources.Load<Sprite>("Texture/UI/AIChara/girl1");
         Sprite girl2 = Resources.Load<Sprite>("Texture/UI/AIChara/girl2");
         bool done = false;
-        //黑幕1.5s
-        UIManager.Instance.ShowCGPanelInstant(blackScreen,1.5f, () => { done = true; });
+        //黑幕1s
+        UIManager.Instance.ShowCGPanelInstant(blackScreen,1f);
         // 插图1
-        UIManager.Instance.ShowGameCGPanel(illustration1);
-        yield return new WaitUntil(() => done);
+        UIManager.Instance.ShowGameCGPanelInstant(illustration1);
         // 等待2s开始对话
         yield return new WaitForSecondsRealtime(2f);
-        // 对话1
+        // 对话1（旁白）
         done = false;
-        UIManager.Instance.ShowChat(dialogue1, () => done = true);
+        UIManager.Instance.ShowChat(dialogue1,false, () => done = true);
         yield return new WaitUntil(() => done);
-        //等待1s开始对话2
+        //旁白结束1s后开始对话2
         yield return new WaitForSecondsRealtime(1f);
         // 对话2 - 菊 渚月
         done = false;
-        UIManager.Instance.ShowChat(dialogue2, girl1Name, girl1, () => done = true);
+        UIManager.Instance.ShowChat(dialogue2, girl1Name, girl1, true,true,() => done = true);
         yield return new WaitUntil(() => done);
         // 对话3 - 浅仓 凛凛子
         done = false;
-        UIManager.Instance.ShowChat(dialogue3, girl2Name, girl2, () => done = true);
+        UIManager.Instance.ShowChat(dialogue3, girl2Name, girl2,true, false,() => done = true);
         yield return new WaitUntil(() => done);
-        // 黑幕2s
-        UIManager.Instance.ShowCGPanel(blackScreen, 1f);
+        done = false;
+        // 黑幕1+0.5+1s
+        UIManager.Instance.ShowCGPanel(blackScreen, 0.5f,()=>done = true);
         // 等待1s
         yield return new WaitForSecondsRealtime(1f);
         // 隐藏插图1
-        done = false;
-        UIManager.Instance.HideGameCGPanel();
+        UIManager.Instance.HideGameCGPanelInstant();
         // 显示插图2
-        UIManager.Instance.ShowGameCGPanelInstant(illustration2, () => done = true);
+        UIManager.Instance.ShowGameCGPanelInstant(illustration2);
+        // 黑幕消失后等待0.5s开始对话4
         yield return new WaitUntil(() => done);
-        // 等待2s开始对话4
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(0.5f);
         // 对话4
         done = false;
-        UIManager.Instance.ShowChat(dialogue4, () => done = true);
+        UIManager.Instance.ShowChat(dialogue4,true, () => done = true);
         yield return new WaitUntil(() => done);
-        // 黑幕1秒并隐藏插图2
+        // 黑幕1+0.5+1秒并隐藏插图2
         done = false;
-        UIManager.Instance.ShowCGPanel(blackScreen, 1f, () => done = true);
-        yield return new WaitForSecondsRealtime(1f); // 等待1秒，确保黑幕显示出来
-        UIManager.Instance.HideGameCGPanel();
+        UIManager.Instance.ShowCGPanel(blackScreen, 0.5f, () => done = true);
+        yield return new WaitForSecondsRealtime(1f); // 等待1秒，确保黑幕完全显示出来
+        UIManager.Instance.HideGameCGPanelInstant();
+        // 黑幕消失后等待0.5s开始最后气泡
         yield return new WaitUntil(() => done);
+        yield return new WaitForSecondsRealtime(0.5f);
+        // 最后气泡
         done = false;
-        // 玩家头顶气泡
         if (player != null)
         {
             Vector3 playerHead = player.transform.position + Vector3.up * 2f;
