@@ -114,7 +114,6 @@ public class ChatPanel : BasePanel
         onCompleteCallback?.Invoke();
         onCompleteCallback = null;
         quickContinue = true;
-        Debug.Log("是否快速继续标志已重置！");
     }
 
     protected override void OnShow()

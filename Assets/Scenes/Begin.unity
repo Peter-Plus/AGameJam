@@ -131,6 +131,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 519420032}
     m_Modifications:
+    - target: {fileID: 296669114795231510, guid: c19d3dd5ae5ef9a468c2c900a282c062, type: 3}
+      propertyPath: rainCamera
+      value: 
+      objectReference: {fileID: 519420031}
     - target: {fileID: 1814944778928728295, guid: c19d3dd5ae5ef9a468c2c900a282c062, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -625,7 +629,7 @@ SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8407760161333328108, guid: 474b72f5eae301d42864b41d081a73a9, type: 3}
   m_PrefabInstance: {fileID: 3318592576511451632}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &4515183290739197075
+--- !u!1001 &4317782491362744597
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -693,27 +697,27 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2882039416269444570, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2882039416269444570, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2882039416269444570, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3213777988759523031, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
       propertyPath: m_Name
       value: UIManager
       objectReference: {fileID: 0}
-    - target: {fileID: 3462280498121821695, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
+    - target: {fileID: 8213015252156046214, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3462280498121821695, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3462280498121821695, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3843681848986936358, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3843681848986936358, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
+    - target: {fileID: 8213015252156046214, guid: 6318d4fa9a4c5cf41b4d0deca48ba29f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
@@ -730,4 +734,4 @@ SceneRoots:
   - {fileID: 1325338758}
   - {fileID: 2045683645}
   - {fileID: 1303150532}
-  - {fileID: 4515183290739197075}
+  - {fileID: 4317782491362744597}

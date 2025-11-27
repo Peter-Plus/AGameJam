@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1814944778928728295}
   - component: {fileID: 296669114795231510}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: RainEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,3 +57,11 @@ MonoBehaviour:
   rainColor: {r: 0.8614176, g: 0.8614176, b: 0.9748427, a: 0.31764707}
   brightnessVariation: 0.3
   spawnWidth: 50
+  enableSplash: 1
+  maxSplashParticles: 2502
+  splashEmissionRate: 218.7
+  splashSize: 0.1
+  splashColor: {r: 0.8, g: 0.9, b: 1, a: 0.6}
+  sWidth: 32
+  sHeight: 12
+  rainCamera: {fileID: 0}
