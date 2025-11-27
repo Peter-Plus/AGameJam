@@ -21,9 +21,24 @@ public class BeginPanel : BasePanel
     public float bgScaleDuration = 1f;// 背景缩放时间=加载时间
     public float bgTargetScale = 1.2f;
 
+    // 添加成员变量保存初始位置
+    private Vector3 titleInitialPos;
+    private Vector3 titleBoxInitialPos;
+    private Vector3 beginBtnInitialPos;
+    private Vector3 settingsBtnInitialPos;
+    private Vector3 exitBtnInitialPos;
+
     protected override void Awake()
     {
         base.Awake();
+
+        // 保存初始位置
+        if (Title != null) titleInitialPos = Title.transform.localPosition;
+        if (TitleBox != null) titleBoxInitialPos = TitleBox.transform.localPosition;
+        if (BeginButton != null) beginBtnInitialPos = BeginButton.transform.parent.localPosition;
+        if (SettingsButton != null) settingsBtnInitialPos = SettingsButton.transform.parent.localPosition;
+        if (ExitButton != null) exitBtnInitialPos = ExitButton.transform.parent.localPosition;
+
         //绑定按钮事件
         if (BeginButton != null)
         {
@@ -82,5 +97,26 @@ public class BeginPanel : BasePanel
     {
         Debug.Log("退出游戏");
         Application.Quit();
+    }
+
+    public override void Show()
+    {
+        OnBeforeShow();
+        base.Show();
+    }
+
+    private void OnBeforeShow()
+    {
+        // 重置所有UI元素位置
+        if (Title != null) Title.transform.localPosition = titleInitialPos;
+        if (TitleBox != null) TitleBox.transform.localPosition = titleBoxInitialPos;
+        if (BeginButton != null) BeginButton.transform.parent.localPosition = beginBtnInitialPos;
+        if (SettingsButton != null) SettingsButton.transform.parent.localPosition = settingsBtnInitialPos;
+        if (ExitButton != null) ExitButton.transform.parent.localPosition = exitBtnInitialPos;
+
+        // 重新启用按钮
+        BeginButton.interactable = true;
+        SettingsButton.interactable = true;
+        ExitButton.interactable = true;
     }
 }

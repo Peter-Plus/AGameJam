@@ -19,8 +19,7 @@ public class MainManager : LevelManager
     void Start()
     {
         //显示菜单面板
-        UIManager.Instance.beginPanel.HideInstant(); // 先瞬间隐藏
-        UIManager.Instance.beginPanel.Show(); // 再显示，触发淡入动画
+        UIManager.Instance.beginPanel.Show();
         //播放主界面音乐
         AudioManager.Instance.PlayerMainMusic();
     }
