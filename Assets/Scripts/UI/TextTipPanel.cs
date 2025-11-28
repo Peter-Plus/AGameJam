@@ -15,35 +15,34 @@ public class TextTipPanel : BasePanel
 
     [Tooltip("显示持续时间")]
     public float displayDuration = 2f;
-
+    [Header("字体设置")]
+    [SerializeField] private int defaultFontSize = 80; // 默认字体大小
     private Coroutine hideCoroutine;
 
-    /// <summary>
-    /// 显示提示文字
-    /// </summary>
+    // 显示提示文字 - 默认字体大小
     public void ShowTip(string text)
     {
-        if (tipText != null)
-            tipText.text = text;
+        ShowTip(text, defaultFontSize);
+    }
 
-        if (tipTextBox != null)
-            tipTextBox.text = text;
-
+    // 显示提示文字 - 自定义字体大小
+    public void ShowTip(string text, int fontSize)
+    {
+        tipText.text = text;
+        tipText.fontSize = fontSize;
+        tipTextBox.text = text;
+        tipTextBox.fontSize = fontSize+1;
         Show();
-
         // 若已有计时协程，先停止
         if (hideCoroutine != null)
         {
             StopCoroutine(hideCoroutine);
         }
-
         // 开始自动隐藏
         hideCoroutine = StartCoroutine(AutoHide());
     }
 
-    /// <summary>
-    /// 自动隐藏协程
-    /// </summary>
+    // 自动隐藏协程
     private IEnumerator AutoHide()
     {
         yield return new WaitForSeconds(displayDuration);

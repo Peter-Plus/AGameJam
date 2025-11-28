@@ -35,6 +35,8 @@ public class EndPoint : MonoBehaviour
                     StartCoroutine(ReturnToMainMenuAfterDelay(2f));
                     return;
                 }
+                //记录通过的关卡
+                DataManager.Instance.AddLevel(currentLevelIndex);
                 //触发关卡完成
                 levelManager.LevelComplete();
                 UIManager.Instance.ShowLoadingPanel(true);

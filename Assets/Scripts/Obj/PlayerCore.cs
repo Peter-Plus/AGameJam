@@ -31,7 +31,6 @@ public class PlayerCore : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.5f; // 普通攻击冷却
     //是否启用攻击特效
     [SerializeField] private bool enableAttackEffect = true;
-    [SerializeField] private bool canMove = true; // 玩家是否可以移动，另一种暂停方式
     private float lastAttackTime = -999f; // 上次攻击时间
     private bool isLive = true; // 玩家是否存活
 
@@ -48,18 +47,11 @@ public class PlayerCore : MonoBehaviour
     #endregion
 
     #region 公开API
-    // 设置玩家能否移动
-    public void SetCanMove(bool value)
-    {
-        canMove = value;
-    }
     // 玩家是否可以移动
     public bool CanMove()
     {
         if(!isLive) return false;
-        if(!canMove) return false;
-        if(Time.timeScale==0f) return false;// 游戏暂停时不可移动
-        return true;
+        return InputManager.Instance.CanPlayerMove();
     }
     // 玩家是否存活
     public bool IsLive() => isLive;
@@ -112,7 +104,7 @@ public class PlayerCore : MonoBehaviour
         if (Time.time < lastSkillTime + skillCooldown)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("技能冷却中!");
+                UIManager.Instance.ShowTextTip("技能冷却中!", 60);
             return 0;
         }
 
@@ -120,7 +112,7 @@ public class PlayerCore : MonoBehaviour
         if (currentMp < skillManaCost)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("法力不足!");
+                UIManager.Instance.ShowTextTip("法力不足!", 60);
             return 0;
         }
 
@@ -132,7 +124,7 @@ public class PlayerCore : MonoBehaviour
         int skillDamage = Mathf.RoundToInt(currentAttack * skillDamageMultiplier);
 
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip($"使用技能! 造成 {skillDamage} 点伤害!");
+            UIManager.Instance.ShowTextTip($"使用技能! 造成 {skillDamage} 点伤害!",60);
 
         return skillDamage;
     }
@@ -150,7 +142,7 @@ public class PlayerCore : MonoBehaviour
 
         // 显示伤害提示
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip($"-{actualDamage} HP");
+            UIManager.Instance.ShowTextTip($"-{actualDamage} HP", 60);
         
         // 检查是否死亡
         if (currentHp <= 0)
@@ -166,7 +158,7 @@ public class PlayerCore : MonoBehaviour
         if (Time.time < lastPotionTime + potionCooldown)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("血瓶冷却中!");
+                UIManager.Instance.ShowTextTip("血瓶冷却中!", 60);
             return;
         }
 
@@ -175,7 +167,7 @@ public class PlayerCore : MonoBehaviour
         if (potionCount <= 0)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("没有血瓶了!");
+                UIManager.Instance.ShowTextTip("没有血瓶了!", 60);
             return;
         }
 
@@ -183,7 +175,7 @@ public class PlayerCore : MonoBehaviour
         if (currentHp >= currentMaxHp)
         {
             if (UIManager.Instance != null)
-                UIManager.Instance.ShowTextTip("生命值已满!");
+                UIManager.Instance.ShowTextTip("生命值已满!", 60);
             return;
         }
 
@@ -199,7 +191,7 @@ public class PlayerCore : MonoBehaviour
         // 显示相关UI
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.ShowTextTip($"+{healAmount} HP");
+            UIManager.Instance.ShowTextTip($"+{healAmount} HP", 60);
             UIManager.Instance.OnUsedPotion();
         }
     }
@@ -211,7 +203,7 @@ public class PlayerCore : MonoBehaviour
         DataManager.Instance.SetHealthPotionCount(potionCount + 1);
 
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip("拾取了一个血瓶!");
+            UIManager.Instance.ShowTextTip("拾取了一个血瓶!", 60 );
     }
 
     // 获得经验值
@@ -220,7 +212,7 @@ public class PlayerCore : MonoBehaviour
         currentExp += exp;
 
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip($"+{exp} EXP");
+            UIManager.Instance.ShowTextTip($"+{exp} EXP", 60);
 
         // 检查是否升级（可能连续升级）
         CheckLevelUp();
@@ -229,7 +221,7 @@ public class PlayerCore : MonoBehaviour
         DataManager.Instance.SetExp(currentExp);
     }
 
-    // 恢复生命值(非血瓶,备用)
+    // 恢复生命值
     public void RestoreHealth(int amount)
     {
         if (currentHp >= currentMaxHp)
@@ -242,7 +234,7 @@ public class PlayerCore : MonoBehaviour
         DataManager.Instance.SetHp(currentHp);
 
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip($"+{healAmount} HP");
+            UIManager.Instance.ShowTextTip($"+{healAmount} HP", 60);
     }
 
     // 恢复法力值
@@ -258,21 +250,17 @@ public class PlayerCore : MonoBehaviour
         DataManager.Instance.SetMp(currentMp);
 
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip($"+{restoreAmount} MP");
+            UIManager.Instance.ShowTextTip($"+{restoreAmount} MP", 60);
     }
 
     // 获取当前生命值
     public int GetCurrentHp() => currentHp;
-
     // 获取当前法力值
     public int GetCurrentMp() => currentMp;
-
     // 获取当前等级
     public int GetCurrentLevel() => currentLevel;
-
     // 获取当前经验值
     public int GetCurrentExp() => currentExp;
-
     // 获取当前等级升级所需的最大经验值
     public int GetMaxExpForCurrentLevel()
     {
@@ -292,7 +280,7 @@ public class PlayerCore : MonoBehaviour
 
     private void Update()
     {
-        if(!isLive || !canMove) return;
+        if(!isLive || !CanMove()) return;
         // 处理调试输入(开发测试用)
         HandleDebugInput();
     }
@@ -333,20 +321,14 @@ public class PlayerCore : MonoBehaviour
         while (true)
         {
             int maxExp = GetMaxExpForCurrentLevel();
-
-            // 如果当前经验达到升级要求
             if (currentExp >= maxExp)
             {
-                // 计算溢出的经验
                 int overflowExp = currentExp - maxExp;
-                // 执行升级
                 LevelUp();
-                // 升级后经验设为溢出的经验
                 currentExp = overflowExp;
             }
             else
             {
-                // 经验不足，退出循环
                 break;
             }
         }
@@ -376,13 +358,10 @@ public class PlayerCore : MonoBehaviour
 
         // 显示升级提示
         if (UIManager.Instance != null)
-            UIManager.Instance.ShowTextTip($"升级! 达到 Lv.{currentLevel}");
+            UIManager.Instance.ShowTextTip($"升级! 达到 Lv.{currentLevel}", 60);
     }
 
-    /// <summary>
-    /// 计算指定等级升级所需的最大经验值
-    /// 公式: baseExpRequired + level* expGrowthPerLevel
-    /// </summary>
+    // 计算指定等级升级所需的最大经验值
     private int CalculateMaxExpForLevel(int level)
     {
         return baseExpRequired + (level) * expGrowthPerLevel;
@@ -404,6 +383,7 @@ public class PlayerCore : MonoBehaviour
                 StartCoroutine(ReturnToMainMenuAfterDelay(2f));
             });
     }
+    // 延迟返回主菜单协程
     private IEnumerator ReturnToMainMenuAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -414,7 +394,7 @@ public class PlayerCore : MonoBehaviour
     private void HandleDebugInput()
     {
         // 按J键普通攻击(测试)
-        if (Input.GetKeyDown(KeyCode.J))
+        if(InputManager.Instance.GetAttackInput())
         {
             int damage = Attack();
             if (damage > 0)
@@ -423,18 +403,18 @@ public class PlayerCore : MonoBehaviour
             }
         }
 
-        // 按K键使用技能(测试)
-        if (Input.GetKeyDown(KeyCode.K))
+        // 按Y键使用技能(测试)
+        if (InputManager.Instance.GetSkillInput())
         {
-            int damage = UseSkill();
-            if (damage > 0)
+            int skillDamage = UseSkill();
+            if (skillDamage > 0)
             {
-                Debug.Log($"技能攻击造成 {damage} 点伤害");
+                Debug.Log($"技能攻击造成 {skillDamage} 点伤害");
             }
         }
 
         // 按H键使用血瓶(测试)
-        if (Input.GetKeyDown(KeyCode.H))
+        if (InputManager.Instance.GetHealthPotionInput())
         {
             UseHealthPotion();
         }

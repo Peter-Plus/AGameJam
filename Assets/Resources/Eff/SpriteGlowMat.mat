@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Light
-  m_Shader: {fileID: 4800000, guid: 8d6e2595979799e4981e31a4da9457ae, type: 3}
+  m_Name: SpriteGlowMat
+  m_Shader: {fileID: 4800000, guid: e671ac291aa4f0e49854a34e68dcccba, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -61,24 +61,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BloomIntensity: 0.8
-    - _BloomSize: 0.02
     - _BumpScale: 1
-    - _CoreSize: 0.6
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _EdgeSoftness: 0.5
-    - _FlickerAmount: 0.213
-    - _FlickerSpeed: 1.19
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GlowIntensity: 0.72
+    - _GlowIntensity: 0
+    - _GlowWidth: 0.0099
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PulseAmount: 0.249
+    - _PulseSpeed: 3.96
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -87,5 +84,5 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GlowColor: {r: 1, g: 0.9, b: 0.6, a: 1}
+    - _GlowColor: {r: 1, g: 0.93719476, b: 0.5503144, a: 0.25490198}
   m_BuildTextureStacks: []

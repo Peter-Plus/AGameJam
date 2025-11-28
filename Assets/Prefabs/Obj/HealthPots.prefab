@@ -99,6 +99,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4668bc5e8afefba46ab5206d135f90d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemName: "\u8840\u74F6"
+  itemDescription: "\u6062\u590D\u751F\u547D\u503C\u7684\u795E\u5947\u836F\u6C34"
+  itemIcon: {fileID: 2144587143023968157}
+  interactRange: 6
+  isInteractable: 1
+  maxInteractCount: 7
+  currentInteractCount: 0
+  isHighlightable: 1
+  glowColor: {r: 1, g: 0.85, b: 0.2, a: 1}
+  dialogues:
+  - "\u54A6\uFF0C\u8FD9\u4E2A\u7EA2\u74F6\u5B50\u662F\u4EC0\u4E48\u4E1C\u897F\uFF1F"
+  - "\u4F60\u597D\u554A\uFF0C\u6211\u662F\u8840\u74F6\uFF0C\u563B\u563B\uFF0C\u5FEB\u6765\u5C1D\u5C1D\u6211\uFF01"
+  - "\u6211\u53EF\u4EE5\u6062\u590D\u4F60\u7684\u751F\u547D\u503C\u54E6~~~~"
+  - "\u4F60\u5F97\u8D70\u8FC7\u6765\u624D\u80FD\u559D\u5230\u6211\u54DF~~~~"
+  - "\u5FEB\u70B9\u554A\uFF0C\u4E0D\u7136\u6211\u4F1A\u51C9\u6389\u7684~~~~"
+  - "\u5FEB\u70B9\u554A\uFF0C\u4E0D\u7136\u6211\u4F1A\u51C9\u6389\u7684~~~~"
+  - "\u5FEB\u70B9\u554A\uFF0C\u4E0D\u7136\u6211\u4F1A\u51C9\u6389\u7684~~~~"
+  speakName: "\u83CA \u6E1A\u6708"
 --- !u!65 &5631739139245938278
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -194,7 +212,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.16352195, g: 0.16352195, b: 0.16352195, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -44,8 +44,6 @@ public class GameLevelManager : MonoBehaviour
             {
                 currentLevelIndex = index;
             }
-            //记录已完成的关卡
-            DataManager.Instance.AddLevel(currentLevelIndex);
         }
         else if (scene.name == "Level0" || scene.name == "MainScene")
         {

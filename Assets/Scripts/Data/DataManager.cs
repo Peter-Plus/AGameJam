@@ -219,7 +219,7 @@ public class DataManager : MonoBehaviour
     public void AddLevel(int levelIndex)
     {
         saveData.passedLevelCount++;//经过的关卡数加一
-
+        //调试需要，遍历levelList
         // 添加到已通过关卡列表
         if (!saveData.levelList.Contains(levelIndex))
         {// 仅当关卡未存在时添加

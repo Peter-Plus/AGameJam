@@ -103,9 +103,7 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region 飘字提示
-    /// <summary>
-    /// 显示飘字提示
-    /// </summary>
+    // 显示飘字提示
     public void ShowTextTip(string text)
     {
         if (textTipPanel == null)
@@ -114,6 +112,16 @@ public class UIManager : MonoBehaviour
             return;
         }
         textTipPanel.ShowTip(text);
+    }
+    // 显示自定义大小飘字提示
+    public void ShowTextTip(string text, int fontSize)
+    {
+        textTipPanel.ShowTip(text, fontSize);
+    }
+    // 隐藏飘字提示
+    public void HideTextTip()
+    {
+        textTipPanel.HideInstant();
     }
     #endregion
 
@@ -302,7 +310,6 @@ public class UIManager : MonoBehaviour
 
     public void ShowGameCGPanel(Sprite cgSprite, Action onComplete = null)
     {
-        Debug.Log("UIManager: ShowGameCGPanel called");
         gameCGPanel.ShowCG(cgSprite, onComplete);
     }
     public void ShowGameCGPanel(Sprite cgSprite, float displayTime, Action onComplete = null)
@@ -346,6 +353,30 @@ public class UIManager : MonoBehaviour
     public void HideSpeakPanel(Action onComplete = null)
     {
         speakPanel.HideSpeak(onComplete);
+    }
+    #endregion
+
+    #region 其他API
+    public void HideAllUIInstant()
+    {
+        // 对话UI
+        if (chatPanel != null) chatPanel.HideInstant();
+        if (tipPanel != null) tipPanel.HideInstant();
+        if (textTipPanel != null) textTipPanel.HideInstant();
+        if (speakPanel != null) speakPanel.HideInstant();
+
+        // 加载UI
+        if (loadingPanel != null) loadingPanel.HideInstant();
+        if (cgPanel != null) cgPanel.HideCGInstant();
+
+        // 游戏UI
+        if (HUDPanel != null) HUDPanel.Hide();
+        if (gameCGPanel != null) gameCGPanel.HideCGInstant();
+
+        // 菜单UI
+        if (beginPanel != null) beginPanel.HideInstant();
+        if (settingsPanel != null) settingsPanel.HideInstant();
+        if (pausePanel != null) pausePanel.HideInstant();
     }
     #endregion
 }

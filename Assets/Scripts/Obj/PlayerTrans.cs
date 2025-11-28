@@ -33,11 +33,7 @@ public class PlayerTrans : MonoBehaviour
     #region 生命周期
     private void Awake()
     {
-        if (spriteRenderer == null)
-        {
-            spriteRenderer = GetComponent<SpriteRenderer>();
-        }
-        baseZPosition = transform.position.z;
+        baseZPosition = transform.position.z;// 记录初始Z位置
         baseScale = transform.localScale;
     }
 
@@ -61,12 +57,19 @@ public class PlayerTrans : MonoBehaviour
     {
         if (movement.x != 0 && spriteRenderer != null)
         {
-            spriteRenderer.flipX = movement.x < 0;
+            spriteRenderer.flipX = movement.x < 0;// 向左移动时翻转精灵
         }
     }
 
     private void HandleInput()
     {
+        // 直接检测，不通过InputManager封装
+        if (!InputManager.Instance.CanPlayerMove())
+        {
+            movement = Vector3.zero;
+            return;
+        }
+
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         movement = new Vector3(horizontal, 0f, vertical).normalized;

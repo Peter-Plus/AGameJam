@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -5,19 +6,39 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
-    [Header("关卡参数相关")]
-    //关卡可否暂停
-    public bool CanPause = true;
+    public bool allowSkip = false;// 是否允许跳过交互
+    //[Header("关卡参数相关")]
+    ////关卡可否暂停
+    ////public bool CanPause = true;
+    ////直接通过单例InputManager控制可否暂停无需此变量
+    //public bool canSkipInteract = true;// 是否允许跳过交互
     [Header("关卡敌人相关")]
     public List<Enemy> Enemys = new();
     private float levelTimer = 0f;// 关卡计时器
-    private bool isLevelActive = true;// 关卡是否处于活动状态
+    protected bool isLevelActive = true;// 关卡是否处于活动状态
+    public bool skipRequested = false;// 是否请求跳过交互
+
 
     #region 交互相关 每个关卡的交互内容不一样，待子类重载实现
     public virtual void StartInteract() { }
     #endregion
 
     #region 固定API
+    public void TogglePause()
+    {
+        if (isLevelActive)
+        {
+            UIManager.Instance.ShowPausePanel();
+            isLevelActive = false;
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            UIManager.Instance.HidePausePanel();
+            isLevelActive = true;
+            Time.timeScale = 1f;
+        }
+    }
     // 检查胜利条件API
     public bool CheckWinCondition()
     {
@@ -31,7 +52,6 @@ public class LevelManager : MonoBehaviour
     public void LevelComplete()
     {
         isLevelActive = false; // 停止计时等
-        Debug.Log($"关卡完成！耗时: {levelTimer}秒");
         Invoke(nameof(CallNextLevel), 2.0f);
     }
     // 关卡失败API
@@ -39,6 +59,12 @@ public class LevelManager : MonoBehaviour
     {
         isLevelActive = false;
         UIManager.Instance.ShowTip("关卡失败！", FailBack);
+    }
+    //UI交互开关API 禁止玩家操作、暂停计时
+    public void SetUIInteract(bool open)
+    {
+        InputManager.Instance.SetAllowPlayerInput(!open);
+        isLevelActive = !open;
     }
     #endregion
 
@@ -52,28 +78,11 @@ public class LevelManager : MonoBehaviour
         UIManager.Instance.ShowGameUI(false);
     }
 
-    protected virtual void Update()//实现暂停按键监听、计时功能
+    protected virtual void Update()//实现计时功能
     {
         if (isLevelActive)
         {
             levelTimer += Time.deltaTime;
-        }
-        if (CanPause && Input.GetKeyDown(KeyCode.P))
-        {
-            //UIManager.Instance.ShowPausePanel();
-            //isLevelActive=false;
-            if (isLevelActive)
-            {
-                UIManager.Instance.ShowPausePanel();
-                isLevelActive = false;
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                UIManager.Instance.HidePausePanel();
-                isLevelActive = true;
-                Time.timeScale = 1f;
-            }
         }
     }
     #endregion
@@ -89,6 +98,16 @@ public class LevelManager : MonoBehaviour
     private void CallNextLevel()
     {
         GameLevelManager.Instance.LoadNextLevel();
+    }
+    protected IEnumerator WaitForSecondsOrSkip(float seconds, System.Func<bool> skipCondition)
+    {
+        float elapsed = 0f;
+        while (elapsed < seconds)
+        {
+            if (skipCondition()) yield break;
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
     }
     #endregion
 }

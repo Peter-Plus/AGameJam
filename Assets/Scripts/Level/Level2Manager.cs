@@ -31,7 +31,7 @@ public class Level2Manager : LevelManager
     private void Start()
     {
         //判断是不是第一次进入该关卡
-        if (DataManager.Instance.IsFirstTimeReachLevel(0))
+        if (DataManager.Instance.IsFirstTimeReachLevel(2))
         {
             StartInteract();
         }
@@ -58,8 +58,8 @@ public class Level2Manager : LevelManager
 
     private IEnumerator InteractSequence()
     {
-        //暂停游戏
-        Time.timeScale = 0f;
+        //开始交互
+        SetUIInteract(true);
         // 加载资源
         Sprite blackScreen = Resources.Load<Sprite>("CG/BlackScreen");
         Sprite illustration1 = Resources.Load<Sprite>("CG/Illustration1");
@@ -103,7 +103,7 @@ public class Level2Manager : LevelManager
         }
         yield return new WaitUntil(() => done);
         //恢复
-        Time.timeScale = 1f;
+        SetUIInteract(false);
 
         UIManager.Instance.ShowTextTip(levelName);
         UIManager.Instance.ShowGameUI(true);
