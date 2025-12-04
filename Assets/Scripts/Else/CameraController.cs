@@ -1,7 +1,9 @@
+using DG.Tweening;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
+    public static CameraController Instance { get; private set; }
     [Header("跟随目标")]
     [SerializeField] private Transform target;
 
@@ -16,13 +18,20 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Transform[] parallaxBackgrounds; // 背景数组
     [SerializeField] private float[] parallaxFactors; // 对应的速度系数
 
+    [Header("震动设置")]
+    [SerializeField] private bool enableShake = true;// 是否启用震动效果
+
     private Camera cam;
     private float cameraHalfWidth;
     private float velocityX;
     private Vector3 lastCameraPosition;
+    private Vector3 shakeOffset = Vector3.zero; // 震动偏移量
+    //private float fixedY; 
+    //private float fixedZ; //用于震动后恢复坐标
 
     private void Awake()
     {
+        Instance = this;
         cam = GetComponent<Camera>();
         cameraHalfWidth = cam.orthographicSize * cam.aspect;
         lastCameraPosition = transform.position;
@@ -42,10 +51,12 @@ public class CameraFollow : MonoBehaviour
         //利用摄像机移动增量实现远景视差效果
         //每帧都准确计算摄像机的移动增量并给BK层传递这个增量，能保证BK和摄像机的移动完全同步
         UpdateBK(cameraDelta);
-        transform.position = newPosition;
-        lastCameraPosition = transform.position;
+        transform.position = newPosition+shakeOffset;
+        lastCameraPosition = newPosition;//更新上次摄像机位置,不存储震动偏移量
     }
 
+
+    #region 远景跟随
     private void UpdateBK(Vector3 cameraDelta)
     {
         // 参数是摄像机的移动增量
@@ -57,4 +68,30 @@ public class CameraFollow : MonoBehaviour
             parallaxBackgrounds[i].position += bgDelta;
         }
     }
+    #endregion
+
+    #region 震动相关API
+    public void Shake(float duration, float strength)
+    {
+        if (!enableShake) return;
+        DOTween.Kill(transform);
+        shakeOffset=Vector3.zero;   
+        float originalY = transform.position.y;
+        float originalZ = transform.position.z;
+        Vector3 dummyShake = Vector3.zero;
+        DOTween.Shake(() => dummyShake, x =>
+        {
+            shakeOffset = new Vector3(0,Mathf.Max(-x.y,x.y),Mathf.Max(-x.z,x.z));
+        }, duration, strength, 20, 90, true, true)
+            .OnComplete(() =>
+            {
+                shakeOffset = Vector3.zero;
+                Vector3 pos = transform.position;
+                pos.y = originalY;
+                pos.z = originalZ;
+                transform.position = pos;
+            });
+    }
+
+    #endregion
 }

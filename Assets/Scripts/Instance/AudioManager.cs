@@ -16,6 +16,12 @@ public class AudioManager : MonoBehaviour
     public AudioClip battleMusic;
     public AudioClip bossMusic;
 
+    [Header("Attack SFX")]
+    public AudioClip j1Sfx;
+    public AudioClip j2Sfx;
+    public AudioClip j3Sfx;
+    public AudioClip a4Sfx;
+
     #region 场景音乐切换API
     /// <summary>
     /// 切换到主菜单音乐
@@ -119,6 +125,30 @@ public class AudioManager : MonoBehaviour
     public void SetSfxVolume(float volume)
     {
         sfxSource.volume = Mathf.Clamp01(volume);
+    }
+    #endregion
+
+    #region 音效API
+    public void PlaySound(string animName)
+    {
+        AudioClip clip = null;
+        switch (animName)
+        {
+            case "J1":
+                clip = j1Sfx;
+                break;
+            case "J2":
+                clip = j2Sfx;
+                break;
+            case "J3":
+                clip = j3Sfx;
+            clip = j3Sfx;
+                break;
+            case "A4":
+                clip = a4Sfx;
+                break;
+        }
+        PlaySFX(clip);
     }
     #endregion
 

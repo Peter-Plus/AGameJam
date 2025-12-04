@@ -1,0 +1,33 @@
+
+skeleton.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Lhand
+  rotate: true
+  xy: 0, 832
+  size: 278, 922
+  orig: 2048, 2048
+  offset: 1094, 659
+  index: -1
+body
+  rotate: true
+  xy: 0, 0
+  size: 830, 1907
+  orig: 2048, 2048
+  offset: 700, 55
+  index: -1
+
+skeleton2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Rhand
+  rotate: false
+  xy: 0, 0
+  size: 2048, 2048
+  orig: 2048, 2048
+  offset: 0, 0
+  index: -1

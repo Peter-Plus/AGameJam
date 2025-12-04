@@ -88,8 +88,6 @@ public class InputManager : MonoBehaviour
     }
     void Update()
     {
-        // 玩家战斗输入
-        HandlePlayerCombatInput();
         // 暂停输入
         HandlePauseInput();
         HandleSkipInput();
@@ -106,31 +104,6 @@ public class InputManager : MonoBehaviour
         return true;
     }
 
-    private void HandlePlayerCombatInput()
-    {
-        if (!CanPlayerInput()) return;
-
-        PlayerCore player = GameObject.FindGameObjectWithTag("Player")?.GetComponent<PlayerCore>();
-        if (player == null) return;
-
-        // 普攻
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            player.Attack();
-        }
-
-        // 技能
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            player.UseSkill();
-        }
-
-        // 血瓶
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            player.UseHealthPotion();
-        }
-    }
     private void HandlePauseInput()
     {
         if (!allowUIInput) return;

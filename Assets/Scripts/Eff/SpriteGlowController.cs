@@ -10,13 +10,13 @@ public class SpriteGlowController : MonoBehaviour
     [Header("发光设置")]
     [SerializeField] private Color glowColor = new Color(1f, 0.9f, 0.3f, 1f); // 默认金黄色
     [SerializeField] private float maxGlowIntensity = 1.5f; // 最大发光强度
-    [SerializeField] private float glowWidth = 0.02f; // 发光宽度
+    //[SerializeField] private float glowWidth = 0.02f; // 发光宽度
 
     [Header("动画设置")]
     [SerializeField] private float fadeInSpeed = 8f;  // 淡入速度
     [SerializeField] private float fadeOutSpeed = 5f; // 淡出速度
-    [SerializeField] private float pulseSpeed = 3f;   // 脉冲速度
-    [SerializeField] private float pulseAmount = 0.3f; // 脉冲幅度
+    //[SerializeField] private float pulseSpeed = 3f;   // 脉冲速度
+    //[SerializeField] private float pulseAmount = 0.3f; // 脉冲幅度
 
     private SpriteRenderer spriteRenderer;
     private Material glowMaterial;

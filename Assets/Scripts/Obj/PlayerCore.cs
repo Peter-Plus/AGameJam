@@ -27,12 +27,15 @@ public class PlayerCore : MonoBehaviour
     [SerializeField] private int attackGrowthPerLevel = 5; // 每级攻击成长
     [SerializeField] private int defenseGrowthPerLevel = 2; // 每级防御成长
 
-    [Header("战斗设置")]
-    [SerializeField] private float attackCooldown = 0.5f; // 普通攻击冷却
-    //是否启用攻击特效
-    [SerializeField] private bool enableAttackEffect = true;
-    private float lastAttackTime = -999f; // 上次攻击时间
+    //[Header("战斗设置")]
+    //普攻冷却在连击系统通过动画事件控制
+    ////是否启用攻击特效
+    //[SerializeField] private bool enableAttackEffect = true;
+    //private float lastAttackTime = -999f; // 上次攻击时间
     private bool isLive = true; // 玩家是否存活
+
+    [Header("连击设置")]
+    [SerializeField] private PlayerComboSystem comboSystem;//连击系统
 
 
     // 当前属性缓存
@@ -69,34 +72,6 @@ public class PlayerCore : MonoBehaviour
     public float GetSkillCooldownDuration() => skillCooldown;
     // 获取血瓶冷却总时长
     public float GetPotionCooldownDuration() => potionCooldown;
-    // 普通攻击
-    public int Attack()
-    {
-        // 检查攻击冷却
-        if (Time.time < lastAttackTime + attackCooldown)
-        {
-            return 0;
-        }
-        lastAttackTime = Time.time;
-        
-        if (enableAttackEffect)
-        {
-            //获取面向方向
-            bool facingRight = true;
-            PlayerTrans playerTrans = GetComponent<PlayerTrans>();
-            if (playerTrans != null)
-            {
-                facingRight = playerTrans.IsFacingRight();
-            }
-            // 显示攻击特效
-            float angle = 0f;
-            angle = facingRight ? 0f : 180f;
-            CrescentSlashEffect.Instance.PlayCrescentSlash(transform.position, angle);
-        }
-        // 返回当前攻击力
-        return currentAttack;
-    }
-
     // 使用技能攻击
     public int UseSkill()
     {
@@ -259,6 +234,11 @@ public class PlayerCore : MonoBehaviour
     public int GetCurrentMp() => currentMp;
     // 获取当前等级
     public int GetCurrentLevel() => currentLevel;
+    // 获取当前攻击力
+    public int GetAttackDamage()
+    {
+        return currentAttack;
+    }
     // 获取当前经验值
     public int GetCurrentExp() => currentExp;
     // 获取当前等级升级所需的最大经验值
@@ -393,20 +373,10 @@ public class PlayerCore : MonoBehaviour
     // 处理调试输入(开发测试用)
     private void HandleDebugInput()
     {
-        // 按J键普通攻击(测试)
-        if(InputManager.Instance.GetAttackInput())
-        {
-            int damage = Attack();
-            if (damage > 0)
-            {
-                Debug.Log($"普通攻击造成 {damage} 点伤害");
-            }
-        }
-
         // 按Y键使用技能(测试)
         if (InputManager.Instance.GetSkillInput())
         {
-            int skillDamage = UseSkill();
+            int skillDamage = UseSkill();//计算并调用相关逻辑
             if (skillDamage > 0)
             {
                 Debug.Log($"技能攻击造成 {skillDamage} 点伤害");
@@ -428,7 +398,7 @@ public class PlayerCore : MonoBehaviour
         // 按O键受到伤害(测试)
         if (Input.GetKeyDown(KeyCode.O))
         {
-            TakeDamage(35);
+            TakeDamage(40);
         }
 
     }
